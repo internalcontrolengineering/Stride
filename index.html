@@ -18,17 +18,17 @@
         .header { 
             background: linear-gradient(135deg, #0a2b3c 0%, #1c5a7a 100%); 
             color: white; 
-            padding: 1rem; 
+            padding: 12px 16px; 
             display: flex; 
             justify-content: space-between; 
             flex-wrap: wrap; 
             align-items: center; 
-            gap: 0.8rem;
+            gap: 12px;
             position: relative;
             overflow: hidden;
         }
-        @media (min-width: 640px) { .header { padding: 1rem 1.5rem; gap: 1rem; } }
-        @media (min-width: 1024px) { .header { padding: 1.2rem 2rem; } }
+        @media (min-width: 640px) { .header { padding: 16px 24px; gap: 16px; } }
+        @media (min-width: 1024px) { .header { padding: 20px 32px; } }
         
         .header::before {
             content: '';
@@ -42,6 +42,7 @@
             pointer-events: none;
         }
         @media (min-width: 768px) { .header::before { width: 300px; height: 300px; } }
+        
         .header::after {
             content: '';
             position: absolute;
@@ -58,100 +59,75 @@
         .logo-area { 
             display: flex; 
             align-items: center; 
-            gap: 0.8rem; 
+            gap: 12px; 
             position: relative;
             z-index: 1;
         }
-        @media (min-width: 640px) { .logo-area { gap: 1rem; } }
-        @media (min-width: 1024px) { .logo-area { gap: 1.2rem; } }
         
-        .logo-circle { 
-            width: 44px; 
-            height: 44px; 
-            background: linear-gradient(145deg, #ffffff 0%, #e8f0f8 100%);
-            border-radius: 14px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5);
-            transition: all 0.3s ease;
-        }
-        @media (min-width: 640px) { .logo-circle { width: 50px; height: 50px; border-radius: 16px; } }
-        @media (min-width: 1024px) { .logo-circle { width: 56px; height: 56px; border-radius: 18px; } }
-        
+        /* ELIMINADO: .logo-circle ya no existe, el logo va directo sin contenedor */
         .logo-img { 
-            height: 28px; 
+            height: 42px; 
             width: auto; 
             object-fit: contain; 
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+            transition: all 0.2s ease;
         }
-        @media (min-width: 640px) { .logo-img { height: 32px; } }
-        @media (min-width: 1024px) { .logo-img { height: 38px; } }
+        @media (min-width: 640px) { .logo-img { height: 50px; } }
+        @media (min-width: 1024px) { .logo-img { height: 56px; } }
         
         .logo-text h1 { 
-            font-size: 1.3rem; 
+            font-size: 1.4rem; 
             font-weight: 800; 
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #ffffff 0%, #d4eaff 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        @media (min-width: 640px) { .logo-text h1 { font-size: 1.5rem; } }
+        @media (min-width: 640px) { .logo-text h1 { font-size: 1.6rem; } }
         @media (min-width: 1024px) { .logo-text h1 { font-size: 1.8rem; } }
         
         .logo-text p { 
-            font-size: 0.55rem; 
+            font-size: 0.6rem; 
             opacity: 0.8; 
             letter-spacing: 0.3px;
             font-weight: 500;
             text-transform: uppercase;
         }
-        @media (min-width: 640px) { .logo-text p { font-size: 0.6rem; } }
-        @media (min-width: 1024px) { .logo-text p { font-size: 0.65rem; letter-spacing: 0.5px; } }
+        @media (min-width: 640px) { .logo-text p { font-size: 0.65rem; letter-spacing: 0.5px; } }
         
-        .right-header { display: flex; align-items: center; gap: 0.5rem; position: relative; z-index: 1; flex-wrap: wrap; justify-content: flex-end; }
-        @media (min-width: 640px) { .right-header { gap: 0.8rem; } }
-        @media (min-width: 1024px) { .right-header { gap: 1rem; } }
+        .right-header { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; flex-wrap: wrap; justify-content: flex-end; }
         
-        .stats-summary { display: flex; gap: 0.8rem; background: rgba(255,255,255,0.12); padding: 0.3rem 0.8rem; border-radius: 40px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
-        @media (min-width: 640px) { .stats-summary { gap: 1.2rem; padding: 0.4rem 1.2rem; } }
-        @media (min-width: 1024px) { .stats-summary { gap: 1.8rem; padding: 0.5rem 1.5rem; } }
+        .stats-summary { display: flex; gap: 12px; background: rgba(255,255,255,0.12); padding: 6px 16px; border-radius: 40px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
+        @media (max-width: 640px) { .stats-summary { gap: 8px; padding: 4px 12px; } }
         
         .stat-value { font-weight: 800; font-size: 1rem; }
-        @media (min-width: 640px) { .stat-value { font-size: 1.1rem; } }
+        @media (min-width: 640px) { .stat-value { font-size: 1.2rem; } }
         @media (min-width: 1024px) { .stat-value { font-size: 1.3rem; } }
         
         .stat-label { font-size: 0.6rem; opacity: 0.8; }
-        @media (min-width: 640px) { .stat-label { font-size: 0.65rem; } }
-        @media (min-width: 1024px) { .stat-label { font-size: 0.7rem; } }
+        @media (min-width: 640px) { .stat-label { font-size: 0.7rem; } }
         
-        .user-info { display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.1); padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 40px; border: 1px solid rgba(255,255,255,0.15); }
-        @media (min-width: 640px) { .user-info { gap: 0.6rem; padding: 0.25rem 0.8rem 0.25rem 1rem; } }
-        @media (min-width: 1024px) { .user-info { gap: 0.8rem; padding: 0.3rem 1rem 0.3rem 1.2rem; } }
+        .user-info { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 4px 12px 4px 16px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.15); }
         
-        .user-badge { font-size: 0.7rem; display: flex; align-items: center; gap: 0.3rem; }
-        @media (min-width: 640px) { .user-badge { font-size: 0.75rem; } }
-        @media (min-width: 1024px) { .user-badge { font-size: 0.8rem; gap: 0.5rem; } }
+        .user-badge { font-size: 0.75rem; display: flex; align-items: center; gap: 6px; }
+        @media (min-width: 640px) { .user-badge { font-size: 0.8rem; gap: 8px; } }
         
-        .logout-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.2rem 0.6rem; border-radius: 40px; font-size: 0.65rem; cursor: pointer; transition: 0.2s; }
-        @media (min-width: 640px) { .logout-btn { padding: 0.25rem 0.7rem; font-size: 0.7rem; } }
-        @media (min-width: 1024px) { .logout-btn { padding: 0.3rem 0.8rem; font-size: 0.75rem; } }
+        .logout-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
+        @media (min-width: 640px) { .logout-btn { padding: 5px 14px; font-size: 0.75rem; } }
+        .logout-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
         
         .session-timer {
             position: fixed;
-            bottom: 12px;
-            left: 12px;
+            bottom: 16px;
+            left: 16px;
             background: #1c5a7a;
             color: white;
-            padding: 5px 12px;
+            padding: 8px 16px;
             border-radius: 40px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             z-index: 100;
             backdrop-filter: blur(4px);
@@ -159,201 +135,181 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        @media (min-width: 640px) { .session-timer { bottom: 15px; left: 15px; padding: 6px 14px; font-size: 0.75rem; gap: 8px; } }
-        @media (min-width: 1024px) { .session-timer { bottom: 20px; left: 20px; padding: 8px 16px; font-size: 0.8rem; gap: 10px; } }
+        @media (min-width: 640px) { .session-timer { bottom: 20px; left: 20px; padding: 8px 18px; font-size: 0.8rem; gap: 10px; } }
         
+        .session-timer:hover { transform: scale(1.02); }
         .session-timer.warning { background: #e67e22 !important; animation: pulse-normal 1s infinite !important; }
         .session-timer.danger { background: #dc2626 !important; animation: pulse-fast 0.3s infinite !important; }
         @keyframes pulse-normal { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         @keyframes pulse-fast { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
         
-        .tabs { display: flex; background: #f1f5f9; padding: 0 0.8rem; gap: 0.2rem; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
-        @media (min-width: 640px) { .tabs { padding: 0 1rem; gap: 0.3rem; } }
-        @media (min-width: 1024px) { .tabs { padding: 0 1.5rem; } }
+        .tabs { display: flex; background: #f1f5f9; padding: 0 16px; gap: 4px; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+        @media (max-width: 640px) { .tabs { padding: 0 8px; gap: 2px; } }
         
-        .tab-btn { background: none; border: none; padding: 0.7rem 1rem; font-weight: 600; cursor: pointer; border-radius: 20px 20px 0 0; color: #475569; transition: all 0.2s; font-size: 0.75rem; }
-        @media (min-width: 640px) { .tab-btn { padding: 0.8rem 1.2rem; font-size: 0.8rem; } }
-        @media (min-width: 1024px) { .tab-btn { padding: 1rem 1.6rem; font-size: 0.9rem; border-radius: 24px 24px 0 0; } }
+        .tab-btn { background: none; border: none; padding: 12px 20px; font-weight: 600; cursor: pointer; border-radius: 20px 20px 0 0; color: #475569; transition: all 0.2s; font-size: 0.85rem; }
+        @media (max-width: 640px) { .tab-btn { padding: 8px 12px; font-size: 0.7rem; } }
+        @media (min-width: 640px) { .tab-btn { padding: 12px 24px; font-size: 0.9rem; } }
+        @media (min-width: 1024px) { .tab-btn { padding: 16px 28px; font-size: 0.95rem; } }
         
-        .tab-btn i { margin-right: 4px; font-size: 0.7rem; }
-        @media (min-width: 640px) { .tab-btn i { margin-right: 6px; font-size: 0.8rem; } }
-        @media (min-width: 1024px) { .tab-btn i { margin-right: 8px; } }
+        .tab-btn i { margin-right: 6px; }
+        @media (max-width: 640px) { .tab-btn i { margin-right: 4px; } }
         
         .tab-btn.active { background: white; color: #1c5a7a; border-bottom: 3px solid #1c5a7a; }
-        .tab-content { display: none; padding: 1rem; animation: fade 0.2s; }
-        @media (min-width: 640px) { .tab-content { padding: 1.5rem; } }
-        @media (min-width: 1024px) { .tab-content { padding: 2rem; } }
+        .tab-content { display: none; padding: 20px; animation: fade 0.2s; }
+        @media (max-width: 640px) { .tab-content { padding: 12px; } }
+        @media (min-width: 1024px) { .tab-content { padding: 24px; } }
         .tab-content.active { display: block; }
         @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
         
-        .form-card, .sprint-card { background: white; border-radius: 20px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
-        @media (min-width: 640px) { .form-card, .sprint-card { border-radius: 22px; padding: 1.2rem; margin-bottom: 1.2rem; } }
-        @media (min-width: 1024px) { .form-card, .sprint-card { border-radius: 24px; padding: 1.5rem; margin-bottom: 1.5rem; } }
+        .form-card, .sprint-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
+        @media (max-width: 640px) { .form-card, .sprint-card { padding: 12px; margin-bottom: 12px; border-radius: 16px; } }
+        @media (min-width: 640px) { .form-card, .sprint-card { padding: 20px; margin-bottom: 20px; border-radius: 20px; } }
         
-        .form-card h3 { margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid #e2e8f0; font-size: 1rem; }
-        @media (min-width: 640px) { .form-card h3 { font-size: 1.1rem; } }
-        @media (min-width: 1024px) { .form-card h3 { margin-bottom: 1.25rem; padding-bottom: 0.5rem; font-size: 1.2rem; } }
+        .form-card h3 { margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; font-size: 1.1rem; }
+        @media (max-width: 640px) { .form-card h3 { margin-bottom: 10px; padding-bottom: 6px; font-size: 0.95rem; } }
+        @media (min-width: 1024px) { .form-card h3 { margin-bottom: 20px; padding-bottom: 12px; font-size: 1.2rem; } }
         
-        .form-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 0.8rem; }
-        @media (min-width: 640px) { .form-row { gap: 1rem; margin-bottom: 1rem; } }
+        .form-row { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; }
+        @media (max-width: 640px) { .form-row { gap: 8px; margin-bottom: 8px; } }
         
-        .form-group { flex: 1; min-width: 120px; }
-        @media (min-width: 480px) { .form-group { min-width: 140px; } }
+        .form-group { flex: 1; min-width: 140px; }
+        @media (max-width: 480px) { .form-group { min-width: 100%; } }
         @media (min-width: 640px) { .form-group { min-width: 150px; } }
         
-        label { font-weight: 600; font-size: 0.6rem; display: block; margin-bottom: 0.2rem; color: #334155; text-transform: uppercase; letter-spacing: 0.3px; }
-        @media (min-width: 640px) { label { font-size: 0.65rem; letter-spacing: 0.4px; } }
-        @media (min-width: 1024px) { label { font-size: 0.7rem; letter-spacing: 0.5px; margin-bottom: 0.3rem; } }
+        label { font-weight: 600; font-size: 0.7rem; display: block; margin-bottom: 4px; color: #334155; text-transform: uppercase; letter-spacing: 0.5px; }
+        @media (max-width: 640px) { label { font-size: 0.6rem; } }
         
-        input, select { width: 100%; padding: 0.5rem; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 0.75rem; transition: all 0.2s; }
-        @media (min-width: 640px) { input, select { padding: 0.6rem; border-radius: 13px; font-size: 0.8rem; } }
-        @media (min-width: 1024px) { input, select { padding: 0.7rem; border-radius: 14px; font-size: 0.85rem; } }
+        input, select { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 0.85rem; transition: all 0.2s; }
+        @media (max-width: 640px) { input, select { padding: 8px 10px; font-size: 0.75rem; border-radius: 10px; } }
         
-        button { background: #1c5a7a; border: none; color: white; padding: 0.5rem 1rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.75rem; }
-        @media (min-width: 640px) { button { padding: 0.55rem 1.2rem; font-size: 0.8rem; } }
-        @media (min-width: 1024px) { button { padding: 0.6rem 1.4rem; font-size: 0.85rem; } }
+        input:focus, select:focus { outline: none; border-color: #1c5a7a; box-shadow: 0 0 0 3px rgba(28,90,122,0.1); }
+        
+        button { background: #1c5a7a; border: none; color: white; padding: 10px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
+        @media (max-width: 640px) { button { padding: 8px 14px; font-size: 0.75rem; } }
+        @media (min-width: 640px) { button { padding: 10px 22px; font-size: 0.85rem; } }
         button:hover { background: #0e3e56; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(28,90,122,0.3); }
         
-        .kanban-board { display: flex; gap: 0.8rem; overflow-x: auto; padding-bottom: 0.5rem; }
-        @media (min-width: 768px) { .kanban-board { gap: 1rem; } }
-        @media (min-width: 1024px) { .kanban-board { gap: 1.2rem; } }
+        .kanban-board { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; }
+        @media (max-width: 640px) { .kanban-board { gap: 10px; } }
         
-        .kanban-col { flex: 1; min-width: 240px; background: #f8fafc; border-radius: 16px; padding: 0.8rem; border: 1px solid #e2edf2; }
-        @media (min-width: 640px) { .kanban-col { min-width: 260px; border-radius: 18px; padding: 0.9rem; } }
-        @media (min-width: 1024px) { .kanban-col { min-width: 280px; border-radius: 20px; padding: 1rem; } }
+        .kanban-col { flex: 1; min-width: 260px; background: #f8fafc; border-radius: 16px; padding: 12px; border: 1px solid #e2edf2; }
+        @media (max-width: 640px) { .kanban-col { min-width: 220px; padding: 8px; border-radius: 12px; } }
         
-        .col-header { font-weight: 700; font-size: 0.85rem; padding-bottom: 0.6rem; border-bottom: 2px solid #cbd5e1; margin-bottom: 0.8rem; display: flex; justify-content: space-between; }
-        @media (min-width: 640px) { .col-header { font-size: 0.9rem; padding-bottom: 0.7rem; margin-bottom: 0.9rem; } }
-        @media (min-width: 1024px) { .col-header { font-size: 1rem; padding-bottom: 0.75rem; margin-bottom: 1rem; } }
+        .col-header { font-weight: 700; font-size: 0.9rem; padding-bottom: 10px; border-bottom: 2px solid #cbd5e1; margin-bottom: 12px; display: flex; justify-content: space-between; }
+        @media (max-width: 640px) { .col-header { font-size: 0.8rem; padding-bottom: 6px; margin-bottom: 8px; } }
         
-        .task-card { background: white; border-radius: 14px; padding: 0.7rem; margin-bottom: 0.6rem; border-left: 3px solid; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.2s; }
-        @media (min-width: 640px) { .task-card { border-radius: 15px; padding: 0.8rem; margin-bottom: 0.7rem; border-left: 4px solid; } }
-        @media (min-width: 1024px) { .task-card { border-radius: 16px; padding: 0.9rem; margin-bottom: 0.8rem; } }
+        .task-card { background: white; border-radius: 14px; padding: 10px; margin-bottom: 10px; border-left: 4px solid; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.2s; }
+        @media (max-width: 640px) { .task-card { padding: 8px; margin-bottom: 6px; border-left-width: 3px; } }
         .task-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         
-        .task-title { font-weight: 700; font-size: 0.8rem; margin-bottom: 0.3rem; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-        @media (min-width: 640px) { .task-title { font-size: 0.85rem; gap: 5px; } }
-        @media (min-width: 1024px) { .task-title { font-size: 0.9rem; gap: 6px; } }
+        .task-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+        @media (max-width: 640px) { .task-title { font-size: 0.75rem; gap: 4px; } }
         
-        .task-meta { font-size: 0.65rem; color: #5b6e8c; margin-top: 4px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 3px; }
-        @media (min-width: 640px) { .task-meta { font-size: 0.68rem; gap: 4px; } }
-        @media (min-width: 1024px) { .task-meta { font-size: 0.7rem; gap: 4px; } }
+        .task-meta { font-size: 0.65rem; color: #5b6e8c; margin-top: 6px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+        @media (max-width: 640px) { .task-meta { font-size: 0.6rem; } }
         
-        .badge { background: #eef2ff; padding: 2px 6px; border-radius: 30px; font-size: 0.65rem; font-weight: 500; }
-        @media (min-width: 640px) { .badge { padding: 2px 7px; } }
-        @media (min-width: 1024px) { .badge { padding: 2px 8px; } }
+        .badge { background: #eef2ff; padding: 3px 8px; border-radius: 30px; font-size: 0.65rem; font-weight: 500; }
+        @media (max-width: 640px) { .badge { padding: 2px 6px; font-size: 0.6rem; } }
         
         .project-btn { 
             background: #e2e8f0;
             border: 1px solid #cbd5e1;
             color: #334155;
-            padding: 0.4rem 0.8rem; 
+            padding: 8px 16px; 
             border-radius: 40px; 
             font-weight: 500; 
             cursor: pointer; 
             transition: all 0.2s; 
-            font-size: 0.7rem;
+            font-size: 0.8rem;
         }
-        @media (min-width: 640px) { .project-btn { padding: 0.45rem 1rem; font-size: 0.75rem; } }
-        @media (min-width: 1024px) { .project-btn { padding: 0.5rem 1.2rem; font-size: 0.8rem; } }
+        @media (max-width: 640px) { .project-btn { padding: 6px 12px; font-size: 0.7rem; } }
         .project-btn.active { background: #1c5a7a; border-color: #1c5a7a; color: white; box-shadow: 0 2px 8px rgba(28,90,122,0.3); }
         .project-btn:hover:not(.active) { background: #cbd5e1; transform: translateY(-1px); }
         
-        .participant-item { background: #f8fafc; border-radius: 16px; padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; display: flex; justify-content: space-between; border-left: 3px solid #1c5a7a; cursor: pointer; transition: all 0.2s; font-size: 0.75rem; }
-        @media (min-width: 640px) { .participant-item { border-radius: 18px; padding: 0.8rem 0.9rem; margin-bottom: 0.65rem; font-size: 0.8rem; border-left: 4px solid #1c5a7a; } }
-        @media (min-width: 1024px) { .participant-item { border-radius: 20px; padding: 0.9rem 1rem; margin-bottom: 0.7rem; } }
+        .participant-item { background: #f8fafc; border-radius: 16px; padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; border-left: 4px solid #1c5a7a; cursor: pointer; transition: all 0.2s; font-size: 0.8rem; }
+        @media (max-width: 640px) { .participant-item { padding: 8px 12px; margin-bottom: 6px; font-size: 0.7rem; border-left-width: 3px; } }
         .participant-item:hover { background: #eef2ff; transform: translateX(4px); }
-        .participant-item small { font-size: 0.6rem; }
-        @media (min-width: 640px) { .participant-item small { font-size: 0.65rem; } }
+        .participant-item small { font-size: 0.65rem; }
+        @media (max-width: 640px) { .participant-item small { font-size: 0.55rem; } }
         
         .sprint-card { cursor: pointer; transition: all 0.2s; }
         .sprint-card:hover { background: #f8fafc; transform: translateX(4px); }
         
         .task-row-sprint { 
             background: #ffffff; 
-            padding: 0.6rem; 
-            margin: 0.4rem 0; 
+            padding: 10px; 
+            margin: 8px 0; 
             border-radius: 14px; 
             border: 1px solid #ecf3f8; 
             display: flex; 
             justify-content: space-between; 
             flex-wrap: wrap; 
-            gap: 6px;
+            gap: 8px;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
         }
-        @media (min-width: 640px) { .task-row-sprint { padding: 0.7rem; margin: 0.45rem 0; border-radius: 15px; gap: 7px; font-size: 0.75rem; } }
-        @media (min-width: 1024px) { .task-row-sprint { padding: 0.8rem; margin: 0.5rem 0; border-radius: 16px; gap: 8px; font-size: 0.8rem; } }
+        @media (max-width: 640px) { .task-row-sprint { padding: 8px; margin: 6px 0; font-size: 0.65rem; gap: 6px; } }
         .task-row-sprint:hover { background: #fefce8; border-color: #fde047; }
         
-        .gantt-controls { margin-bottom: 0.8rem; display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
-        @media (min-width: 640px) { .gantt-controls { margin-bottom: 1rem; gap: 1rem; } }
+        .gantt-controls { margin-bottom: 16px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+        @media (max-width: 640px) { .gantt-controls { gap: 8px; margin-bottom: 12px; } }
         
-        .view-selector { background: #f1f5f9; padding: 3px; border-radius: 40px; display: inline-flex; gap: 3px; }
-        @media (min-width: 640px) { .view-selector { padding: 4px; gap: 4px; } }
-        
-        .view-btn { background: transparent; color: #334155; padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; }
-        @media (min-width: 640px) { .view-btn { padding: 5px 15px; font-size: 0.75rem; } }
-        @media (min-width: 1024px) { .view-btn { padding: 6px 18px; font-size: 0.8rem; } }
+        .view-selector { background: #f1f5f9; padding: 4px; border-radius: 40px; display: inline-flex; gap: 4px; }
+        .view-btn { background: transparent; color: #334155; padding: 6px 18px; border-radius: 30px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        @media (max-width: 640px) { .view-btn { padding: 4px 12px; font-size: 0.7rem; } }
         .view-btn.active { background: #1c5a7a; color: white; }
         .view-btn:hover:not(.active) { background: #e2e8f0; }
         
-        .gantt-container { background: white; border-radius: 16px; border: 1px solid #e2e8f0; overflow-x: auto; margin-top: 0.8rem; }
-        @media (min-width: 640px) { .gantt-container { border-radius: 18px; margin-top: 1rem; } }
-        @media (min-width: 1024px) { .gantt-container { border-radius: 20px; } }
+        .gantt-container { background: white; border-radius: 16px; border: 1px solid #e2e8f0; overflow-x: auto; margin-top: 16px; }
+        @media (max-width: 640px) { .gantt-container { border-radius: 12px; margin-top: 12px; } }
         
-        .gantt-table { width: 100%; border-collapse: collapse; font-size: 0.65rem; min-width: 500px; }
-        @media (min-width: 640px) { .gantt-table { font-size: 0.7rem; min-width: 550px; } }
-        @media (min-width: 1024px) { .gantt-table { font-size: 0.75rem; min-width: 600px; } }
+        .gantt-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; min-width: 600px; }
+        @media (max-width: 640px) { .gantt-table { font-size: 0.65rem; min-width: 500px; } }
         
-        .gantt-table th, .gantt-table td { border-bottom: 1px solid #e9edf2; padding: 6px 4px; vertical-align: middle; }
-        @media (min-width: 640px) { .gantt-table th, .gantt-table td { padding: 8px 5px; } }
-        @media (min-width: 1024px) { .gantt-table th, .gantt-table td { padding: 10px 6px; } }
+        .gantt-table th, .gantt-table td { border-bottom: 1px solid #e9edf2; padding: 10px 8px; vertical-align: middle; }
+        @media (max-width: 640px) { .gantt-table th, .gantt-table td { padding: 6px 4px; } }
         
-        .task-name-col { font-weight: 600; background: white; position: sticky; left: 0; z-index: 1; min-width: 160px; }
-        @media (min-width: 640px) { .task-name-col { min-width: 190px; } }
-        @media (min-width: 1024px) { .task-name-col { min-width: 220px; } }
+        .task-name-col { font-weight: 600; background: white; position: sticky; left: 0; z-index: 1; min-width: 200px; }
+        @media (max-width: 640px) { .task-name-col { min-width: 160px; } }
         
         .gantt-unit-cell { background: #f8fafc; position: relative; }
         .gantt-bar-bg { position: absolute; top: 4px; left: 0; right: 0; bottom: 4px; border-radius: 8px; cursor: pointer; transition: 0.1s; }
         .gantt-bar-bg:hover { opacity: 0.85; transform: scaleY(1.02); }
-        .sprint-group-title { background: #eef2ff; font-weight: 700; font-size: 0.8rem; }
+        .sprint-group-title { background: #eef2ff; font-weight: 700; font-size: 0.85rem; }
         
-        .info-nota { background: #d1fae5; padding: 6px 10px; border-radius: 14px; margin-bottom: 12px; font-size: 0.65rem; color: #065f46; border-left: 3px solid #10b981; }
-        @media (min-width: 640px) { .info-nota { padding: 7px 11px; border-radius: 15px; font-size: 0.7rem; border-left: 4px solid #10b981; } }
-        @media (min-width: 1024px) { .info-nota { padding: 8px 12px; border-radius: 16px; font-size: 0.75rem; } }
+        .info-nota { background: #d1fae5; padding: 10px 14px; border-radius: 14px; margin-bottom: 16px; font-size: 0.7rem; color: #065f46; border-left: 4px solid #10b981; }
+        @media (max-width: 640px) { .info-nota { padding: 8px 10px; margin-bottom: 12px; font-size: 0.6rem; } }
         
         .text-nowrap { white-space: nowrap; }
         .text-center { text-align: center; }
-        .warning-text { color: #e67e22; font-size: 0.6rem; margin-top: 3px; }
-        @media (min-width: 640px) { .warning-text { font-size: 0.65rem; margin-top: 4px; } }
-        @media (min-width: 1024px) { .warning-text { font-size: 0.7rem; } }
+        .warning-text { color: #e67e22; font-size: 0.65rem; margin-top: 4px; }
+        @media (max-width: 640px) { .warning-text { font-size: 0.55rem; } }
         
-        .participants-header { margin-bottom: 1rem; }
-        .participants-header hr { margin: 0.5rem 0 1rem 0; border: none; border-top: 1px solid #e2e8f0; }
-        .add-member-btn-container { margin-top: 0.8rem; }
-        .action-buttons-container { display: flex; gap: 0.8rem; margin-top: 1rem; justify-content: center; flex-wrap: wrap; }
-        @media (min-width: 640px) { .action-buttons-container { gap: 1rem; margin-top: 1.2rem; } }
-        @media (min-width: 1024px) { .action-buttons-container { margin-top: 1.5rem; } }
+        .participants-header { margin-bottom: 16px; }
+        .participants-header hr { margin: 12px 0 20px 0; border: none; border-top: 1px solid #e2e8f0; }
+        @media (max-width: 640px) { .participants-header hr { margin: 8px 0 12px 0; } }
+        
+        .add-member-btn-container { margin-top: 16px; }
+        .action-buttons-container { display: flex; gap: 16px; margin-top: 24px; justify-content: center; flex-wrap: wrap; }
+        @media (max-width: 640px) { .action-buttons-container { gap: 10px; margin-top: 16px; } }
         
         .import-export-buttons {
             position: fixed;
-            bottom: 15px;
-            right: 15px;
+            bottom: 20px;
+            right: 20px;
             display: flex;
-            gap: 8px;
+            gap: 12px;
             z-index: 100;
             transition: opacity 0.3s ease;
         }
-        @media (min-width: 640px) { .import-export-buttons { bottom: 20px; right: 20px; gap: 10px; } }
-        @media (min-width: 1024px) { .import-export-buttons { bottom: 30px; right: 30px; gap: 12px; } }
+        @media (max-width: 640px) { .import-export-buttons { bottom: 12px; right: 12px; gap: 8px; } }
         
         .import-export-buttons.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         
         .import-export-buttons button {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             background: #1c5a7a;
             color: white;
@@ -363,11 +319,10 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 1rem;
+            font-size: 1.2rem;
             border: none;
         }
-        @media (min-width: 640px) { .import-export-buttons button { width: 44px; height: 44px; font-size: 1.1rem; } }
-        @media (min-width: 1024px) { .import-export-buttons button { width: 48px; height: 48px; font-size: 1.2rem; } }
+        @media (max-width: 640px) { .import-export-buttons button { width: 40px; height: 40px; font-size: 1rem; } }
         
         .import-export-buttons button:hover { background: #0e3e56; transform: scale(1.05); }
         .btn-export { background: #10b981; }
@@ -377,141 +332,339 @@
         .btn-clear { background: #dc2626; }
         .btn-clear:hover { background: #b91c1c; }
         
+        /* ========== CARRUSEL 3D LOGIN RESPONSIVE ========== */
         .login-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(25, 80, 120, 0.75);
-            backdrop-filter: blur(12px);
+            background: linear-gradient(135deg, #0a2b3c 0%, #1c5a7a 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 2000;
-            animation: fadeIn 0.3s ease;
+            overflow: hidden;
         }
-        @keyframes fadeIn { from { opacity: 0; backdrop-filter: blur(0px); } to { opacity: 1; backdrop-filter: blur(12px); } }
         
-        .login-modal {
-            background: linear-gradient(145deg, #ffffff 0%, #f0f6ff 100%);
-            border-radius: 40px;
-            width: 90%;
-            max-width: 400px;
-            padding: 1.8rem 1.5rem;
-            box-shadow: 0 25px 60px -12px rgba(0,40,60,0.4), inset 0 1px 0 rgba(255,255,255,0.8);
+        .login-overlay::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: particles 20s linear infinite;
+        }
+        
+        @keyframes particles {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+        
+        .carousel-container {
+            perspective: 1200px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            padding: 0 50px;
+        }
+        @media (max-width: 640px) { .carousel-container { padding: 0 40px; } }
+        @media (max-width: 480px) { .carousel-container { padding: 0 30px; } }
+        
+        .carousel-title {
             text-align: center;
-            border: 1px solid rgba(28,90,122,0.2);
-            animation: slideUp 0.4s ease;
+            margin-bottom: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
         }
-        @media (min-width: 640px) { .login-modal { border-radius: 44px; max-width: 420px; padding: 2rem 1.8rem; } }
-        @media (min-width: 1024px) { .login-modal { border-radius: 48px; max-width: 440px; padding: 2.5rem 2rem; } }
+        @media (max-width: 640px) { .carousel-title { margin-bottom: 20px; gap: 6px; } }
         
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .login-logo { 
-            width: 90px; 
-            height: 90px; 
-            background: linear-gradient(135deg, #ffffff 0%, #e8f0f8 100%);
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin: 0 auto 1rem auto; 
-            box-shadow: 0 8px 20px rgba(28,90,122,0.25), inset 0 1px 0 rgba(255,255,255,0.9);
-            border: 1px solid rgba(28,90,122,0.15);
+        .carousel-logo {
+            /* ELIMINADO: cuadrado contenedor, ahora solo la imagen sin fondo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
         }
-        @media (min-width: 640px) { .login-logo { width: 105px; height: 105px; margin: 0 auto 1.1rem auto; } }
-        @media (min-width: 1024px) { .login-logo { width: 120px; height: 120px; margin: 0 auto 1.2rem auto; } }
-        
-        .login-logo img { height: 55px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        @media (min-width: 640px) { .login-logo img { height: 65px; } }
-        @media (min-width: 1024px) { .login-logo img { height: 80px; } }
-        
-        .login-modal h2 { 
-            font-size: 1.6rem; 
-            background: linear-gradient(135deg, #1c5a7a 0%, #2c7aa0 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 0.2rem; 
-            letter-spacing: -0.5px;
+        @media (max-width: 640px) { 
+            .carousel-logo { margin-bottom: 6px; }
         }
-        @media (min-width: 640px) { .login-modal h2 { font-size: 1.8rem; } }
-        @media (min-width: 1024px) { .login-modal h2 { font-size: 2rem; } }
         
-        .login-modal p { color: #5a7a92; margin-bottom: 1.5rem; font-size: 0.75rem; font-weight: 500; }
-        @media (min-width: 640px) { .login-modal p { font-size: 0.8rem; margin-bottom: 1.8rem; } }
-        @media (min-width: 1024px) { .login-modal p { font-size: 0.85rem; margin-bottom: 2rem; } }
+        .carousel-logo img {
+            height: 150px;
+            width: auto;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+        @media (max-width: 640px) { 
+            .carousel-logo img { height: 60px; }
+        }
+        @media (max-width: 480px) { 
+            .carousel-logo img { height: 80px; }
+        }
         
-        .login-modal select, .login-modal input { 
-            width: 100%; 
-            padding: 0.7rem 1rem; 
-            margin-bottom: 0.8rem; 
-            border-radius: 60px; 
-            border: 1px solid #cde0ec; 
+        .carousel-title h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        @media (max-width: 640px) { .carousel-title h2 { font-size: 1.6rem; } }
+        @media (max-width: 480px) { .carousel-title h2 { font-size: 1.4rem; } }
+        
+        .carousel-title p {
+            color: rgba(255,255,255,0.8);
             font-size: 0.85rem;
-            background: white;
-            transition: all 0.2s;
+            font-weight: 500;
         }
-        @media (min-width: 640px) { .login-modal select, .login-modal input { padding: 0.8rem 1.1rem; font-size: 0.9rem; margin-bottom: 0.9rem; } }
-        @media (min-width: 1024px) { .login-modal select, .login-modal input { padding: 0.9rem 1.2rem; font-size: 0.95rem; margin-bottom: 1rem; } }
+        @media (max-width: 640px) { .carousel-title p { font-size: 0.7rem; } }
+        @media (max-width: 480px) { .carousel-title p { font-size: 0.6rem; } }
         
-        .login-modal select:focus, .login-modal input:focus {
-            outline: none; border-color: #1c5a7a; box-shadow: 0 0 0 3px rgba(28,90,122,0.15);
+        .carousel-3d {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
         }
+        @media (max-width: 640px) { .carousel-3d { height: 320px; } }
+        @media (max-width: 480px) { .carousel-3d { height: 280px; } }
         
-        .login-modal button { 
-            width: 100%; 
-            padding: 0.7rem; 
-            font-size: 0.9rem; 
-            background: linear-gradient(135deg, #1c5a7a 0%, #0e3e56 100%);
-            border: none; 
-            color: white; 
-            border-radius: 60px; 
+        .carousel-card {
+            position: absolute;
+            width: 280px;
+            height: 350px;
+            background: linear-gradient(145deg, #ffffff 0%, #f0f6ff 100%);
+            border-radius: 28px;
+            padding: 24px 20px;
             cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            border: 1px solid rgba(28,90,122,0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        @media (max-width: 640px) { 
+            .carousel-card { width: 240px; height: 300px; padding: 18px 15px; border-radius: 24px; }
+        }
+        @media (max-width: 480px) { 
+            .carousel-card { width: 210px; height: 270px; padding: 15px 12px; border-radius: 20px; }
+        }
+        
+        .carousel-card.active-card {
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.4), 0 0 0 3px rgba(28,90,122,0.5);
+            transform: scale(1.02);
+        }
+        
+        .card-icon {
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(135deg, #1c5a7a 0%, #0e3e56 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        @media (max-width: 640px) { 
+            .card-icon { width: 65px; height: 65px; margin-bottom: 15px; }
+            .card-icon i { font-size: 2rem !important; }
+        }
+        @media (max-width: 480px) { 
+            .card-icon { width: 55px; height: 55px; margin-bottom: 12px; }
+            .card-icon i { font-size: 1.6rem !important; }
+        }
+        
+        .card-icon i { font-size: 2.5rem; color: white; }
+        
+        .card-title {
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-top: 0.3rem;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(28,90,122,0.3);
+            color: #1c5a7a;
+            margin-bottom: 8px;
         }
-        @media (min-width: 640px) { .login-modal button { padding: 0.8rem; font-size: 0.95rem; margin-top: 0.4rem; } }
-        @media (min-width: 1024px) { .login-modal button { padding: 0.9rem; font-size: 1rem; margin-top: 0.5rem; } }
+        @media (max-width: 640px) { .card-title { font-size: 1.1rem; } }
+        @media (max-width: 480px) { .card-title { font-size: 1rem; } }
         
-        .login-modal button:hover { 
-            background: linear-gradient(135deg, #0e4a6a 0%, #0a3548 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(28,90,122,0.4);
+        .card-desc {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
         }
+        @media (max-width: 640px) { .card-desc { font-size: 0.65rem; margin-bottom: 8px; } }
+        @media (max-width: 480px) { .card-desc { font-size: 0.55rem; } }
         
-        .error-msg { 
-            color: #dc2626; 
-            font-size: 0.7rem; 
-            margin-top: 0.8rem;
-            padding: 0.4rem;
-            background: #fee2e2;
+        .card-badge {
+            background: #eef2ff;
+            padding: 6px 14px;
             border-radius: 40px;
-            animation: shake 0.3s ease;
+            font-size: 0.7rem;
+            color: #1c5a7a;
+            font-weight: 600;
+            margin-top: auto;
         }
-        @media (min-width: 640px) { .error-msg { font-size: 0.75rem; margin-top: 0.9rem; padding: 0.45rem; } }
-        @media (min-width: 1024px) { .error-msg { font-size: 0.8rem; margin-top: 1rem; padding: 0.5rem; } }
+        @media (max-width: 640px) { .card-badge { padding: 4px 10px; font-size: 0.6rem; } }
         
-        @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 20;
+            color: white;
+            font-size: 1.5rem;
+        }
+        @media (max-width: 640px) { 
+            .nav-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+        }
+        @media (max-width: 480px) { 
+            .nav-btn { width: 35px; height: 35px; font-size: 1rem; }
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-50%) scale(1.05);
+        }
+        
+        .nav-left { left: 10px; }
+        .nav-right { right: 10px; }
+        @media (min-width: 768px) { .nav-left { left: 20px; } .nav-right { right: 20px; } }
+        @media (max-width: 480px) { .nav-left { left: 5px; } .nav-right { right: 5px; } }
+        
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2100;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .password-modal-content {
+            background: linear-gradient(145deg, #ffffff 0%, #f0f6ff 100%);
+            border-radius: 32px;
+            width: 90%;
+            max-width: 380px;
+            padding: 32px 28px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+        }
+        @media (max-width: 640px) { 
+            .password-modal-content { padding: 24px 20px; max-width: 340px; border-radius: 28px; }
+            .password-modal-content h3 { font-size: 1.3rem; }
+            .password-modal-content p { font-size: 0.75rem; }
+        }
+        @media (max-width: 480px) { 
+            .password-modal-content { padding: 20px 16px; }
+            .password-modal-content h3 { font-size: 1.1rem; }
+            .password-modal-content p { font-size: 0.65rem; margin-bottom: 16px; }
+        }
+        
+        .password-modal-content h3 {
+            font-size: 1.5rem;
+            color: #1c5a7a;
+            margin-bottom: 8px;
+        }
+        
+        .password-modal-content p {
+            color: #64748b;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .password-modal-content input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 60px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+        @media (max-width: 640px) { .password-modal-content input { padding: 10px 14px; font-size: 0.85rem; margin-bottom: 12px; } }
+        
+        .password-modal-content input:focus {
+            outline: none;
+            border-color: #1c5a7a;
+            box-shadow: 0 0 0 3px rgba(28,90,122,0.15);
+        }
+        
+        .password-modal-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        @media (max-width: 640px) { .password-modal-buttons { gap: 12px; } }
+        
+        .password-modal-buttons button {
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        @media (max-width: 640px) { .password-modal-buttons button { padding: 8px 16px; font-size: 0.8rem; } }
+        
+        .btn-confirm {
+            background: #1c5a7a;
+            color: white;
+        }
+        .btn-confirm:hover { background: #0e3e56; transform: translateY(-1px); }
+        
+        .btn-cancel {
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .btn-cancel:hover { background: #cbd5e1; transform: translateY(-1px); }
+        
+        .error-msg-pass {
+            color: #dc2626;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: white; border-radius: 24px; width: 90%; max-width: 480px; padding: 1.2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-height: 85vh; overflow-y: auto; }
-        @media (min-width: 640px) { .modal-content { border-radius: 26px; padding: 1.3rem; max-width: 490px; } }
-        @media (min-width: 1024px) { .modal-content { border-radius: 28px; padding: 1.5rem; max-width: 500px; } }
+        .modal-content { background: white; border-radius: 24px; width: 90%; max-width: 500px; padding: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-height: 85vh; overflow-y: auto; }
+        @media (max-width: 640px) { .modal-content { padding: 16px; border-radius: 20px; } }
         
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0; }
-        .modal-header h3 { font-size: 1rem; font-weight: 600; }
-        @media (min-width: 640px) { .modal-header h3 { font-size: 1.1rem; } }
-        @media (min-width: 1024px) { .modal-header h3 { font-size: 1.2rem; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
+        .modal-header h3 { font-size: 1.1rem; font-weight: 600; }
+        @media (max-width: 640px) { .modal-header h3 { font-size: 0.95rem; } }
         
         .modal-close { background: none; color: #94a3b8; font-size: 1.2rem; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; }
         .modal-close:hover { background: #f1f5f9; color: #475569; }
         
-        .modal-buttons { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+        .modal-buttons { display: flex; gap: 16px; justify-content: flex-end; margin-top: 24px; }
         .btn-danger { background: #dc2626; }
         .btn-danger:hover { background: #b91c1c; }
         .btn-secondary { background: #e2e8f0; color: #334155; }
@@ -521,34 +674,41 @@
         .btn-email { background: #ea4335; }
         .btn-email:hover { background: #c5221f; }
         
-        .sprint-select { font-size: 0.7rem; min-width: 200px; }
-        @media (min-width: 640px) { .sprint-select { font-size: 0.75rem; min-width: 230px; } }
-        @media (min-width: 1024px) { .sprint-select { font-size: 0.8rem; min-width: 260px; } }
+        .sprint-select { font-size: 0.8rem; min-width: 240px; }
+        @media (max-width: 640px) { .sprint-select { font-size: 0.7rem; min-width: 180px; } }
         
         .full-width { width: 100%; }
-        .assign-sprint-select { padding: 4px 8px; border-radius: 10px; font-size: 0.65rem; background: #f1f5f9; border: 1px solid #cbd5e1; cursor: pointer; }
-        @media (min-width: 640px) { .assign-sprint-select { padding: 5px 10px; font-size: 0.7rem; border-radius: 11px; } }
-        @media (min-width: 1024px) { .assign-sprint-select { padding: 6px 12px; font-size: 0.75rem; border-radius: 12px; } }
+        .assign-sprint-select { padding: 6px 12px; border-radius: 12px; font-size: 0.7rem; background: #f1f5f9; border: 1px solid #cbd5e1; cursor: pointer; }
+        @media (max-width: 640px) { .assign-sprint-select { padding: 4px 8px; font-size: 0.6rem; } }
         
         footer {
-            margin-top: 1.5rem;
-            padding: 0.8rem 1rem;
+            margin-top: 24px;
+            padding: 16px 24px;
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             border-top: 1px solid #e2e8f0;
         }
-        @media (min-width: 640px) { footer { margin-top: 1.8rem; padding: 1rem 1.5rem; } }
-        @media (min-width: 1024px) { footer { margin-top: 2rem; padding: 1.2rem 2rem; } }
+        @media (max-width: 640px) { footer { margin-top: 16px; padding: 12px 16px; } }
         
-        hr { margin: 1rem 0; border: none; border-top: 1px solid #e2e8f0; }
+        hr { margin: 20px 0; border: none; border-top: 1px solid #e2e8f0; }
+        @media (max-width: 640px) { hr { margin: 12px 0; } }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
 <div class="app-container" id="appContainer" style="display: none;">
     <div class="header">
         <div class="logo-area">
-            <div class="logo-circle">
-                <img class="logo-img" src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-G.png" alt="Stride Logo" onerror="this.style.display='none'">
-            </div>
+            <!-- ELIMINADO: div contenedor .logo-circle, solo la imagen del logo -->
+            <img class="logo-img" src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-G.png" alt="Stride Logo" onerror="this.style.display='none'">
             <div class="logo-text">
                 <h1>Stride</h1>
                 <p>Project Manager · Coworking · Supervisión · Control</p>
@@ -579,7 +739,7 @@
             <div class="form-row">
                 <div class="form-group"><label>Nombre</label><input type="text" id="memberName" placeholder="Nombre completo"></div>
                 <div class="form-group"><label>Puesto / Rol</label><input type="text" id="memberRole" placeholder="Scrum Master, Director, Jefe"></div>
-                <div class="form-group"><label>Correo electrónico</label><input type="email" id="memberEmail" placeholder="nombre@empresa.com"></div>
+                <div class="form-group"><label>Correo electrónico</label><input type="email" id="memberEmail" placeholder="nombre@comasw.com"></div>
                 <div class="form-group"><label>Celular</label><input type="text" id="memberPhone" placeholder="+529999123456"></div>
             </div>
             <div class="add-member-btn-container"><button id="addMemberBtn"><i class="fas fa-save"></i> Agregar participante</button></div>
@@ -592,8 +752,8 @@
     </div>
 
     <div id="tab-proyectos" class="tab-content">
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem; align-items:center;">
-            <div id="projectListContainer" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; align-items:center;">
+            <div id="projectListContainer" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
             <button id="newProjectBtn" class="secondary"><i class="fas fa-plus"></i> Nuevo Proyecto</button>
         </div>
         <div class="form-card">
@@ -603,12 +763,12 @@
                 <div class="form-group"><label>Asignado a</label><select id="taskAssigneeSelect"></select></div>
             </div>
             <div class="form-row">
-                <div class="form-group" style="min-width: 220px;"><label>Sprint</label><select id="taskSprintSelect" class="sprint-select"></select></div>
-                <div class="form-group"><label>Duración (días)</label><input type="number" id="taskDuration" placeholder="Número"></div>
+                <div class="form-group" style="min-width: 240px;"><label>Sprint</label><select id="taskSprintSelect" class="sprint-select"></select></div>
+                <div class="form-group"><label>Duración (días)</label><input type="number" id="taskDuration" placeholder="Número" min="1"></div>
                 <div class="form-group"><label>Fecha inicio</label><input type="date" id="taskStartDate"></div>
                 <div class="form-group"><label>Estado</label><select id="taskStatus"><option value="todo">📋 To Do</option><option value="inprogress">⚙️ En Progreso</option><option value="done">✅ Hecho</option></select></div>
             </div>
-            <div id="createWarning" class="warning-text" style="background:#fef3c7; padding:6px; border-radius:10px; margin-bottom:8px;"></div>
+            <div id="createWarning" class="warning-text" style="background:#fef3c7; padding:8px; border-radius:12px; margin-bottom:12px;"></div>
             <button id="addTaskBtn">Crear Tarea</button>
         </div>
         <div class="kanban-board" id="kanbanBoard"></div>
@@ -634,7 +794,7 @@
 
     <div id="tab-gantt" class="tab-content">        
         <div class="gantt-controls"><div class="view-selector"><button class="view-btn" data-view="day">📅 Día</button><button class="view-btn" data-view="week">📆 Semana</button><button class="view-btn" data-view="month">📅 Mes</button></div>
-        <span style="font-size:0.6rem; color:#666;"><i class="fas fa-chart-line"></i> 🟢 Verde | 🟠 ≤5d | 🔴 Vencido | 🔵 Hecho</span></div>
+        <span style="font-size:0.7rem; color:#666;"><i class="fas fa-chart-line"></i> 🟢 En tiempo | 🟠 ≤5d | 🔴 Vencido | 🔵 Hecho</span></div>
         <div id="ganttProfessionalContainer"></div>
     </div>
 </div>
@@ -753,29 +913,31 @@
         return "#10b981";
     }
     
-    function generateTaskSummary(participantId, project) {
+    // ========== FUNCIONES SIN ASTERISCOS ==========
+    function generateTaskSummary(participantId, project, skipFooter = false) {
         const participant = project.participants.find(p => p.id === participantId);
         if (!participant) return null;
         const userTasks = project.tasks.filter(t => t.assigneeId === participantId);
         const todoTasks = userTasks.filter(t => t.status === "todo");
         const inProgressTasks = userTasks.filter(t => t.status === "inprogress");
         const doneTasks = userTasks.filter(t => t.status === "done");
-        let message = `📋 *RESUMEN DE TAREAS - ${participant.name.toUpperCase()}*\n\n`;
-        message += `📁 *Proyecto:* ${project.name}\n`;
-        message += `👤 *Rol:* ${participant.role || "No especificado"}\n`;
-        message += `📧 *Email:* ${participant.email}\n`;
-        message += `📱 *Teléfono:* ${participant.phone}\n\n`;
+        let message = `📋 RESUMEN DE TAREAS - ${participant.name.toUpperCase()}\n\n`;
+        message += `📁 Proyecto: ${project.name}\n`;
+        message += `👤 Rol: ${participant.role || "No especificado"}\n`;
+        message += `📧 Email: ${participant.email}\n`;
+        message += `📱 Teléfono: ${participant.phone}\n\n`;
         message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n`;
-        message += `📊 *ESTADÍSTICAS:*\n`;
+        message += `📊 ESTADÍSTICAS:\n`;
         message += `• 📋 Pendientes: ${todoTasks.length}\n`;
         message += `• ⚙️ En progreso: ${inProgressTasks.length}\n`;
         message += `• ✅ Completadas: ${doneTasks.length}\n`;
         message += `• 📦 Total asignadas: ${userTasks.length}\n\n`;
+        
         if (todoTasks.length > 0) {
             message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n`;
-            message += `📋 *TAREAS PENDIENTES:*\n`;
+            message += `📋 TAREAS PENDIENTES:\n`;
             todoTasks.forEach((t, idx) => {
-                message += `${idx+1}. *${t.title}*\n`;
+                message += `${idx+1}. ${t.title}\n`;
                 message += `   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
                 if (t.sprintId) {
                     const sprint = getSprintById(project, t.sprintId);
@@ -786,9 +948,9 @@
         }
         if (inProgressTasks.length > 0) {
             message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n`;
-            message += `⚙️ *TAREAS EN PROGRESO:*\n`;
+            message += `⚙️ TAREAS EN PROGRESO:\n`;
             inProgressTasks.forEach((t, idx) => {
-                message += `${idx+1}. *${t.title}*\n`;
+                message += `${idx+1}. ${t.title}\n`;
                 message += `   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
                 if (t.sprintId) {
                     const sprint = getSprintById(project, t.sprintId);
@@ -799,31 +961,36 @@
         }
         if (doneTasks.length > 0) {
             message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n`;
-            message += `✅ *TAREAS COMPLETADAS:*\n`;
+            message += `✅ TAREAS COMPLETADAS:\n`;
             doneTasks.forEach((t, idx) => {
-                message += `${idx+1}. *${t.title}*\n`;
+                message += `${idx+1}. ${t.title}\n`;
                 message += `   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)}\n`;
                 message += `\n`;
             });
         }
         if (userTasks.length === 0) {
-            message += `✨ *¡No tienes tareas asignadas actualmente!*\n`;
+            message += `✨ ¡No tienes tareas asignadas actualmente!\n`;
         }
-        message += `\n━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n`;
-        message += `📅 *Reporte generado:* ${new Date().toLocaleString()}\n`;
-        message += `🏢 *Stride - Project Manager*`;
+        
+        if (!skipFooter) {
+            message += `\n━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n`;
+            message += `📅 Reporte generado: ${new Date().toLocaleString()}\n`;
+            message += `🏢 Stride - Project Manager\n`;
+            message += `🛡️ DEPARTAMENTO DE CONTROL INTERNO`;
+        }
         return message;
     }
-    
+
     function generateSummaryForAll(project) {
         let allMessages = [];
         for (let participant of project.participants) {
-            const msg = generateTaskSummary(participant.id, project);
+            const msg = generateTaskSummary(participant.id, project, true);
             if (msg) allMessages.push(msg);
         }
-        return allMessages;
+        const footer = `\n━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n📅 Reporte generado: ${new Date().toLocaleString()}\n🏢 Stride - Project Manager\n🛡️ DEPARTAMENTO DE CONTROL INTERNO`;
+        return allMessages.join('\n\n' + '='.repeat(50) + '\n\n') + footer;
     }
-    
+
     function showCommunicationModal(type) {
         const proj = currentProject();
         if (!proj || proj.participants.length === 0) {
@@ -841,13 +1008,13 @@
                 <div class="form-row">
                     <div class="form-group full-width">
                         <label>Seleccionar participante</label>
-                        <select id="participantSelect" style="width:100%; padding:0.5rem; border-radius:12px;">
+                        <select id="participantSelect" style="width:100%; padding:8px; border-radius:12px;">
                             <option value="all">📢 Todos los participantes</option>
                             ${proj.participants.map(p => `<option value="${p.id}">👤 ${escapeHtml(p.name)} (${escapeHtml(p.role)})</option>`).join('')}
                         </select>
                     </div>
                 </div>
-                <div id="previewMessage" style="background:#f8fafc; padding:10px; border-radius:14px; margin-top:12px; max-height:250px; overflow-y:auto; font-size:0.7rem; white-space:pre-wrap; font-family:monospace;"></div>
+                <div id="previewMessage" style="background:#f8fafc; padding:12px; border-radius:14px; margin-top:16px; max-height:250px; overflow-y:auto; font-size:0.75rem; white-space:pre-wrap; font-family:monospace;"></div>
                 <div class="modal-buttons">
                     <button class="btn-secondary" id="modalCancelBtn">Cancelar</button>
                     <button id="modalSendBtn" class="${type === 'email' ? 'btn-email' : 'btn-whatsapp'}"><i class="fas ${type === 'email' ? 'fa-paper-plane' : 'fa-paper-plane'}"></i> ${type === 'email' ? 'Enviar Correo' : 'Enviar WhatsApp'}</button>
@@ -861,11 +1028,12 @@
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
         const participantSelect = modalOverlay.querySelector('#participantSelect');
         const previewDiv = modalOverlay.querySelector('#previewMessage');
+        
         function updatePreview() {
             const selectedId = participantSelect.value;
             if (selectedId === 'all') {
                 const summaries = generateSummaryForAll(proj);
-                previewDiv.textContent = summaries.join('\n\n' + '='.repeat(50) + '\n\n');
+                previewDiv.textContent = summaries;
             } else {
                 const summary = generateTaskSummary(selectedId, proj);
                 previewDiv.textContent = summary || "No hay tareas asignadas";
@@ -873,26 +1041,23 @@
         }
         participantSelect.addEventListener('change', updatePreview);
         updatePreview();
+        
         modalOverlay.querySelector('#modalSendBtn').addEventListener('click', () => {
             const selectedId = participantSelect.value;
             const isAll = selectedId === 'all';
+            
             if (type === 'email') {
                 if (isAll) {
-                    let emailBody = "";
-                    for (let p of proj.participants) {
-                        const summary = generateTaskSummary(p.id, proj);
-                        if (summary) {
-                            emailBody += summary + "\n\n" + "=".repeat(50) + "\n\n";
-                        }
-                    }
-                    const subject = encodeURIComponent(`Resumen de tareas - ${proj.name}`);
+                    const allEmails = proj.participants.map(p => p.email).join(';');
+                    const emailBody = generateSummaryForAll(proj);
+                    const subject = encodeURIComponent(`Avance del Proyecto - ${proj.name}`);
                     const body = encodeURIComponent(emailBody);
-                    window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+                    window.open(`mailto:${allEmails}?subject=${subject}&body=${body}`, '_blank');
                 } else {
                     const participant = proj.participants.find(p => p.id === selectedId);
                     const summary = generateTaskSummary(selectedId, proj);
                     if (participant && summary) {
-                        const subject = encodeURIComponent(`Resumen de tareas - ${proj.name}`);
+                        const subject = encodeURIComponent(`Avance del Proyecto - ${proj.name}`);
                         const body = encodeURIComponent(summary);
                         window.open(`mailto:${participant.email}?subject=${subject}&body=${body}`, '_blank');
                     }
@@ -900,13 +1065,7 @@
                 closeModal();
             } else if (type === 'whatsapp') {
                 if (isAll) {
-                    let allMessages = "";
-                    for (let p of proj.participants) {
-                        const summary = generateTaskSummary(p.id, proj);
-                        if (summary) {
-                            allMessages += summary + "\n\n" + "=".repeat(50) + "\n\n";
-                        }
-                    }
+                    const allMessages = generateSummaryForAll(proj);
                     const encodedMsg = encodeURIComponent(allMessages);
                     window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
                 } else {
@@ -926,18 +1085,49 @@
         });
     }
     
+    // FUNCIÓN DE EXPORTACIÓN MEJORADA
     function exportData() {
-        const exportData = { projects: data.projects, currentProjectId: data.currentProjectId, ganttView: data.ganttView, exportDate: new Date().toISOString() };
+        const exportData = { 
+            projects: data.projects, 
+            currentProjectId: data.currentProjectId, 
+            ganttView: data.ganttView, 
+            exportDate: new Date().toISOString(),
+            version: "1.0"
+        };
         const jsonStr = JSON.stringify(exportData, null, 2);
         const blob = new Blob([jsonStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `stride_backup_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        
+        if ('showSaveFilePicker' in window) {
+            const opts = {
+                suggestedName: `Stride_backup_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`,
+                types: [{
+                    description: 'Archivo JSON',
+                    accept: { 'application/json': ['.json'] }
+                }]
+            };
+            window.showSaveFilePicker(opts).then(fileHandle => {
+                return fileHandle.createWritable().then(writable => {
+                    return writable.write(blob).then(() => writable.close());
+                });
+            }).catch(err => {
+                if (err.name !== 'AbortError') {
+                    fallbackDownload(url);
+                }
+            });
+        } else {
+            fallbackDownload(url);
+        }
+        
+        function fallbackDownload(url) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stride_backup_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+        }
     }
     
     function importData() {
@@ -1015,7 +1205,7 @@
         }
         const sprintSel = document.getElementById("taskSprintSelect");
         if(sprintSel && proj) {
-            sprintSel.innerHTML = `<option value="">📦 Backlog (sin sprint)</option>` + (proj.sprints || []).map(s => `<option value="${s.id}" style="padding:6px;">🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join("");
+            sprintSel.innerHTML = `<option value="">📦 Backlog (sin sprint)</option>` + (proj.sprints || []).map(s => `<option value="${s.id}" style="padding:8px;">🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join("");
             sprintSel.disabled = !isManager;
         }
         sprintSel?.addEventListener('change', () => {
@@ -1036,8 +1226,8 @@
         if(data.projects.length === 0){
             const emptyMsg = document.createElement("span");
             emptyMsg.style.color = "#94a3b8";
-            emptyMsg.style.fontSize = "0.7rem";
-            emptyMsg.style.padding = "0.4rem 0";
+            emptyMsg.style.fontSize = "0.8rem";
+            emptyMsg.style.padding = "8px 0";
             emptyMsg.innerText = "📁 Sin proyectos. Crea uno nuevo ➕";
             container.appendChild(emptyMsg);
             return;
@@ -1130,16 +1320,16 @@
                     <div class="form-group"><label>Asignado a</label><select id="editTaskAssignee"><option value="">-- Sin asignar --</option>${(proj.participants || []).map(m => `<option value="${m.id}" ${task.assigneeId === m.id ? 'selected' : ''}>${escapeHtml(m.name)} (${escapeHtml(m.role)})</option>`).join('')}</select></div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group" style="min-width:220px;"><label>Sprint</label><select id="editTaskSprint" class="sprint-select"><option value="">📦 Backlog</option>${(proj.sprints || []).map(s => `<option value="${s.id}" ${task.sprintId === s.id ? 'selected' : ''}>${escapeHtml(s.name)} (${formatDateDMY(s.startDate)}→${formatDateDMY(s.endDate)})</option>`).join('')}</select></div>
-                    <div class="form-group"><label>Duración (días)</label><input type="number" id="editTaskDuration" value="${task.duration || ''}"></div>
+                    <div class="form-group" style="min-width:240px;"><label>Sprint</label><select id="editTaskSprint" class="sprint-select"><option value="">📦 Backlog</option>${(proj.sprints || []).map(s => `<option value="${s.id}" ${task.sprintId === s.id ? 'selected' : ''}>${escapeHtml(s.name)} (${formatDateDMY(s.startDate)}→${formatDateDMY(s.endDate)})</option>`).join('')}</select></div>
+                    <div class="form-group"><label>Duración (días)</label><input type="number" id="editTaskDuration" value="${task.duration || ''}" min="1"></div>
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label>Fecha inicio</label><input type="date" id="editTaskStartDate" value="${task.startDate || ''}"></div>
                     <div class="form-group"><label>Fecha fin</label><input type="date" id="editTaskEndDate" value="${task.endDate || ''}"></div>
                     <div class="form-group"><label>Estado Kanban</label><select id="editTaskStatus"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>📋 To Do</option><option value="inprogress" ${task.status === 'inprogress' ? 'selected' : ''}>⚙️ En Progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>✅ Hecho</option></select></div>
                 </div>
-                <div id="editInfo" class="info-nota" style="margin-bottom:8px;">✏️ Al editar duración o fechas, los campos se actualizarán automáticamente</div>
-                <div id="editWarning" class="warning-text" style="background:#fef3c7; padding:6px; border-radius:10px; margin-bottom:8px;"></div>
+                <div id="editInfo" class="info-nota" style="margin-bottom:12px;">✏️ Al editar duración o fechas, los campos se actualizarán automáticamente</div>
+                <div id="editWarning" class="warning-text" style="background:#fef3c7; padding:8px; border-radius:12px; margin-bottom:12px;"></div>
                 <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn"><i class="fas fa-trash-alt"></i> Eliminar</button><button id="modalSaveBtn"><i class="fas fa-save"></i> Guardar cambios</button></div>
             </div>
         `;
@@ -1227,21 +1417,33 @@
             const newTitle = modalOverlay.querySelector('#editTaskTitle').value.trim();
             const newAssigneeId = modalOverlay.querySelector('#editTaskAssignee').value || null;
             const newSprintId = sprintSelect.value || null;
-            const newDuration = parseInt(durationInput.value);
+            let newDuration = parseInt(durationInput.value);
             const newStartDate = startDateInput.value;
-            const newEndDate = endDateInput.value;
+            let newEndDate = endDateInput.value;
             const newStatus = modalOverlay.querySelector('#editTaskStatus').value;
             if (!newTitle) { alert("El título es obligatorio"); return; }
+            if (newDuration && newDuration <= 0) {
+                alert("La duración debe ser un número positivo mayor a 0");
+                return;
+            }
             if (newSprintId && newSprintId !== "") {
+                if (!newStartDate || !newDuration || newDuration <= 0) { alert("Para un sprint es obligatorio: Duración positiva y Fecha inicio"); return; }
+                if (!newEndDate) newEndDate = addDaysToYMD(newStartDate, newDuration - 1);
                 const validation = validateSprintRange(proj, newSprintId, newStartDate, newEndDate, newDuration);
                 if (!validation.valid) { alert(validation.message); return; }
+                task.endDate = newEndDate;
+            } else {
+                if (newStartDate && newDuration && newDuration > 0) {
+                    newEndDate = addDaysToYMD(newStartDate, newDuration - 1);
+                }
+                task.endDate = newEndDate || null;
             }
             task.title = newTitle;
             task.assigneeId = newAssigneeId;
             task.sprintId = newSprintId;
-            task.duration = newDuration || null;
+            task.duration = (newDuration && newDuration > 0) ? newDuration : null;
             task.startDate = newStartDate || null;
-            task.endDate = newEndDate || null;
+            task.endDate = task.endDate || null;
             task.status = newStatus;
             saveLocal(); renderAll(); closeModal();
         });
@@ -1265,11 +1467,11 @@
         modalOverlay.innerHTML = `
             <div class="modal-content">
                 <div class="modal-header"><h3><i class="fas fa-tasks"></i> Completar datos para asignar a sprint</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
-                <div class="info-nota" style="margin-bottom:0.8rem;"><i class="fas fa-info-circle"></i> Asignando a: <strong>${escapeHtml(targetSprint.name)}</strong> (${formatDateDMY(targetSprint.startDate)} → ${formatDateDMY(targetSprint.endDate)})</div>
+                <div class="info-nota" style="margin-bottom:12px;"><i class="fas fa-info-circle"></i> Asignando a: <strong>${escapeHtml(targetSprint.name)}</strong> (${formatDateDMY(targetSprint.startDate)} → ${formatDateDMY(targetSprint.endDate)})</div>
                 <div class="form-row"><div class="form-group" style="flex:2;"><label>Título</label><input type="text" id="editTaskTitle" value="${escapeHtml(task.title)}"></div><div class="form-group"><label>Asignado a</label><select id="editTaskAssignee"><option value="">-- Sin asignar --</option>${(proj.participants || []).map(m => `<option value="${m.id}" ${task.assigneeId === m.id ? 'selected' : ''}>${escapeHtml(m.name)} (${escapeHtml(m.role)})</option>`).join('')}</select></div></div>
-                <div class="form-row"><div class="form-group"><label>Duración (días)</label><input type="number" id="editTaskDuration" value="${task.duration || ''}" placeholder="Ej: 5"></div><div class="form-group"><label>Fecha inicio</label><input type="date" id="editTaskStartDate" value="${task.startDate || ''}"></div></div>
+                <div class="form-row"><div class="form-group"><label>Duración (días)</label><input type="number" id="editTaskDuration" value="${task.duration || ''}" placeholder="Ej: 5" min="1"></div><div class="form-group"><label>Fecha inicio</label><input type="date" id="editTaskStartDate" value="${task.startDate || ''}"></div></div>
                 <div class="form-row"><div class="form-group"><label>Fecha fin</label><input type="date" id="editTaskEndDate" value="${task.endDate || ''}"></div><div class="form-group"><label>Estado Kanban</label><select id="editTaskStatus"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>📋 To Do</option><option value="inprogress" ${task.status === 'inprogress' ? 'selected' : ''}>⚙️ En Progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>✅ Hecho</option></select></div></div>
-                <div id="editWarning" class="warning-text" style="background:#fef3c7; padding:6px; border-radius:10px; margin-bottom:8px;"></div>
+                <div id="editWarning" class="warning-text" style="background:#fef3c7; padding:8px; border-radius:12px; margin-bottom:12px;"></div>
                 <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button id="modalSaveBtn"><i class="fas fa-save"></i> Asignar al sprint</button></div>
             </div>
         `;
@@ -1351,9 +1553,9 @@
         modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', () => {
             const newTitle = modalOverlay.querySelector('#editTaskTitle').value.trim();
             const newAssigneeId = modalOverlay.querySelector('#editTaskAssignee').value || null;
-            const newDuration = parseInt(durationInput.value);
-            const newStartDate = startDateInput.value;
-            const newEndDate = endDateInput.value;
+            let newDuration = parseInt(durationInput.value);
+            let newStartDate = startDateInput.value;
+            let newEndDate = endDateInput.value;
             const newStatus = modalOverlay.querySelector('#editTaskStatus').value;
             if (!newTitle) { alert("El título es obligatorio"); return; }
             if (!newDuration || newDuration <= 0) { alert("La duración es obligatoria y debe ser mayor a 0"); return; }
@@ -1422,11 +1624,11 @@
         const container = document.getElementById("participantsList");
         container.innerHTML = "";
         if (!proj) {
-            container.innerHTML = "<p style='text-align:center; padding:1.5rem; color:#94a3b8; font-size:0.8rem;'>📁 Selecciona o crea un proyecto</p>";
+            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>📁 Selecciona o crea un proyecto</p>";
             return;
         }
         if(!proj.participants || proj.participants.length === 0){
-            container.innerHTML = "<p style='text-align:center; padding:1.5rem; color:#94a3b8; font-size:0.8rem;'>📋 No hay participantes registrados</p>";
+            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>📋 No hay participantes registrados</p>";
             return;
         }
         (proj.participants || []).forEach(m => {
@@ -1477,7 +1679,7 @@
         const board = document.getElementById("kanbanBoard"); 
         const proj = currentProject();
         if(!proj) {
-            board.innerHTML = "<p style='text-align:center; padding:1.5rem; color:#94a3b8; font-size:0.8rem;'>📁 Selecciona o crea un proyecto para ver las tareas</p>";
+            board.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>📁 Selecciona o crea un proyecto para ver las tareas</p>";
             return;
         }
         const states = [{key:"todo", title:"📋 TO DO"},{key:"inprogress", title:"⚙️ IN PROGRESS"},{key:"done", title:"✅ DONE"}];
@@ -1504,9 +1706,9 @@
         if((proj.tasks || []).length === 0){
             const emptyMsg = document.createElement("div");
             emptyMsg.style.textAlign = "center";
-            emptyMsg.style.padding = "1.5rem";
+            emptyMsg.style.padding = "24px";
             emptyMsg.style.color = "#94a3b8";
-            emptyMsg.style.fontSize = "0.8rem";
+            emptyMsg.style.fontSize = "0.85rem";
             emptyMsg.style.width = "100%";
             emptyMsg.innerText = "✨ No hay tareas. Crea tu primera tarea";
             board.appendChild(emptyMsg);
@@ -1516,14 +1718,14 @@
     function renderSprintsAndBacklog() {
         const proj = currentProject(); 
         if(!proj) {
-            document.getElementById("sprintsListContainer").innerHTML = "<p style='text-align:center; padding:1.5rem; color:#94a3b8; font-size:0.8rem;'>📁 Selecciona o crea un proyecto</p>";
+            document.getElementById("sprintsListContainer").innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>📁 Selecciona o crea un proyecto</p>";
             document.getElementById("backlogTasksList").innerHTML = "";
             return;
         }
         const container = document.getElementById("sprintsListContainer"); 
         container.innerHTML = "";
         if(!proj.sprints || proj.sprints.length === 0){
-            container.innerHTML = "<p style='text-align:center; padding:1.5rem; color:#94a3b8; font-size:0.8rem;'>🚀 No hay sprints. Crea tu primer sprint</p>";
+            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>🚀 No hay sprints. Crea tu primer sprint</p>";
         } else {
             (proj.sprints || []).forEach(sprint => {
                 const tasksOfSprint = (proj.tasks || []).filter(t => t.sprintId === sprint.id);
@@ -1533,7 +1735,7 @@
                 if (isManager) div.addEventListener('dblclick', (e) => { e.stopPropagation(); showSprintModal(sprint.id); });
                 container.appendChild(div);
                 const taskContainer = div.querySelector('.sprint-tasks-list');
-                if(tasksOfSprint.length === 0) taskContainer.innerHTML = "<p style='padding:6px; font-style:italic; color:#888; font-size:0.7rem;'>Sin tareas asignadas</p>";
+                if(tasksOfSprint.length === 0) taskContainer.innerHTML = "<p style='padding:8px; font-style:italic; color:#888; font-size:0.75rem;'>Sin tareas asignadas</p>";
                 tasksOfSprint.forEach(task => {
                     const member = getParticipantById(proj, task.assigneeId);
                     const row = document.createElement("div"); row.className = "task-row-sprint";
@@ -1546,7 +1748,7 @@
         }
         const backlogDiv = document.getElementById("backlogTasksList");
         const backlogTasks = (proj.tasks || []).filter(t => !t.sprintId);
-        backlogDiv.innerHTML = backlogTasks.length ? "" : "<p style='padding:12px; text-align:center; color:#888; font-size:0.75rem;'>📦 Backlog vacío</p>";
+        backlogDiv.innerHTML = backlogTasks.length ? "" : "<p style='padding:16px; text-align:center; color:#888; font-size:0.8rem;'>📦 Backlog vacío</p>";
         backlogTasks.forEach(task => {
             const member = getParticipantById(proj, task.assigneeId);
             const div = document.createElement("div"); div.className = "task-row-sprint";
@@ -1580,87 +1782,87 @@
         }));
     }
     
-    function renderGantt() {
-        const proj = currentProject();
-        if(!proj || !proj.sprints || proj.sprints.length === 0) { 
-            document.getElementById("ganttProfessionalContainer").innerHTML = "<div class='form-card' style='text-align:center;'>📊 Crea sprints primero para ver el diagrama de Gantt</div>"; 
-            return; 
-        }
-        const allSprints = [...proj.sprints].sort((a,b)=>a.startDate.localeCompare(b.startDate));
-        const globalStart = allSprints[0].startDate;
-        const globalEnd = allSprints[allSprints.length-1].endDate;
-        const totalDays = diffDaysInUTC(globalStart, globalEnd) + 1;
-        let dates = [];
-        for(let i = 0; i < totalDays; i++) { dates.push(addDaysToYMD(globalStart, i)); }
-        let view = data.ganttView || 'day';
-        let timelineUnits = [], unitWidth = 0;
-        if(view === 'day') { unitWidth = 35; timelineUnits = dates.map((d, idx) => ({ label: getDisplayDate(d), width: unitWidth, startDate: d, endDate: d, index: idx })); }
-        else if(view === 'week') {
-            let weeks = [], currentWeek = [];
-            for(let d of dates) { currentWeek.push(d); let { year, month, day } = parseDateYMD(d); let dateObj = new Date(Date.UTC(year, month, day)); if(dateObj.getUTCDay() === 6 || d === dates[dates.length-1]) { weeks.push([...currentWeek]); currentWeek = []; } }
-            unitWidth = 80; timelineUnits = weeks.map((week, idx) => ({ label: `${getDisplayDate(week[0])} - ${getDisplayDate(week[week.length-1])}`, width: unitWidth, startDate: week[0], endDate: week[week.length-1], index: idx }));
-        }
-        else if(view === 'month') {
-            let monthsMap = new Map();
-            for(let d of dates) { let { year, month } = parseDateYMD(d); let key = `${year}-${month}`; if(!monthsMap.has(key)) monthsMap.set(key, []); monthsMap.get(key).push(d); }
-            let months = Array.from(monthsMap.values()); unitWidth = 100;
-            timelineUnits = months.map((monthDays, idx) => { let { year, month } = parseDateYMD(monthDays[0]); let monthName = new Date(Date.UTC(year, month, 1)).toLocaleString('es', { month: 'short', timeZone: 'UTC' }); return { label: `${monthName} ${year}<br>${getDisplayDate(monthDays[0])} - ${getDisplayDate(monthDays[monthDays.length-1])}`, width: unitWidth, startDate: monthDays[0], endDate: monthDays[monthDays.length-1], index: idx }; });
-        }
-        let headerCells = timelineUnits.map(u => `<th style="min-width:${u.width}px; font-size:0.6rem; text-align:center;">${u.label}</th>`).join('');
-        let html = `<div class="gantt-container"><table class="gantt-table"><thead><tr>
-            <th style="min-width:160px; position:sticky; left:0; background:#f8fafc; z-index:3;">Tarea / Sprint</th>
-            <th style="width:60px">Duración</th>
-            <th style="width:80px">Inicio</th>
-            <th style="width:80px">Fin</th>
-            <th style="width:100px">Responsable</th>${headerCells}
-        <tr></thead><tbody>`;
-        for(let sprint of allSprints) {
-            const tasksInSprint = (proj.tasks || []).filter(t => t.sprintId === sprint.id && t.startDate && t.duration);
-            html += `<tr class="sprint-group-title">
-                <td style="position:sticky; left:0; background:#eef2ff; z-index:2; padding:8px 6px;">
-                    <div><strong><i class="fas fa-rocket"></i> ${escapeHtml(sprint.name)}</strong></div>
-                    <div style="font-size:0.6rem; font-weight:normal; margin-top:2px;">${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</div>
-                  <\/td>
-                <td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td>${'<td style="background:#eef2ff;"></td>'.repeat(timelineUnits.length)}
-            <\/tr>`;
-            if(tasksInSprint.length === 0) { 
-                html += `<tr><td colspan="${5 + timelineUnits.length}" style="text-align:center; color:#999; padding:12px;">Sin tareas con fechas<\/td><\/tr>`;
-                continue; 
-            }
-            for(let task of tasksInSprint) {
-                const barColor = getTaskColor(task, proj);
-                const member = getParticipantById(proj, task.assigneeId);
-                const tooltipText = `Inicio: ${formatDateDMY(task.startDate)} → Fin: ${formatDateDMY(task.endDate)}`;
-                let startUnitIdx = -1, endUnitIdx = -1;
-                for(let i = 0; i < timelineUnits.length; i++) { 
-                    const unit = timelineUnits[i]; 
-                    if(task.startDate <= unit.endDate && task.endDate >= unit.startDate) { 
-                        if(startUnitIdx === -1) startUnitIdx = i; 
-                        endUnitIdx = i; 
-                    } 
-                }
-                html += `<tr>
-                    <td style="position:sticky; left:0; background:white; z-index:1;" class="task-name-col">${escapeHtml(task.title)}<\/td>
-                    <td class="text-center">${task.duration}d<\/td>
-                    <td class="text-center text-nowrap">${formatDateDMY(task.startDate)}<\/td>
-                    <td class="text-center text-nowrap">${formatDateDMY(task.endDate)}<\/td>
-                    <td style="white-space: nowrap; font-size:0.65rem;">${member ? escapeHtml(member.name) : "—"}<\/td>`;
-                for(let i = 0; i < timelineUnits.length; i++) { 
-                    const isInRange = (i >= startUnitIdx && i <= endUnitIdx); 
-                    if(isInRange) { 
-                        html += `<td class="gantt-unit-cell" style="background:${barColor}20;"><div class="gantt-bar-bg" style="background:${barColor};" title="${tooltipText}"></div><\/td>`; 
-                    } else { 
-                        html += `<td class="gantt-unit-cell"><\/td>`; 
-                    } 
-                }
-                html += `<\/tr>`;
-            }
-        }
-        html += `</tbody><\/table><\/div>`;
-        document.getElementById("ganttProfessionalContainer").innerHTML = html;
-        document.querySelectorAll(".view-btn").forEach(btn => btn.classList.remove("active"));
-        document.querySelector(`.view-btn[data-view="${view}"]`)?.classList.add("active");
+function renderGantt() {
+    const proj = currentProject();
+    if(!proj || !proj.sprints || proj.sprints.length === 0) { 
+        document.getElementById("ganttProfessionalContainer").innerHTML = "<div class='form-card' style='text-align:center;'>📊 Crea sprints primero para ver el diagrama de Gantt</div>"; 
+        return; 
     }
+    const allSprints = [...proj.sprints].sort((a,b)=>a.startDate.localeCompare(b.startDate));
+    const globalStart = allSprints[0].startDate;
+    const globalEnd = allSprints[allSprints.length-1].endDate;
+    const totalDays = diffDaysInUTC(globalStart, globalEnd) + 1;
+    let dates = [];
+    for(let i = 0; i < totalDays; i++) { dates.push(addDaysToYMD(globalStart, i)); }
+    let view = data.ganttView || 'day';
+    let timelineUnits = [], unitWidth = 0;
+    if(view === 'day') { unitWidth = 38; timelineUnits = dates.map((d, idx) => ({ label: getDisplayDate(d), width: unitWidth, startDate: d, endDate: d, index: idx })); }
+    else if(view === 'week') {
+        let weeks = [], currentWeek = [];
+        for(let d of dates) { currentWeek.push(d); let { year, month, day } = parseDateYMD(d); let dateObj = new Date(Date.UTC(year, month, day)); if(dateObj.getUTCDay() === 6 || d === dates[dates.length-1]) { weeks.push([...currentWeek]); currentWeek = []; } }
+        unitWidth = 90; timelineUnits = weeks.map((week, idx) => ({ label: `${getDisplayDate(week[0])} - ${getDisplayDate(week[week.length-1])}`, width: unitWidth, startDate: week[0], endDate: week[week.length-1], index: idx }));
+    }
+    else if(view === 'month') {
+        let monthsMap = new Map();
+        for(let d of dates) { let { year, month } = parseDateYMD(d); let key = `${year}-${month}`; if(!monthsMap.has(key)) monthsMap.set(key, []); monthsMap.get(key).push(d); }
+        let months = Array.from(monthsMap.values()); unitWidth = 110;
+        timelineUnits = months.map((monthDays, idx) => { let { year, month } = parseDateYMD(monthDays[0]); let monthName = new Date(Date.UTC(year, month, 1)).toLocaleString('es', { month: 'short', timeZone: 'UTC' }); return { label: `${monthName} ${year}<br>${getDisplayDate(monthDays[0])} - ${getDisplayDate(monthDays[monthDays.length-1])}`, width: unitWidth, startDate: monthDays[0], endDate: monthDays[monthDays.length-1], index: idx }; });
+    }
+    let headerCells = timelineUnits.map(u => `<th style="min-width:${u.width}px; font-size:0.7rem; text-align:center;">${u.label}</th>`).join('');
+    let html = `<div class="gantt-container"><table class="gantt-table"><thead><tr>
+        <th style="min-width:220px; position:sticky; left:0; background:#f8fafc; z-index:3;">Tarea / Sprint</th>
+        <th style="width:75px">Duración</th>
+        <th style="width:100px">Inicio</th>
+        <th style="width:100px">Fin</th>
+        <th style="width:130px">Responsable</th>${headerCells}
+    </tr></thead><tbody>`;
+    for(let sprint of allSprints) {
+        const tasksInSprint = (proj.tasks || []).filter(t => t.sprintId === sprint.id && t.startDate && t.duration);
+        html += `<tr class="sprint-group-title">
+            <td style="position:sticky; left:0; background:#eef2ff; z-index:2; padding:12px 8px;">
+                <div><strong><i class="fas fa-rocket"></i> ${escapeHtml(sprint.name)}</strong></div>
+                <div style="font-size:0.7rem; font-weight:normal; margin-top:2px;">${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</div>
+              <\/td>
+            <td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td>${'<td style="background:#eef2ff;"></td>'.repeat(timelineUnits.length)}
+        <\/tr>`;
+        if(tasksInSprint.length === 0) { 
+            html += `<tr><td colspan="${5 + timelineUnits.length}" style="text-align:center; color:#999; padding:20px;">Sin tareas con fechas<\/td><\/tr>`;
+            continue; 
+        }
+        for(let task of tasksInSprint) {
+            const barColor = getTaskColor(task, proj);
+            const member = getParticipantById(proj, task.assigneeId);
+            const tooltipText = `Inicio: ${formatDateDMY(task.startDate)} → Fin: ${formatDateDMY(task.endDate)}`;
+            let startUnitIdx = -1, endUnitIdx = -1;
+            for(let i = 0; i < timelineUnits.length; i++) { 
+                const unit = timelineUnits[i]; 
+                if(task.startDate <= unit.endDate && task.endDate >= unit.startDate) { 
+                    if(startUnitIdx === -1) startUnitIdx = i; 
+                    endUnitIdx = i; 
+                } 
+            }
+            html += `<tr>
+                <td style="position:sticky; left:0; background:white; z-index:1;" class="task-name-col">${escapeHtml(task.title)}<\/td>
+                <td class="text-center">${task.duration}d<\/td>
+                <td class="text-center text-nowrap">${formatDateDMY(task.startDate)}<\/td>
+                <td class="text-center text-nowrap">${formatDateDMY(task.endDate)}<\/td>
+                <td style="white-space: nowrap;">${member ? escapeHtml(member.name) : "—"}<\/td>`;
+            for(let i = 0; i < timelineUnits.length; i++) { 
+                const isInRange = (i >= startUnitIdx && i <= endUnitIdx); 
+                if(isInRange) { 
+                    html += `<td class="gantt-unit-cell" style="background:${barColor}20;"><div class="gantt-bar-bg" style="background:${barColor};" title="${tooltipText}"></div><\/td>`; 
+                } else { 
+                    html += `<td class="gantt-unit-cell"><\/td>`; 
+                } 
+            }
+            html += `<\/tr>`;
+        }
+    }
+    html += `</tbody><\/table><\/div>`;
+    document.getElementById("ganttProfessionalContainer").innerHTML = html;
+    document.querySelectorAll(".view-btn").forEach(btn => btn.classList.remove("active"));
+    document.querySelector(`.view-btn[data-view="${view}"]`)?.classList.add("active");
+}
     
     function updateGlobalStats() {
         document.getElementById("statProjects").innerText = data.projects.length;
@@ -1705,16 +1907,20 @@
         let duration = dur ? parseInt(dur) : null;
         const proj = currentProject();
         if(!proj) { alert("Debes seleccionar o crear un proyecto primero"); return; }
+        if (duration !== null && duration <= 0) {
+            alert("La duración debe ser un número positivo mayor a 0");
+            return;
+        }
         if (sprintId) {
-            if (!start || !duration || duration <= 0) { alert("Para un sprint es obligatorio: Duración y Fecha inicio"); return; }
+            if (!start || !duration || duration <= 0) { alert("Para un sprint es obligatorio: Duración positiva y Fecha inicio"); return; }
             let end = addDaysToYMD(start, duration - 1);
             const validation = validateSprintRange(proj, sprintId, start, end, duration);
             if (!validation.valid) { alert(validation.message); return; }
             let newTask = { id: "t_"+Date.now()+Math.random(), title, assigneeId: document.getElementById("taskAssigneeSelect").value || null, sprintId, duration: duration, startDate: start, endDate: end, status: document.getElementById("taskStatus").value };
             proj.tasks.push(newTask);
         } else {
-            let end = (start && duration) ? addDaysToYMD(start, duration - 1) : null;
-            let newTask = { id: "t_"+Date.now()+Math.random(), title, assigneeId: document.getElementById("taskAssigneeSelect").value || null, sprintId: null, duration: duration || null, startDate: start || null, endDate: end || null, status: document.getElementById("taskStatus").value };
+            let end = (start && duration && duration > 0) ? addDaysToYMD(start, duration - 1) : null;
+            let newTask = { id: "t_"+Date.now()+Math.random(), title, assigneeId: document.getElementById("taskAssigneeSelect").value || null, sprintId: null, duration: (duration && duration > 0) ? duration : null, startDate: start || null, endDate: end || null, status: document.getElementById("taskStatus").value };
             proj.tasks.push(newTask);
         }
         saveLocal(); renderAll();
@@ -1884,105 +2090,192 @@
         }
     }
     
+    // ========== CARRUSEL 3D LOGIN ==========
     function showLogin() {
+        const profiles = [
+            {
+                id: 'manager',
+                title: 'Manager',
+                icon: 'fa-user-tie',
+                description: 'Control total sobre proyectos, participantes y tareas',
+                badge: 'Acceso total',
+                color: '#1c5a7a'
+            },
+            {
+                id: 'stakeholder',
+                title: 'Stakeholder',
+                icon: 'fa-eye',
+                description: 'Visualización de proyectos y seguimiento de avances',
+                badge: 'Solo consulta',
+                color: '#10b981'
+            }
+        ];
+        
+        let rotationAngle = 0;
+        const cardCount = profiles.length;
+        const angleStep = 360 / cardCount;
+        let isAnimating = false;
+        
         const loginHtml = `
             <div class="login-overlay" id="loginOverlay">
-                <div class="login-modal">
-                    <div class="login-logo">
-                        <img src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-G.png" alt="Stride Logo" onerror="this.style.display='none'">
+                <div class="carousel-container">
+                    <div class="carousel-title">
+                        <div class="carousel-logo">
+                            <!-- ELIMINADO: cuadrado contenedor, solo la imagen del logo -->
+                            <img src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-BC.png" alt="Stride Logo" onerror="this.style.display='none'">
+                        </div>
+                        <h2>Stride</h2>
+                        <p>Project Manager · Coworking · Supervisión · Control</p>
                     </div>
-                    <h2>Stride</h2>
-                    <p>Project Manager · Coworking · Supervisión · Control</p>
-                    <select id="userRoleSelect">
-                        <option value="manager">👤 Manager</option>
-                        <option value="stakeholder">👁️ Stakeholder</option>
-                    </select>
-                    <div id="passwordField" style="display: none;"><input type="password" id="passwordInput" placeholder="Contraseña"></div>
-                    <button id="loginBtn">Acceder</button>
-                    <div id="loginError" class="error-msg"></div>
+                    <div class="carousel-3d" id="carousel3d">
+                        ${profiles.map((profile, idx) => `
+                            <div class="carousel-card" data-id="${profile.id}" data-index="${idx}" style="transform: rotateY(${idx * angleStep}deg) translateZ(250px);">
+                                <div class="card-icon" style="background: linear-gradient(135deg, ${profile.color} 0%, ${profile.color}cc 100%);">
+                                    <i class="fas ${profile.icon}"></i>
+                                </div>
+                                <div class="card-title">${profile.title}</div>
+                                <div class="card-desc">${profile.description}</div>
+                                <div class="card-badge">${profile.badge}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="nav-btn nav-left" id="carouselPrev">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                    <div class="nav-btn nav-right" id="carouselNext">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
                 </div>
             </div>
         `;
+        
         document.body.insertAdjacentHTML('beforeend', loginHtml);
-        const roleSelect = document.getElementById('userRoleSelect');
-        const passwordField = document.getElementById('passwordField');
-        const passwordInput = document.getElementById('passwordInput');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginError = document.getElementById('loginError');
         
-        function clearPasswordAndError() {
-            if (passwordInput) {
-                passwordInput.value = '';
-                passwordInput.focus();
-            }
-            if (loginError) loginError.textContent = '';
+        const cards = document.querySelectorAll('.carousel-card');
+        const prevBtn = document.getElementById('carouselPrev');
+        const nextBtn = document.getElementById('carouselNext');
+        
+        function updateCarousel() {
+            if (isAnimating) return;
+            isAnimating = true;
+            cards.forEach((card, idx) => {
+                const angle = (idx * angleStep) + rotationAngle;
+                card.style.transform = `rotateY(${angle}deg) translateZ(250px)`;
+                card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            setTimeout(() => { isAnimating = false; }, 500);
         }
         
-        function updatePasswordFieldVisibility() {
-            if (roleSelect.value === 'manager') {
-                passwordField.style.display = 'block';
-                clearPasswordAndError();
+        function rotateLeft() { rotationAngle -= angleStep; updateCarousel(); updateActiveCard(); }
+        function rotateRight() { rotationAngle += angleStep; updateCarousel(); updateActiveCard(); }
+        
+        function updateActiveCard() {
+            cards.forEach(card => card.classList.remove('active-card'));
+            let minAngle = Infinity;
+            let activeIndex = 0;
+            cards.forEach((card, idx) => {
+                const angle = ((idx * angleStep) + rotationAngle) % 360;
+                let normalizedAngle = angle;
+                if (normalizedAngle > 180) normalizedAngle = 360 - normalizedAngle;
+                if (normalizedAngle < minAngle) {
+                    minAngle = normalizedAngle;
+                    activeIndex = idx;
+                }
+            });
+            cards[activeIndex]?.classList.add('active-card');
+        }
+        
+        function performLogin(role, isManagerValue) {
+            const expirationTime = Date.now() + SESSION_DURATION_MS;
+            saveSession(role, isManagerValue);
+            startSessionTimer(expirationTime);
+            const loginOverlay = document.getElementById('loginOverlay');
+            if (loginOverlay) loginOverlay.remove();
+            document.getElementById('appContainer').style.display = 'block';
+            document.getElementById('importExportBtns').style.display = 'flex';
+            isManager = isManagerValue;
+            currentUser = role;
+            loadData();
+            setTimeout(() => {
+                const timer = document.getElementById('sessionTimer');
+                if (timer) timer.addEventListener('dblclick', toggleImportExportButtons);
+            }, 100);
+        }
+        
+        function selectProfile(profileId) {
+            if (profileId === 'manager') {
+                showPasswordModal();
             } else {
-                passwordField.style.display = 'none';
-                if (passwordInput) passwordInput.value = '';
-                if (loginError) loginError.textContent = '';
+                performLogin('Stakeholder', false);
             }
         }
         
-        roleSelect.addEventListener('change', updatePasswordFieldVisibility);
-        updatePasswordFieldVisibility();
-        
-        function handleLogin() {
-            const role = roleSelect.value;
-            if (role === 'manager') {
+        function showPasswordModal() {
+            if (document.querySelector('.password-modal')) return;
+            const passwordModal = document.createElement('div');
+            passwordModal.className = 'password-modal';
+            passwordModal.innerHTML = `
+                <div class="password-modal-content">
+                    <h3><i class="fas fa-lock"></i> Acceso Manager</h3>
+                    <p>Ingresa la contraseña para acceder con control total</p>
+                    <input type="password" id="managerPassword" placeholder="Contraseña" autofocus>
+                    <div id="passError" class="error-msg-pass"></div>
+                    <div class="password-modal-buttons">
+                        <button class="btn-cancel" id="cancelPassword">Cancelar</button>
+                        <button class="btn-confirm" id="confirmPassword">Acceder</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(passwordModal);
+            const passwordInput = document.getElementById('managerPassword');
+            const confirmBtn = document.getElementById('confirmPassword');
+            const cancelBtn = document.getElementById('cancelPassword');
+            const errorDiv = document.getElementById('passError');
+            const handleConfirm = () => {
                 const password = passwordInput.value;
                 if (password === 'ControlInterno2026') {
-                    const expirationTime = Date.now() + SESSION_DURATION_MS;
-                    saveSession('Manager', true);
-                    startSessionTimer(expirationTime);
-                    document.getElementById('loginOverlay').remove();
-                    document.getElementById('appContainer').style.display = 'block';
-                    document.getElementById('importExportBtns').style.display = 'flex';
-                    isManager = true;
-                    currentUser = 'Manager';
-                    loadData();
-                    setTimeout(() => {
-                        const timer = document.getElementById('sessionTimer');
-                        if (timer) timer.addEventListener('dblclick', toggleImportExportButtons);
-                    }, 100);
+                    passwordModal.remove();
+                    performLogin('Manager', true);
                 } else {
-                    loginError.textContent = 'Contraseña incorrecta';
+                    errorDiv.textContent = 'Contraseña incorrecta';
                     passwordInput.value = '';
                     passwordInput.focus();
                     passwordInput.style.border = '2px solid #dc2626';
                     setTimeout(() => { passwordInput.style.border = ''; }, 500);
                 }
-            } else {
-                const expirationTime = Date.now() + SESSION_DURATION_MS;
-                saveSession('Stakeholder', false);
-                startSessionTimer(expirationTime);
-                document.getElementById('loginOverlay').remove();
-                document.getElementById('appContainer').style.display = 'block';
-                document.getElementById('importExportBtns').style.display = 'flex';
-                isManager = false;
-                currentUser = 'Stakeholder';
-                loadData();
-                setTimeout(() => {
-                    const timer = document.getElementById('sessionTimer');
-                    if (timer) timer.addEventListener('dblclick', toggleImportExportButtons);
-                }, 100);
-            }
+            };
+            const handleCancel = () => { passwordModal.remove(); };
+            passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleConfirm(); });
+            confirmBtn.addEventListener('click', handleConfirm);
+            cancelBtn.addEventListener('click', handleCancel);
+            setTimeout(() => passwordInput.focus(), 50);
         }
         
-        loginBtn.addEventListener('click', handleLogin);
-        if (passwordInput) {
-            passwordInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') { e.preventDefault(); handleLogin(); }
+        prevBtn.addEventListener('click', rotateLeft);
+        nextBtn.addEventListener('click', rotateRight);
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const profileId = card.getAttribute('data-id');
+                selectProfile(profileId);
             });
-        }
-        roleSelect.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') { e.preventDefault(); handleLogin(); }
         });
+        setTimeout(() => { updateActiveCard(); }, 100);
+        const keyHandler = (e) => {
+            if (!document.getElementById('loginOverlay')) {
+                document.removeEventListener('keydown', keyHandler);
+                return;
+            }
+            if (e.key === 'ArrowLeft') rotateLeft();
+            if (e.key === 'ArrowRight') rotateRight();
+            if (e.key === 'Enter') {
+                const activeCard = document.querySelector('.carousel-card.active-card');
+                if (activeCard) {
+                    const profileId = activeCard.getAttribute('data-id');
+                    selectProfile(profileId);
+                }
+            }
+        };
+        document.addEventListener('keydown', keyHandler);
     }
     
     function initializeApp() {
@@ -2007,19 +2300,19 @@
 </script>
 
 <footer>
-    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
         <img src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-G.png" 
              alt="Control Interno" 
-             style="height: 18px; width: auto; object-fit: contain; opacity: 0.5;">
-        <div style="width: 1px; height: 20px; background-color: #cbd5e1;"></div>
+             style="height: 20px; width: auto; object-fit: contain; opacity: 0.5;">
+        <div style="width: 1px; height: 24px; background-color: #cbd5e1;"></div>
         <div style="display: flex; flex-direction: column; line-height: 1.2; text-align: center;">
-            <span style="font-size: 0.45rem; color: #0A2540;">Control Interno</span>
-            <span style="font-size: 0.35rem; color: #94a3b8; font-weight: 500;">Ingeniería de Control</span>
+            <span style="font-size: 0.5rem; color: #0A2540;">Control Interno</span>
+            <span style="font-size: 0.4rem; color: #94a3b8; font-weight: 500;">Ingeniería de Control</span>
         </div>
-        <div style="width: 1px; height: 20px; background-color: #cbd5e1;"></div>
+        <div style="width: 1px; height: 24px; background-color: #cbd5e1;"></div>
         <div style="display: flex; flex-direction: column; line-height: 1.2; text-align: center;">
-            <span style="font-size: 0.45rem; color: #0A2540;">Stride</span>
-            <span style="font-size: 0.35rem; color: #94a3b8; font-weight: 500;">V1.0 | Mayo 2026</span>
+            <span style="font-size: 0.5rem; color: #0A2540;">Stride</span>
+            <span style="font-size: 0.4rem; color: #94a3b8; font-weight: 500;">V1.0 | Mayo 2026</span>
         </div>
     </div>
 </footer>
