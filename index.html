@@ -6,7 +6,9 @@
     <title>Stride | Project Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* ========== ESTILOS COMPLETOS (MANTENER LOS MISMOS) ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: #eef2f7; padding: 12px; }
         @media (min-width: 768px) { body { padding: 20px; } }
@@ -14,7 +16,6 @@
         .app-container { max-width: 1600px; margin: 0 auto; background: white; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); overflow: hidden; }
         @media (min-width: 768px) { .app-container { border-radius: 28px; } }
         
-        /* ========== HEADER PREMIUM RESPONSIVE ========== */
         .header { 
             background: linear-gradient(135deg, #0a2b3c 0%, #1c5a7a 100%); 
             color: white; 
@@ -64,7 +65,6 @@
             z-index: 1;
         }
         
-        /* ELIMINADO: .logo-circle ya no existe, el logo va directo sin contenedor */
         .logo-img { 
             height: 42px; 
             width: auto; 
@@ -114,6 +114,20 @@
         .logout-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
         @media (min-width: 640px) { .logout-btn { padding: 5px 14px; font-size: 0.75rem; } }
         .logout-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
+        
+        .sync-status {
+            font-size: 0.65rem;
+            background: rgba(255,255,255,0.15);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .sync-status.synced { background: rgba(16,185,129,0.3); }
+        .sync-status.syncing { background: rgba(245,158,11,0.3); animation: pulse 1s infinite; }
+        .sync-status.error { background: rgba(220,38,38,0.3); }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
         
         .session-timer {
             position: fixed;
@@ -332,7 +346,6 @@
         .btn-clear { background: #dc2626; }
         .btn-clear:hover { background: #b91c1c; }
         
-        /* ========== CARRUSEL 3D LOGIN RESPONSIVE ========== */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -387,14 +400,10 @@
         @media (max-width: 640px) { .carousel-title { margin-bottom: 20px; gap: 6px; } }
         
         .carousel-logo {
-            /* ELIMINADO: cuadrado contenedor, ahora solo la imagen sin fondo */
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 8px;
-        }
-        @media (max-width: 640px) { 
-            .carousel-logo { margin-bottom: 6px; }
         }
         
         .carousel-logo img {
@@ -402,12 +411,8 @@
             width: auto;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
         }
-        @media (max-width: 640px) { 
-            .carousel-logo img { height: 60px; }
-        }
-        @media (max-width: 480px) { 
-            .carousel-logo img { height: 80px; }
-        }
+        @media (max-width: 640px) { .carousel-logo img { height: 100px; } }
+        @media (max-width: 480px) { .carousel-logo img { height: 80px; } }
         
         .carousel-title h2 {
             font-size: 2.2rem;
@@ -456,12 +461,8 @@
             align-items: center;
             text-align: center;
         }
-        @media (max-width: 640px) { 
-            .carousel-card { width: 240px; height: 300px; padding: 18px 15px; border-radius: 24px; }
-        }
-        @media (max-width: 480px) { 
-            .carousel-card { width: 210px; height: 270px; padding: 15px 12px; border-radius: 20px; }
-        }
+        @media (max-width: 640px) { .carousel-card { width: 240px; height: 300px; padding: 18px 15px; border-radius: 24px; } }
+        @media (max-width: 480px) { .carousel-card { width: 210px; height: 270px; padding: 15px 12px; border-radius: 20px; } }
         
         .carousel-card.active-card {
             box-shadow: 0 30px 60px -12px rgba(0,0,0,0.4), 0 0 0 3px rgba(28,90,122,0.5);
@@ -479,16 +480,11 @@
             margin-bottom: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
-        @media (max-width: 640px) { 
-            .card-icon { width: 65px; height: 65px; margin-bottom: 15px; }
-            .card-icon i { font-size: 2rem !important; }
-        }
-        @media (max-width: 480px) { 
-            .card-icon { width: 55px; height: 55px; margin-bottom: 12px; }
-            .card-icon i { font-size: 1.6rem !important; }
-        }
+        @media (max-width: 640px) { .card-icon { width: 65px; height: 65px; margin-bottom: 15px; } }
         
         .card-icon i { font-size: 2.5rem; color: white; }
+        @media (max-width: 640px) { .card-icon i { font-size: 2rem !important; } }
+        @media (max-width: 480px) { .card-icon i { font-size: 1.6rem !important; } }
         
         .card-title {
             font-size: 1.4rem;
@@ -537,12 +533,8 @@
             color: white;
             font-size: 1.5rem;
         }
-        @media (max-width: 640px) { 
-            .nav-btn { width: 40px; height: 40px; font-size: 1.2rem; }
-        }
-        @media (max-width: 480px) { 
-            .nav-btn { width: 35px; height: 35px; font-size: 1rem; }
-        }
+        @media (max-width: 640px) { .nav-btn { width: 40px; height: 40px; font-size: 1.2rem; } }
+        @media (max-width: 480px) { .nav-btn { width: 35px; height: 35px; font-size: 1rem; } }
         
         .nav-btn:hover {
             background: rgba(255,255,255,0.3);
@@ -579,28 +571,23 @@
             animation: slideUp 0.3s ease;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
         }
-        @media (max-width: 640px) { 
-            .password-modal-content { padding: 24px 20px; max-width: 340px; border-radius: 28px; }
-            .password-modal-content h3 { font-size: 1.3rem; }
-            .password-modal-content p { font-size: 0.75rem; }
-        }
-        @media (max-width: 480px) { 
-            .password-modal-content { padding: 20px 16px; }
-            .password-modal-content h3 { font-size: 1.1rem; }
-            .password-modal-content p { font-size: 0.65rem; margin-bottom: 16px; }
-        }
+        @media (max-width: 640px) { .password-modal-content { padding: 24px 20px; max-width: 340px; border-radius: 28px; } }
         
         .password-modal-content h3 {
             font-size: 1.5rem;
             color: #1c5a7a;
             margin-bottom: 8px;
         }
+        @media (max-width: 640px) { .password-modal-content h3 { font-size: 1.3rem; } }
+        @media (max-width: 480px) { .password-modal-content h3 { font-size: 1.1rem; } }
         
         .password-modal-content p {
             color: #64748b;
             margin-bottom: 20px;
             font-size: 0.85rem;
         }
+        @media (max-width: 640px) { .password-modal-content p { font-size: 0.75rem; } }
+        @media (max-width: 480px) { .password-modal-content p { font-size: 0.65rem; margin-bottom: 16px; } }
         
         .password-modal-content input {
             width: 100%;
@@ -701,13 +688,35 @@
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+        
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 50px;
+            z-index: 3000;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .loading-spinner i { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+
+<div id="loadingSpinner" class="loading-spinner" style="display: none;">
+    <i class="fas fa-spinner"></i> Cargando datos...
+</div>
+
 <div class="app-container" id="appContainer" style="display: none;">
     <div class="header">
         <div class="logo-area">
-            <!-- ELIMINADO: div contenedor .logo-circle, solo la imagen del logo -->
             <img class="logo-img" src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-BC.png" alt="Stride Logo" onerror="this.style.display='none'">
             <div class="logo-text">
                 <h1>Stride</h1>
@@ -722,6 +731,7 @@
             </div>
             <div class="user-info" id="userInfo">
                 <div class="user-badge"><i class="fas fa-user-circle"></i> <span id="userNameDisplay">Cargando...</span></div>
+                <div class="sync-status" id="syncStatus"><i class="fas fa-cloud-upload-alt"></i> <span>Conectando...</span></div>
                 <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Salir</button>
             </div>
         </div>
@@ -811,8 +821,25 @@
 </div>
 
 <script>
+    // ========== CONFIGURACIÓN DE SUPABASE ==========
+    const SUPABASE_URL = 'https://vmphwoyaupuffjfqnnev.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtcGh3b3lhdXB1ZmZqZnFubmV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NDcxODAsImV4cCI6MjA5NTEyMzE4MH0.3qqYF2nQqYeIT11s4Jxxc6pzZIl2W_LBsU8cgAvuEGU';
+    
+    // ========== ID DE USUARIO FIJO PARA COMPARTIR DATOS ==========
+    // TODOS los usuarios (Manager y Stakeholder) usan el MISMO userId
+    // Así los datos se comparten entre todos
+    const SHARED_USER_ID = 'stride_shared_company_data';
+    
+    let supabaseClient = null;
+    try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("Supabase cliente inicializado");
+    } catch(e) {
+        console.error("Error inicializando Supabase:", e);
+    }
+    
     // ========== CONFIGURACIÓN DE SESIÓN ==========
-    const SESSION_DURATION_MINUTES = 10;
+    const SESSION_DURATION_MINUTES = 60; // 60 minutos de sesión
     const SESSION_DURATION_MS = SESSION_DURATION_MINUTES * 60 * 1000;
     
     let sessionTimerInterval = null;
@@ -820,9 +847,141 @@
     let currentUser = null;
     let isManager = false;
     let data = { projects: [], currentProjectId: null, ganttView: 'day' };
+    let syncInProgress = false;
+    let pendingSync = false;
     
-    function saveLocal() { localStorage.setItem("stride_pmo_final", JSON.stringify(data)); }
+    function showLoading(show) {
+        const spinner = document.getElementById('loadingSpinner');
+        if (spinner) spinner.style.display = show ? 'flex' : 'none';
+    }
     
+    function updateSyncStatus(status, message) {
+        const statusDiv = document.getElementById('syncStatus');
+        if (!statusDiv) return;
+        statusDiv.className = `sync-status ${status}`;
+        const span = statusDiv.querySelector('span');
+        if (span) span.textContent = message;
+    }
+    
+    // ========== FUNCIONES DE SUPABASE (CON ID FIJO) ==========
+    async function loadFromSupabase() {
+        if (!supabaseClient) return false;
+        try {
+            showLoading(true);
+            updateSyncStatus('syncing', 'Cargando desde la nube...');
+            
+            console.log("🔄 Cargando datos compartidos con ID:", SHARED_USER_ID);
+            
+            const { data: result, error } = await supabaseClient
+                .from('app_data')
+                .select('data')
+                .eq('user_id', SHARED_USER_ID)
+                .maybeSingle();
+            
+            if (error) {
+                console.error('❌ Error loading from Supabase:', error);
+                alert('Error al cargar desde Supabase:\n' + error.message + '\nCódigo: ' + (error.code || 'N/A'));
+                updateSyncStatus('error', 'Error DB');
+                return false;
+            }
+            
+            if (result && result.data) {
+                data = result.data;
+                if (!data.ganttView) data.ganttView = 'day';
+                if (!data.projects) data.projects = [];
+                console.log("✅ Datos cargados desde Supabase:", data);
+                updateSyncStatus('synced', 'Sincronizado');
+                return true;
+            } else {
+                console.log("📝 No hay datos, creando registro inicial...");
+                const initialData = { projects: [], currentProjectId: null, ganttView: 'day' };
+                const { error: insertError } = await supabaseClient
+                    .from('app_data')
+                    .insert({ user_id: SHARED_USER_ID, data: initialData });
+                
+                if (insertError) {
+                    console.error('❌ Error creando datos iniciales:', insertError);
+                    alert('Error creando registro inicial:\n' + insertError.message);
+                    updateSyncStatus('error', 'Error');
+                    return false;
+                }
+                data = initialData;
+                updateSyncStatus('synced', 'Sincronizado');
+                return true;
+            }
+        } catch (err) {
+            console.error('❌ Error general en loadFromSupabase:', err);
+            alert('Error inesperado al cargar:\n' + err.message);
+            updateSyncStatus('error', 'Error');
+            return false;
+        } finally {
+            showLoading(false);
+        }
+    }
+    
+    async function saveToSupabase() {
+        if (!supabaseClient || syncInProgress) {
+            if (!syncInProgress) pendingSync = true;
+            return;
+        }
+        
+        try {
+            syncInProgress = true;
+            updateSyncStatus('syncing', 'Guardando en la nube...');
+            
+            console.log("🔄 Intentando guardar en Supabase...");
+            
+            const { error } = await supabaseClient
+                .from('app_data')
+                .upsert({ 
+                    user_id: SHARED_USER_ID, 
+                    data: data,
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'user_id' });
+            
+            if (error) {
+                console.error('❌ Error saving to Supabase:', error);
+                alert('Error al guardar en Supabase:\n' + error.message + '\nCódigo: ' + (error.code || 'N/A'));
+                updateSyncStatus('error', 'Error: ' + error.message);
+            } else {
+                console.log("✅ Datos guardados correctamente en Supabase");
+                updateSyncStatus('synced', 'Sincronizado');
+            }
+        } catch (err) {
+            console.error('❌ Error general en saveToSupabase:', err);
+            alert('Error inesperado al guardar:\n' + err.message);
+            updateSyncStatus('error', 'Error');
+        } finally {
+            syncInProgress = false;
+            if (pendingSync) {
+                pendingSync = false;
+                setTimeout(() => saveToSupabase(), 100);
+            }
+        }
+    }
+    
+    async function saveAndSync() {
+        saveLocalBackup();
+        await saveToSupabase();
+    }
+    
+    function saveLocalBackup() { 
+        localStorage.setItem(`stride_pmo_backup`, JSON.stringify(data)); 
+    }
+    
+    function loadLocalBackup() {
+        const stored = localStorage.getItem(`stride_pmo_backup`);
+        if (stored) {
+            data = JSON.parse(stored);
+            if (!data.ganttView) data.ganttView = 'day';
+            if (!data.projects) data.projects = [];
+            console.log("Cargado desde backup local");
+            return true;
+        }
+        return false;
+    }
+    
+    // ========== FUNCIONES DE FECHAS ==========
     function parseDateYMD(dateStr) {
         if (!dateStr) return null;
         const parts = dateStr.split('-');
@@ -846,11 +1005,6 @@
         return Math.floor((endUTC - startUTC) / (1000 * 60 * 60 * 24));
     }
     
-    function getDisplayDate(ymd) {
-        let { day, month } = parseDateYMD(ymd);
-        return `${day}/${month+1}`;
-    }
-    
     function formatDateDMY(ymd) {
         if (!ymd) return "—";
         let { day, month, year } = parseDateYMD(ymd);
@@ -859,18 +1013,14 @@
     
     function getTodayYMD() {
         let now = new Date();
-        let year = now.getFullYear();
-        let month = String(now.getMonth() + 1).padStart(2, '0');
-        let day = String(now.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
     }
     
-    function loadData() {
-        const stored = localStorage.getItem("stride_pmo_final");
-        if(stored) {
-            data = JSON.parse(stored);
-        } else {
-            data = { projects: [], currentProjectId: null, ganttView: 'day' };
+    async function loadData() {
+        const success = await loadFromSupabase();
+        if (!success) {
+            console.log("Usando backup local");
+            loadLocalBackup();
         }
         if(!data.currentProjectId && data.projects.length) data.currentProjectId = data.projects[0]?.id;
         renderAll();
@@ -892,10 +1042,10 @@
         const taskStart = new Date(startDate);
         const taskEnd = new Date(endDate);
         if (taskStart < sprintStart) {
-            return { valid: false, message: `⚠️ La fecha inicio (${formatDateDMY(startDate)}) es anterior al inicio del sprint (${formatDateDMY(sprint.startDate)})` };
+            return { valid: false, message: `⚠️ La fecha inicio es anterior al inicio del sprint` };
         }
         if (taskEnd > sprintEnd) {
-            return { valid: false, message: `⚠️ La fecha fin (${formatDateDMY(endDate)}) es posterior al fin del sprint (${formatDateDMY(sprint.endDate)})` };
+            return { valid: false, message: `⚠️ La fecha fin es posterior al fin del sprint` };
         }
         if (taskStart > taskEnd) {
             return { valid: false, message: "⚠️ La fecha inicio no puede ser posterior a la fecha fin" };
@@ -903,17 +1053,16 @@
         return { valid: true, message: "✅ Fechas válidas dentro del sprint" };
     }
     
-    function getTaskColor(task, project) {
+    function getTaskColor(task) {
         if (task.status === "done") return "#3b82f6";
         if (!task.endDate) return "#94a3b8";
-        const today = getTodayYMD();
-        const diff = diffDaysInUTC(today, task.endDate);
+        const diff = diffDaysInUTC(getTodayYMD(), task.endDate);
         if (diff < 0) return "#ef4444";
         if (diff <= 5) return "#f59e0b";
         return "#10b981";
     }
     
-    // ========== FUNCIONES SIN ASTERISCOS ==========
+    // ========== FUNCIONES DE COMUNICACIÓN ==========
     function generateTaskSummary(participantId, project, skipFooter = false) {
         const participant = project.participants.find(p => p.id === participantId);
         if (!participant) return null;
@@ -934,11 +1083,9 @@
         message += `• 📦 Total asignadas: ${userTasks.length}\n\n`;
         
         if (todoTasks.length > 0) {
-            message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n`;
-            message += `📋 TAREAS PENDIENTES:\n`;
+            message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n📋 TAREAS PENDIENTES:\n`;
             todoTasks.forEach((t, idx) => {
-                message += `${idx+1}. ${t.title}\n`;
-                message += `   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
+                message += `${idx+1}. ${t.title}\n   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
                 if (t.sprintId) {
                     const sprint = getSprintById(project, t.sprintId);
                     if (sprint) message += `   🚀 Sprint: ${sprint.name}\n`;
@@ -947,11 +1094,9 @@
             });
         }
         if (inProgressTasks.length > 0) {
-            message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n`;
-            message += `⚙️ TAREAS EN PROGRESO:\n`;
+            message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n⚙️ TAREAS EN PROGRESO:\n`;
             inProgressTasks.forEach((t, idx) => {
-                message += `${idx+1}. ${t.title}\n`;
-                message += `   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
+                message += `${idx+1}. ${t.title}\n   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
                 if (t.sprintId) {
                     const sprint = getSprintById(project, t.sprintId);
                     if (sprint) message += `   🚀 Sprint: ${sprint.name}\n`;
@@ -960,12 +1105,9 @@
             });
         }
         if (doneTasks.length > 0) {
-            message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n`;
-            message += `✅ TAREAS COMPLETADAS:\n`;
+            message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n✅ TAREAS COMPLETADAS:\n`;
             doneTasks.forEach((t, idx) => {
-                message += `${idx+1}. ${t.title}\n`;
-                message += `   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)}\n`;
-                message += `\n`;
+                message += `${idx+1}. ${t.title}\n   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)}\n\n`;
             });
         }
         if (userTasks.length === 0) {
@@ -973,10 +1115,7 @@
         }
         
         if (!skipFooter) {
-            message += `\n━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n`;
-            message += `📅 Reporte generado: ${new Date().toLocaleString()}\n`;
-            message += `🏢 Stride - Project Manager\n`;
-            message += `🛡️ DEPARTAMENTO DE CONTROL INTERNO`;
+            message += `\n━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n📅 Reporte generado: ${new Date().toLocaleString()}\n🏢 Stride - Project Manager\n🛡️ DEPARTAMENTO DE CONTROL INTERNO`;
         }
         return message;
     }
@@ -1017,7 +1156,7 @@
                 <div id="previewMessage" style="background:#f8fafc; padding:12px; border-radius:14px; margin-top:16px; max-height:250px; overflow-y:auto; font-size:0.75rem; white-space:pre-wrap; font-family:monospace;"></div>
                 <div class="modal-buttons">
                     <button class="btn-secondary" id="modalCancelBtn">Cancelar</button>
-                    <button id="modalSendBtn" class="${type === 'email' ? 'btn-email' : 'btn-whatsapp'}"><i class="fas ${type === 'email' ? 'fa-paper-plane' : 'fa-paper-plane'}"></i> ${type === 'email' ? 'Enviar Correo' : 'Enviar WhatsApp'}</button>
+                    <button id="modalSendBtn" class="${type === 'email' ? 'btn-email' : 'btn-whatsapp'}"><i class="fas fa-paper-plane"></i> ${type === 'email' ? 'Enviar Correo' : 'Enviar WhatsApp'}</button>
                 </div>
             </div>
         `;
@@ -1032,11 +1171,9 @@
         function updatePreview() {
             const selectedId = participantSelect.value;
             if (selectedId === 'all') {
-                const summaries = generateSummaryForAll(proj);
-                previewDiv.textContent = summaries;
+                previewDiv.textContent = generateSummaryForAll(proj);
             } else {
-                const summary = generateTaskSummary(selectedId, proj);
-                previewDiv.textContent = summary || "No hay tareas asignadas";
+                previewDiv.textContent = generateTaskSummary(selectedId, proj) || "No hay tareas asignadas";
             }
         }
         participantSelect.addEventListener('change', updatePreview);
@@ -1050,34 +1187,25 @@
                 if (isAll) {
                     const allEmails = proj.participants.map(p => p.email).join(';');
                     const emailBody = generateSummaryForAll(proj);
-                    const subject = encodeURIComponent(`Avance del Proyecto - ${proj.name}`);
-                    const body = encodeURIComponent(emailBody);
-                    window.open(`mailto:${allEmails}?subject=${subject}&body=${body}`, '_blank');
+                    window.open(`mailto:${allEmails}?subject=${encodeURIComponent(`Avance del Proyecto - ${proj.name}`)}&body=${encodeURIComponent(emailBody)}`, '_blank');
                 } else {
                     const participant = proj.participants.find(p => p.id === selectedId);
                     const summary = generateTaskSummary(selectedId, proj);
                     if (participant && summary) {
-                        const subject = encodeURIComponent(`Avance del Proyecto - ${proj.name}`);
-                        const body = encodeURIComponent(summary);
-                        window.open(`mailto:${participant.email}?subject=${subject}&body=${body}`, '_blank');
+                        window.open(`mailto:${participant.email}?subject=${encodeURIComponent(`Avance del Proyecto - ${proj.name}`)}&body=${encodeURIComponent(summary)}`, '_blank');
                     }
                 }
                 closeModal();
             } else if (type === 'whatsapp') {
                 if (isAll) {
-                    const allMessages = generateSummaryForAll(proj);
-                    const encodedMsg = encodeURIComponent(allMessages);
-                    window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
+                    window.open(`https://wa.me/?text=${encodeURIComponent(generateSummaryForAll(proj))}`, '_blank');
                 } else {
                     const participant = proj.participants.find(p => p.id === selectedId);
                     const summary = generateTaskSummary(selectedId, proj);
                     if (participant && summary) {
                         let phone = participant.phone.replace(/\D/g, '');
-                        if (!phone.startsWith('52') && !phone.startsWith('56') && !phone.startsWith('1')) {
-                            phone = '52' + phone;
-                        }
-                        const encodedMsg = encodeURIComponent(summary);
-                        window.open(`https://wa.me/${phone}?text=${encodedMsg}`, '_blank');
+                        if (!phone.startsWith('52')) phone = '52' + phone;
+                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(summary)}`, '_blank');
                     }
                 }
                 closeModal();
@@ -1085,104 +1213,71 @@
         });
     }
     
-    // FUNCIÓN DE EXPORTACIÓN MEJORADA
-    function exportData() {
-        const exportData = { 
-            projects: data.projects, 
-            currentProjectId: data.currentProjectId, 
-            ganttView: data.ganttView, 
-            exportDate: new Date().toISOString(),
-            version: "1.0"
-        };
-        const jsonStr = JSON.stringify(exportData, null, 2);
-        const blob = new Blob([jsonStr], { type: 'application/json' });
+    // ========== FUNCIONES DE EXPORTACIÓN/IMPORTACIÓN ==========
+    async function exportData() {
+        const exportData = { projects: data.projects, currentProjectId: data.currentProjectId, ganttView: data.ganttView };
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        
-        if ('showSaveFilePicker' in window) {
-            const opts = {
-                suggestedName: `Stride_backup_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`,
-                types: [{
-                    description: 'Archivo JSON',
-                    accept: { 'application/json': ['.json'] }
-                }]
-            };
-            window.showSaveFilePicker(opts).then(fileHandle => {
-                return fileHandle.createWritable().then(writable => {
-                    return writable.write(blob).then(() => writable.close());
-                });
-            }).catch(err => {
-                if (err.name !== 'AbortError') {
-                    fallbackDownload(url);
-                }
-            });
-        } else {
-            fallbackDownload(url);
-        }
-        
-        function fallbackDownload(url) {
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `stride_backup_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 100);
-        }
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `stride_backup_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 100);
     }
     
     function importData() {
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'application/json';
-        input.onchange = (e) => {
+        input.onchange = async (e) => {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = (event) => {
+            reader.onload = async (event) => {
                 try {
                     const imported = JSON.parse(event.target.result);
-                    if (!imported.projects || !Array.isArray(imported.projects)) {
-                        alert("Archivo inválido: no contiene proyectos");
-                        return;
-                    }
-                    let importedCount = 0, skippedCount = 0;
-                    for (const importedProject of imported.projects) {
-                        const existingIndex = data.projects.findIndex(p => p.id === importedProject.id);
-                        if (existingIndex === -1) {
-                            if (!importedProject.participants) importedProject.participants = [];
-                            if (!importedProject.tasks) importedProject.tasks = [];
-                            if (!importedProject.sprints) importedProject.sprints = [];
-                            data.projects.push(importedProject);
-                            importedCount++;
-                        } else {
-                            skippedCount++;
+                    if (!imported.projects) throw new Error("Formato inválido");
+                    for (const proj of imported.projects) {
+                        if (!data.projects.find(p => p.id === proj.id)) {
+                            if (!proj.participants) proj.participants = [];
+                            if (!proj.tasks) proj.tasks = [];
+                            if (!proj.sprints) proj.sprints = [];
+                            data.projects.push(proj);
                         }
                     }
                     if (imported.currentProjectId && data.projects.find(p => p.id === imported.currentProjectId)) {
                         data.currentProjectId = imported.currentProjectId;
                     }
-                    if (imported.ganttView) data.ganttView = imported.ganttView;
-                    saveLocal();
+                    await saveAndSync();
                     renderAll();
-                    alert(`Importación completada:\n• ${importedCount} proyecto(s) nuevos agregados\n• ${skippedCount} proyecto(s) omitidos (ya existían)`);
-                } catch (err) {
-                    alert("Error al leer el archivo JSON: " + err.message);
-                }
+                    alert("Importación completada");
+                } catch (err) { alert("Error: " + err.message); }
             };
             reader.readAsText(file);
         };
         input.click();
     }
     
-    function clearAllData() {
-        if (confirm("¿Eliminar TODOS los datos guardados (proyectos, participantes, tareas, sprints)? Esta acción no se puede deshacer.")) {
-            localStorage.removeItem("stride_pmo_final");
-            alert("Datos eliminados correctamente. La página se recargará.");
-            location.reload();
+    async function clearAllData() {
+        if (confirm("¿Eliminar TODOS los datos compartidos? ¡Esta acción afectará a todos los usuarios!")) {
+            data = { projects: [], currentProjectId: null, ganttView: 'day' };
+            await saveAndSync();
+            renderAll();
+            alert("Datos eliminados correctamente.");
         }
     }
     
-    function renderAll() { renderProjectSelector(); updateSelectors(); renderParticipants(); renderKanban(); renderSprintsAndBacklog(); renderGantt(); updateGlobalStats(); applyViewOnlyMode(); }
+    // ========== FUNCIONES DE RENDERIZADO ==========
+    function renderAll() { 
+        renderProjectSelector(); 
+        updateSelectors(); 
+        renderParticipants(); 
+        renderKanban(); 
+        renderSprintsAndBacklog(); 
+        renderGantt(); 
+        updateGlobalStats(); 
+        applyViewOnlyMode(); 
+    }
     
     function applyViewOnlyMode() {
         const editButtons = document.querySelectorAll('#addTaskBtn, #addMemberBtn, #addSprintBtn, #newProjectBtn, #sendEmailBtn, #sendWhatsAppBtn, #exportDataBtn, #importDataBtn, #clearDataBtn');
@@ -1205,16 +1300,16 @@
         }
         const sprintSel = document.getElementById("taskSprintSelect");
         if(sprintSel && proj) {
-            sprintSel.innerHTML = `<option value="">📦 Backlog (sin sprint)</option>` + (proj.sprints || []).map(s => `<option value="${s.id}" style="padding:8px;">🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join("");
+            sprintSel.innerHTML = `<option value="">📦 Backlog (sin sprint)</option>` + (proj.sprints || []).map(s => `<option value="${s.id}">🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join("");
             sprintSel.disabled = !isManager;
         }
         sprintSel?.addEventListener('change', () => {
             const warn = document.getElementById("createWarning");
             if (sprintSel.value && sprintSel.value !== "") {
-                warn.innerHTML = "⚠️ Al seleccionar un sprint, debes indicar Duración, Fecha inicio y Fecha fin (dentro del rango del sprint)";
+                warn.innerHTML = "⚠️ Al seleccionar un sprint, debes indicar Duración, Fecha inicio y Fecha fin";
                 warn.style.background = "#fef3c7";
             } else {
-                warn.innerHTML = "📦 Backlog: Duración y fechas son opcionales (puedes editarlas después)";
+                warn.innerHTML = "📦 Backlog: Duración y fechas son opcionales";
                 warn.style.background = "#e6f7e6";
             }
         });
@@ -1224,19 +1319,14 @@
         const container = document.getElementById("projectListContainer");
         container.innerHTML = "";
         if(data.projects.length === 0){
-            const emptyMsg = document.createElement("span");
-            emptyMsg.style.color = "#94a3b8";
-            emptyMsg.style.fontSize = "0.8rem";
-            emptyMsg.style.padding = "8px 0";
-            emptyMsg.innerText = "📁 Sin proyectos. Crea uno nuevo ➕";
-            container.appendChild(emptyMsg);
+            container.innerHTML = "<span style='color:#94a3b8; font-size:0.8rem; padding:8px 0;'>📁 Sin proyectos. Crea uno nuevo ➕</span>";
             return;
         }
         data.projects.forEach(proj => {
             const btn = document.createElement("button");
             btn.className = `project-btn ${data.currentProjectId === proj.id ? 'active' : ''}`;
             btn.innerText = proj.name;
-            btn.onclick = () => { data.currentProjectId = proj.id; saveLocal(); renderAll(); };
+            btn.onclick = async () => { data.currentProjectId = proj.id; await saveAndSync(); renderAll(); };
             if (isManager) {
                 btn.addEventListener('dblclick', (e) => { e.stopPropagation(); showProjectModal(proj.id); });
             }
@@ -1244,7 +1334,7 @@
         });
     }
     
-    function showProjectModal(projectId) {
+    async function showProjectModal(projectId) {
         if (!isManager) return;
         const project = data.projects.find(p => p.id === projectId);
         if (!project) return;
@@ -1252,9 +1342,9 @@
         modalOverlay.className = 'modal-overlay';
         modalOverlay.innerHTML = `
             <div class="modal-content">
-                <div class="modal-header"><h3><i class="fas fa-folder"></i> Editar Proyecto</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
-                <div class="form-row"><div class="form-group full-width"><label>Nombre del Proyecto</label><input type="text" id="editProjectName" value="${escapeHtml(project.name)}" placeholder="Nombre del proyecto"></div></div>
-                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn"><i class="fas fa-trash-alt"></i> Eliminar Proyecto</button><button id="modalSaveBtn"><i class="fas fa-save"></i> Guardar cambios</button></div>
+                <div class="modal-header"><h3>Editar Proyecto</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
+                <div class="form-row"><div class="form-group full-width"><label>Nombre</label><input type="text" id="editProjectName" value="${escapeHtml(project.name)}"></div></div>
+                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn">Eliminar</button><button id="modalSaveBtn">Guardar</button></div>
             </div>
         `;
         document.body.appendChild(modalOverlay);
@@ -1262,31 +1352,31 @@
         modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
         modalOverlay.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-        modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', () => {
+        modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', async () => {
             const newName = modalOverlay.querySelector('#editProjectName').value.trim();
-            if (!newName) { alert("El nombre del proyecto es obligatorio"); return; }
+            if (!newName) { alert("El nombre es obligatorio"); return; }
             project.name = newName;
-            saveLocal(); renderAll(); closeModal();
+            await saveAndSync(); renderAll(); closeModal();
         });
-        modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', () => {
-            if (confirm(`¿Eliminar permanentemente el proyecto "${project.name}"?`)) {
+        modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', async () => {
+            if (confirm(`¿Eliminar "${project.name}"?`)) {
                 data.projects = data.projects.filter(p => p.id !== projectId);
                 if (data.projects.length > 0) data.currentProjectId = data.projects[0].id;
                 else data.currentProjectId = null;
-                saveLocal(); renderAll(); closeModal();
+                await saveAndSync(); renderAll(); closeModal();
             }
         });
     }
     
-    function showNewProjectModal() {
+    async function showNewProjectModal() {
         if (!isManager) return;
         const modalOverlay = document.createElement('div');
         modalOverlay.className = 'modal-overlay';
         modalOverlay.innerHTML = `
             <div class="modal-content">
-                <div class="modal-header"><h3><i class="fas fa-plus-circle"></i> Nuevo Proyecto</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
-                <div class="form-row"><div class="form-group full-width"><label>Nombre del Proyecto</label><input type="text" id="newProjectName" placeholder="Nombre del proyecto"></div></div>
-                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button id="modalCreateBtn"><i class="fas fa-check"></i> Crear Proyecto</button></div>
+                <div class="modal-header"><h3>Nuevo Proyecto</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
+                <div class="form-row"><div class="form-group full-width"><label>Nombre</label><input type="text" id="newProjectName" placeholder="Nombre del proyecto"></div></div>
+                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button id="modalCreateBtn">Crear</button></div>
             </div>
         `;
         document.body.appendChild(modalOverlay);
@@ -1294,17 +1384,17 @@
         modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
         modalOverlay.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-        modalOverlay.querySelector('#modalCreateBtn').addEventListener('click', () => {
+        modalOverlay.querySelector('#modalCreateBtn').addEventListener('click', async () => {
             const newName = modalOverlay.querySelector('#newProjectName').value.trim();
-            if (!newName) { alert("El nombre del proyecto es obligatorio"); return; }
+            if (!newName) { alert("El nombre es obligatorio"); return; }
             const newProject = { id: "p_" + Date.now(), name: newName, participants: [], tasks: [], sprints: [] };
             data.projects.push(newProject);
             data.currentProjectId = newProject.id;
-            saveLocal(); renderAll(); closeModal();
+            await saveAndSync(); renderAll(); closeModal();
         });
     }
     
-    function showTaskModal(taskId) {
+    async function showTaskModal(taskId) {
         if (!isManager) return;
         const proj = currentProject();
         if(!proj) return;
@@ -1314,23 +1404,12 @@
         modalOverlay.className = 'modal-overlay';
         modalOverlay.innerHTML = `
             <div class="modal-content">
-                <div class="modal-header"><h3><i class="fas fa-tasks"></i> Editar tarea</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
-                <div class="form-row">
-                    <div class="form-group" style="flex:2;"><label>Título</label><input type="text" id="editTaskTitle" value="${escapeHtml(task.title)}"></div>
-                    <div class="form-group"><label>Asignado a</label><select id="editTaskAssignee"><option value="">-- Sin asignar --</option>${(proj.participants || []).map(m => `<option value="${m.id}" ${task.assigneeId === m.id ? 'selected' : ''}>${escapeHtml(m.name)} (${escapeHtml(m.role)})</option>`).join('')}</select></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group" style="min-width:240px;"><label>Sprint</label><select id="editTaskSprint" class="sprint-select"><option value="">📦 Backlog</option>${(proj.sprints || []).map(s => `<option value="${s.id}" ${task.sprintId === s.id ? 'selected' : ''}>${escapeHtml(s.name)} (${formatDateDMY(s.startDate)}→${formatDateDMY(s.endDate)})</option>`).join('')}</select></div>
-                    <div class="form-group"><label>Duración (días)</label><input type="number" id="editTaskDuration" value="${task.duration || ''}" min="1"></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Fecha inicio</label><input type="date" id="editTaskStartDate" value="${task.startDate || ''}"></div>
-                    <div class="form-group"><label>Fecha fin</label><input type="date" id="editTaskEndDate" value="${task.endDate || ''}"></div>
-                    <div class="form-group"><label>Estado Kanban</label><select id="editTaskStatus"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>📋 To Do</option><option value="inprogress" ${task.status === 'inprogress' ? 'selected' : ''}>⚙️ En Progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>✅ Hecho</option></select></div>
-                </div>
-                <div id="editInfo" class="info-nota" style="margin-bottom:12px;">✏️ Al editar duración o fechas, los campos se actualizarán automáticamente</div>
+                <div class="modal-header"><h3>Editar tarea</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
+                <div class="form-row"><div class="form-group" style="flex:2;"><label>Título</label><input type="text" id="editTaskTitle" value="${escapeHtml(task.title)}"></div><div class="form-group"><label>Asignado a</label><select id="editTaskAssignee"><option value="">-- Sin asignar --</option>${(proj.participants || []).map(m => `<option value="${m.id}" ${task.assigneeId === m.id ? 'selected' : ''}>${escapeHtml(m.name)}</option>`).join('')}</select></div></div>
+                <div class="form-row"><div class="form-group"><label>Sprint</label><select id="editTaskSprint"><option value="">📦 Backlog</option>${(proj.sprints || []).map(s => `<option value="${s.id}" ${task.sprintId === s.id ? 'selected' : ''}>${escapeHtml(s.name)}</option>`).join('')}</select></div><div class="form-group"><label>Duración</label><input type="number" id="editTaskDuration" value="${task.duration || ''}" min="1"></div></div>
+                <div class="form-row"><div class="form-group"><label>Fecha inicio</label><input type="date" id="editTaskStartDate" value="${task.startDate || ''}"></div><div class="form-group"><label>Fecha fin</label><input type="date" id="editTaskEndDate" value="${task.endDate || ''}"></div><div class="form-group"><label>Estado</label><select id="editTaskStatus"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>📋 To Do</option><option value="inprogress" ${task.status === 'inprogress' ? 'selected' : ''}>⚙️ En Progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>✅ Hecho</option></select></div></div>
                 <div id="editWarning" class="warning-text" style="background:#fef3c7; padding:8px; border-radius:12px; margin-bottom:12px;"></div>
-                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn"><i class="fas fa-trash-alt"></i> Eliminar</button><button id="modalSaveBtn"><i class="fas fa-save"></i> Guardar cambios</button></div>
+                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn">Eliminar</button><button id="modalSaveBtn">Guardar</button></div>
             </div>
         `;
         document.body.appendChild(modalOverlay);
@@ -1338,71 +1417,28 @@
         modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
         modalOverlay.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+        
         const durationInput = modalOverlay.querySelector('#editTaskDuration');
         const startDateInput = modalOverlay.querySelector('#editTaskStartDate');
         const endDateInput = modalOverlay.querySelector('#editTaskEndDate');
         const sprintSelect = modalOverlay.querySelector('#editTaskSprint');
         const warningDiv = modalOverlay.querySelector('#editWarning');
-        let updating = false;
-        const updateEndDate = () => {
-            if (updating) return;
-            const dur = parseInt(durationInput.value);
-            const start = startDateInput.value;
+        
+        const recalculate = () => {
+            const start = startDateInput.value, end = endDateInput.value, dur = durationInput.value;
+            if (start && end) {
+                const newDur = diffDaysInUTC(start, end) + 1;
+                if (newDur > 0 && durationInput.value != newDur) durationInput.value = newDur;
+            }
             if (start && dur && dur > 0) {
-                updating = true;
                 const newEnd = addDaysToYMD(start, dur - 1);
                 if (newEnd && endDateInput.value !== newEnd) endDateInput.value = newEnd;
-                updating = false;
-            }
-        };
-        const updateStartDate = () => {
-            if (updating) return;
-            const dur = parseInt(durationInput.value);
-            const end = endDateInput.value;
-            if (end && dur && dur > 0) {
-                updating = true;
-                const newStart = addDaysToYMD(end, -(dur - 1));
-                if (newStart && startDateInput.value !== newStart) startDateInput.value = newStart;
-                updating = false;
-            }
-        };
-        const updateDuration = () => {
-            if (updating) return;
-            const start = startDateInput.value;
-            const end = endDateInput.value;
-            if (start && end) {
-                updating = true;
-                const newDur = diffDaysInUTC(start, end);
-                if (newDur >= 0 && durationInput.value != newDur + 1) durationInput.value = newDur + 1;
-                updating = false;
-            }
-        };
-        const recalculate = () => {
-            const hasDuration = durationInput.value && parseInt(durationInput.value) > 0;
-            const hasStart = !!startDateInput.value;
-            const hasEnd = !!endDateInput.value;
-            const countFilled = [hasDuration, hasStart, hasEnd].filter(Boolean).length;
-            if (countFilled >= 2) {
-                if (hasDuration && hasStart && !hasEnd) updateEndDate();
-                else if (hasStart && hasEnd && !hasDuration) updateDuration();
-                else if (hasDuration && hasEnd && !hasStart) updateStartDate();
-                else if (hasDuration && hasStart && hasEnd) {
-                    const start = startDateInput.value, end = endDateInput.value, dur = parseInt(durationInput.value);
-                    const calculatedEnd = addDaysToYMD(start, dur - 1);
-                    const calculatedDur = diffDaysInUTC(start, end) + 1;
-                    if (calculatedEnd && end !== calculatedEnd) updateEndDate();
-                    else if (calculatedDur && dur !== calculatedDur) updateDuration();
-                }
             }
             const sprintId = sprintSelect.value;
-            const start = startDateInput.value, end = endDateInput.value, dur = durationInput.value;
             if (sprintId && sprintId !== "" && start && end && dur) {
                 const validation = validateSprintRange(proj, sprintId, start, end, parseInt(dur));
-                if (!validation.valid) { warningDiv.innerHTML = validation.message; warningDiv.style.background = "#fee2e2"; }
-                else { warningDiv.innerHTML = "✅ Fechas válidas dentro del sprint"; warningDiv.style.background = "#d1fae5"; }
-            } else if (sprintId && sprintId !== "") {
-                warningDiv.innerHTML = "⚠️ Al seleccionar un sprint, debes completar Duración, Fecha inicio y Fecha fin";
-                warningDiv.style.background = "#fef3c7";
+                warningDiv.innerHTML = validation.message;
+                warningDiv.style.background = validation.valid ? "#d1fae5" : "#fee2e2";
             } else {
                 warningDiv.innerHTML = "📦 Backlog: Duración y fechas son opcionales";
                 warningDiv.style.background = "#e6f7e6";
@@ -1413,208 +1449,23 @@
         endDateInput.addEventListener('change', recalculate);
         sprintSelect.addEventListener('change', recalculate);
         recalculate();
-        modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', () => {
+        
+        modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', async () => {
             const newTitle = modalOverlay.querySelector('#editTaskTitle').value.trim();
-            const newAssigneeId = modalOverlay.querySelector('#editTaskAssignee').value || null;
-            const newSprintId = sprintSelect.value || null;
-            let newDuration = parseInt(durationInput.value);
-            const newStartDate = startDateInput.value;
-            let newEndDate = endDateInput.value;
-            const newStatus = modalOverlay.querySelector('#editTaskStatus').value;
             if (!newTitle) { alert("El título es obligatorio"); return; }
-            if (newDuration && newDuration <= 0) {
-                alert("La duración debe ser un número positivo mayor a 0");
-                return;
-            }
-            if (newSprintId && newSprintId !== "") {
-                if (!newStartDate || !newDuration || newDuration <= 0) { alert("Para un sprint es obligatorio: Duración positiva y Fecha inicio"); return; }
-                if (!newEndDate) newEndDate = addDaysToYMD(newStartDate, newDuration - 1);
-                const validation = validateSprintRange(proj, newSprintId, newStartDate, newEndDate, newDuration);
-                if (!validation.valid) { alert(validation.message); return; }
-                task.endDate = newEndDate;
-            } else {
-                if (newStartDate && newDuration && newDuration > 0) {
-                    newEndDate = addDaysToYMD(newStartDate, newDuration - 1);
-                }
-                task.endDate = newEndDate || null;
-            }
             task.title = newTitle;
-            task.assigneeId = newAssigneeId;
-            task.sprintId = newSprintId;
-            task.duration = (newDuration && newDuration > 0) ? newDuration : null;
-            task.startDate = newStartDate || null;
-            task.endDate = task.endDate || null;
-            task.status = newStatus;
-            saveLocal(); renderAll(); closeModal();
+            task.assigneeId = modalOverlay.querySelector('#editTaskAssignee').value || null;
+            task.sprintId = sprintSelect.value || null;
+            task.duration = parseInt(durationInput.value) || null;
+            task.startDate = startDateInput.value || null;
+            task.endDate = endDateInput.value || null;
+            task.status = modalOverlay.querySelector('#editTaskStatus').value;
+            await saveAndSync(); renderAll(); closeModal();
         });
-        modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', () => {
-            if (confirm(`¿Eliminar permanentemente la tarea "${task.title}"?`)) {
+        modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', async () => {
+            if (confirm(`¿Eliminar "${task.title}"?`)) {
                 proj.tasks = proj.tasks.filter(t => t.id !== taskId);
-                saveLocal(); renderAll(); closeModal();
-            }
-        });
-    }
-    
-    function showTaskEditModalForAssign(taskId, targetSprintId) {
-        if (!isManager) return;
-        const proj = currentProject();
-        if(!proj) return;
-        const task = proj.tasks.find(t => t.id === taskId);
-        const targetSprint = getSprintById(proj, targetSprintId);
-        if (!task || !targetSprint) return;
-        const modalOverlay = document.createElement('div');
-        modalOverlay.className = 'modal-overlay';
-        modalOverlay.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-header"><h3><i class="fas fa-tasks"></i> Completar datos para asignar a sprint</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
-                <div class="info-nota" style="margin-bottom:12px;"><i class="fas fa-info-circle"></i> Asignando a: <strong>${escapeHtml(targetSprint.name)}</strong> (${formatDateDMY(targetSprint.startDate)} → ${formatDateDMY(targetSprint.endDate)})</div>
-                <div class="form-row"><div class="form-group" style="flex:2;"><label>Título</label><input type="text" id="editTaskTitle" value="${escapeHtml(task.title)}"></div><div class="form-group"><label>Asignado a</label><select id="editTaskAssignee"><option value="">-- Sin asignar --</option>${(proj.participants || []).map(m => `<option value="${m.id}" ${task.assigneeId === m.id ? 'selected' : ''}>${escapeHtml(m.name)} (${escapeHtml(m.role)})</option>`).join('')}</select></div></div>
-                <div class="form-row"><div class="form-group"><label>Duración (días)</label><input type="number" id="editTaskDuration" value="${task.duration || ''}" placeholder="Ej: 5" min="1"></div><div class="form-group"><label>Fecha inicio</label><input type="date" id="editTaskStartDate" value="${task.startDate || ''}"></div></div>
-                <div class="form-row"><div class="form-group"><label>Fecha fin</label><input type="date" id="editTaskEndDate" value="${task.endDate || ''}"></div><div class="form-group"><label>Estado Kanban</label><select id="editTaskStatus"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>📋 To Do</option><option value="inprogress" ${task.status === 'inprogress' ? 'selected' : ''}>⚙️ En Progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>✅ Hecho</option></select></div></div>
-                <div id="editWarning" class="warning-text" style="background:#fef3c7; padding:8px; border-radius:12px; margin-bottom:12px;"></div>
-                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button id="modalSaveBtn"><i class="fas fa-save"></i> Asignar al sprint</button></div>
-            </div>
-        `;
-        document.body.appendChild(modalOverlay);
-        const closeModal = () => modalOverlay.remove();
-        modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
-        modalOverlay.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-        const durationInput = modalOverlay.querySelector('#editTaskDuration');
-        const startDateInput = modalOverlay.querySelector('#editTaskStartDate');
-        const endDateInput = modalOverlay.querySelector('#editTaskEndDate');
-        const warningDiv = modalOverlay.querySelector('#editWarning');
-        let updating = false;
-        const updateEndDate = () => {
-            if (updating) return;
-            const dur = parseInt(durationInput.value);
-            const start = startDateInput.value;
-            if (start && dur && dur > 0) {
-                updating = true;
-                const newEnd = addDaysToYMD(start, dur - 1);
-                if (newEnd && endDateInput.value !== newEnd) endDateInput.value = newEnd;
-                updating = false;
-            }
-        };
-        const updateStartDate = () => {
-            if (updating) return;
-            const dur = parseInt(durationInput.value);
-            const end = endDateInput.value;
-            if (end && dur && dur > 0) {
-                updating = true;
-                const newStart = addDaysToYMD(end, -(dur - 1));
-                if (newStart && startDateInput.value !== newStart) startDateInput.value = newStart;
-                updating = false;
-            }
-        };
-        const updateDuration = () => {
-            if (updating) return;
-            const start = startDateInput.value;
-            const end = endDateInput.value;
-            if (start && end) {
-                updating = true;
-                const newDur = diffDaysInUTC(start, end);
-                if (newDur >= 0 && durationInput.value != newDur + 1) durationInput.value = newDur + 1;
-                updating = false;
-            }
-        };
-        const recalculate = () => {
-            const hasDuration = durationInput.value && parseInt(durationInput.value) > 0;
-            const hasStart = !!startDateInput.value;
-            const hasEnd = !!endDateInput.value;
-            const countFilled = [hasDuration, hasStart, hasEnd].filter(Boolean).length;
-            if (countFilled >= 2) {
-                if (hasDuration && hasStart && !hasEnd) updateEndDate();
-                else if (hasStart && hasEnd && !hasDuration) updateDuration();
-                else if (hasDuration && hasEnd && !hasStart) updateStartDate();
-                else if (hasDuration && hasStart && hasEnd) {
-                    const start = startDateInput.value, end = endDateInput.value, dur = parseInt(durationInput.value);
-                    const calculatedEnd = addDaysToYMD(start, dur - 1);
-                    const calculatedDur = diffDaysInUTC(start, end) + 1;
-                    if (calculatedEnd && end !== calculatedEnd) updateEndDate();
-                    else if (calculatedDur && dur !== calculatedDur) updateDuration();
-                }
-            }
-            const start = startDateInput.value, end = endDateInput.value, dur = durationInput.value;
-            if (start && end && dur) {
-                const sprintStart = new Date(targetSprint.startDate), sprintEnd = new Date(targetSprint.endDate);
-                const taskStart = new Date(start), taskEnd = new Date(end);
-                if (taskStart < sprintStart) { warningDiv.innerHTML = `⚠️ La fecha inicio no puede ser anterior a ${formatDateDMY(targetSprint.startDate)}`; warningDiv.style.background = "#fee2e2"; }
-                else if (taskEnd > sprintEnd) { warningDiv.innerHTML = `⚠️ La fecha fin no puede ser posterior a ${formatDateDMY(targetSprint.endDate)}`; warningDiv.style.background = "#fee2e2"; }
-                else if (taskStart > taskEnd) { warningDiv.innerHTML = "⚠️ La fecha inicio no puede ser posterior a la fecha fin"; warningDiv.style.background = "#fee2e2"; }
-                else { warningDiv.innerHTML = "✅ Fechas válidas dentro del sprint"; warningDiv.style.background = "#d1fae5"; }
-            } else if (start && end) { warningDiv.innerHTML = "✅ Fechas ingresadas, la duración se calculará automáticamente"; warningDiv.style.background = "#e6f7e6"; }
-            else { warningDiv.innerHTML = "⚠️ Completa al menos dos campos para calcular el tercero automáticamente"; warningDiv.style.background = "#fef3c7"; }
-        };
-        durationInput.addEventListener('input', recalculate);
-        startDateInput.addEventListener('change', recalculate);
-        endDateInput.addEventListener('change', recalculate);
-        recalculate();
-        modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', () => {
-            const newTitle = modalOverlay.querySelector('#editTaskTitle').value.trim();
-            const newAssigneeId = modalOverlay.querySelector('#editTaskAssignee').value || null;
-            let newDuration = parseInt(durationInput.value);
-            let newStartDate = startDateInput.value;
-            let newEndDate = endDateInput.value;
-            const newStatus = modalOverlay.querySelector('#editTaskStatus').value;
-            if (!newTitle) { alert("El título es obligatorio"); return; }
-            if (!newDuration || newDuration <= 0) { alert("La duración es obligatoria y debe ser mayor a 0"); return; }
-            if (!newStartDate || !newEndDate) { alert("La fecha inicio y fecha fin son obligatorias"); return; }
-            const sprintStart = new Date(targetSprint.startDate), sprintEnd = new Date(targetSprint.endDate);
-            const taskStart = new Date(newStartDate), taskEnd = new Date(newEndDate);
-            if (taskStart < sprintStart) { alert(`La fecha inicio no puede ser anterior a ${formatDateDMY(targetSprint.startDate)}`); return; }
-            if (taskEnd > sprintEnd) { alert(`La fecha fin no puede ser posterior a ${formatDateDMY(targetSprint.endDate)}`); return; }
-            if (taskStart > taskEnd) { alert("La fecha inicio no puede ser posterior a la fecha fin"); return; }
-            task.title = newTitle;
-            task.assigneeId = newAssigneeId;
-            task.sprintId = targetSprintId;
-            task.duration = newDuration;
-            task.startDate = newStartDate;
-            task.endDate = newEndDate;
-            task.status = newStatus;
-            saveLocal(); renderAll(); closeModal();
-        });
-    }
-    
-    function showSprintModal(sprintId) {
-        if (!isManager) return;
-        const proj = currentProject();
-        if(!proj) return;
-        const sprint = proj.sprints.find(s => s.id === sprintId);
-        if (!sprint) return;
-        const modalOverlay = document.createElement('div');
-        modalOverlay.className = 'modal-overlay';
-        modalOverlay.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-header"><h3><i class="fas fa-rocket"></i> Editar Sprint</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
-                <div class="form-row"><div class="form-group" style="flex:2;"><label>Nombre del Sprint</label><input type="text" id="editSprintName" value="${escapeHtml(sprint.name)}"></div></div>
-                <div class="form-row"><div class="form-group"><label>Fecha inicio</label><input type="date" id="editSprintStart" value="${sprint.startDate || ''}"></div><div class="form-group"><label>Fecha fin</label><input type="date" id="editSprintEnd" value="${sprint.endDate || ''}"></div></div>
-                <div class="form-row"><div class="form-group full-width"><label>Objetivo</label><input type="text" id="editSprintGoal" value="${escapeHtml(sprint.goal || '')}"></div></div>
-                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn"><i class="fas fa-trash-alt"></i> Eliminar Sprint</button><button id="modalSaveBtn"><i class="fas fa-save"></i> Guardar cambios</button></div>
-            </div>
-        `;
-        document.body.appendChild(modalOverlay);
-        const closeModal = () => modalOverlay.remove();
-        modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
-        modalOverlay.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-        modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', () => {
-            const newName = modalOverlay.querySelector('#editSprintName').value.trim();
-            const newStart = modalOverlay.querySelector('#editSprintStart').value;
-            const newEnd = modalOverlay.querySelector('#editSprintEnd').value;
-            const newGoal = modalOverlay.querySelector('#editSprintGoal').value.trim();
-            if (!newName) { alert("El nombre del sprint es obligatorio"); return; }
-            sprint.name = newName;
-            sprint.startDate = newStart;
-            sprint.endDate = newEnd;
-            sprint.goal = newGoal;
-            saveLocal(); renderAll(); closeModal();
-        });
-        modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', () => {
-            if (confirm(`¿Eliminar permanentemente el sprint "${sprint.name}"?`)) {
-                proj.tasks.forEach(t => { if (t.sprintId === sprintId) t.sprintId = null; });
-                proj.sprints = proj.sprints.filter(s => s.id !== sprintId);
-                saveLocal(); renderAll(); closeModal();
+                await saveAndSync(); renderAll(); closeModal();
             }
         });
     }
@@ -1624,23 +1475,22 @@
         const container = document.getElementById("participantsList");
         container.innerHTML = "";
         if (!proj) {
-            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>📁 Selecciona o crea un proyecto</p>";
+            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8;'>📁 Selecciona o crea un proyecto</p>";
             return;
         }
         if(!proj.participants || proj.participants.length === 0){
-            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>📋 No hay participantes registrados</p>";
+            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8;'>📋 No hay participantes registrados</p>";
             return;
         }
-        (proj.participants || []).forEach(m => {
+        proj.participants.forEach(m => {
             const div = document.createElement("div"); div.className = "participant-item";
-            div.setAttribute('data-id', m.id);
-            div.innerHTML = `<div><strong>${escapeHtml(m.name)}</strong> · ${escapeHtml(m.role)}<br><small><i class="fas fa-envelope"></i> ${escapeHtml(m.email)}  |  <i class="fas fa-phone"></i> ${escapeHtml(m.phone)}</small></div><div><i class="fas fa-grip-vertical" style="color:#94a3b8;"></i></div>`;
+            div.innerHTML = `<div><strong>${escapeHtml(m.name)}</strong> · ${escapeHtml(m.role)}<br><small><i class="fas fa-envelope"></i> ${escapeHtml(m.email)} | <i class="fas fa-phone"></i> ${escapeHtml(m.phone)}</small></div><div><i class="fas fa-grip-vertical"></i></div>`;
             if (isManager) div.addEventListener('dblclick', (e) => { e.stopPropagation(); showMemberModal(m.id); });
             container.appendChild(div);
         });
     }
     
-    function showMemberModal(memberId) {
+    async function showMemberModal(memberId) {
         if (!isManager) return;
         const proj = currentProject();
         if(!proj) return;
@@ -1648,29 +1498,29 @@
         if (!member) return;
         const modalOverlay = document.createElement('div');
         modalOverlay.className = 'modal-overlay';
-        modalOverlay.innerHTML = `<div class="modal-content"><div class="modal-header"><h3><i class="fas fa-user-edit"></i> Editar participante</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
-            <div class="form-row"><div class="form-group"><label>Nombre completo</label><input type="text" id="editName" value="${escapeHtml(member.name)}"></div><div class="form-group"><label>Puesto / Rol</label><input type="text" id="editRole" value="${escapeHtml(member.role)}"></div></div>
-            <div class="form-row"><div class="form-group"><label>Correo electrónico</label><input type="email" id="editEmail" value="${escapeHtml(member.email)}"></div><div class="form-group"><label>Celular</label><input type="text" id="editPhone" value="${escapeHtml(member.phone)}"></div></div>
-            <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn"><i class="fas fa-trash-alt"></i> Eliminar</button><button id="modalSaveBtn"><i class="fas fa-save"></i> Guardar cambios</button></div></div>`;
+        modalOverlay.innerHTML = `<div class="modal-content"><div class="modal-header"><h3>Editar participante</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
+            <div class="form-row"><div class="form-group"><label>Nombre</label><input type="text" id="editName" value="${escapeHtml(member.name)}"></div><div class="form-group"><label>Rol</label><input type="text" id="editRole" value="${escapeHtml(member.role)}"></div></div>
+            <div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="editEmail" value="${escapeHtml(member.email)}"></div><div class="form-group"><label>Celular</label><input type="text" id="editPhone" value="${escapeHtml(member.phone)}"></div></div>
+            <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn">Eliminar</button><button id="modalSaveBtn">Guardar</button></div></div>`;
         document.body.appendChild(modalOverlay);
         const closeModal = () => modalOverlay.remove();
         modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
         modalOverlay.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-        modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', () => {
+        modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', async () => {
             const newName = modalOverlay.querySelector('#editName').value.trim();
             if (!newName) { alert("El nombre es obligatorio"); return; }
             member.name = newName;
-            member.role = modalOverlay.querySelector('#editRole').value.trim();
-            member.email = modalOverlay.querySelector('#editEmail').value.trim();
-            member.phone = modalOverlay.querySelector('#editPhone').value.trim();
-            saveLocal(); renderAll(); closeModal();
+            member.role = modalOverlay.querySelector('#editRole').value;
+            member.email = modalOverlay.querySelector('#editEmail').value;
+            member.phone = modalOverlay.querySelector('#editPhone').value;
+            await saveAndSync(); renderAll(); closeModal();
         });
-        modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', () => {
-            if (confirm(`¿Eliminar permanentemente a "${member.name}"?`)) {
+        modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', async () => {
+            if (confirm(`¿Eliminar a "${member.name}"?`)) {
                 proj.participants = proj.participants.filter(m => m.id !== memberId);
                 proj.tasks.forEach(t => { if (t.assigneeId === memberId) t.assigneeId = null; });
-                saveLocal(); renderAll(); closeModal();
+                await saveAndSync(); renderAll(); closeModal();
             }
         });
     }
@@ -1679,7 +1529,7 @@
         const board = document.getElementById("kanbanBoard"); 
         const proj = currentProject();
         if(!proj) {
-            board.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>📁 Selecciona o crea un proyecto para ver las tareas</p>";
+            board.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8;'>📁 Selecciona o crea un proyecto</p>";
             return;
         }
         const states = [{key:"todo", title:"📋 TO DO"},{key:"inprogress", title:"⚙️ IN PROGRESS"},{key:"done", title:"✅ DONE"}];
@@ -1687,14 +1537,15 @@
         states.forEach(col => {
             const colDiv = document.createElement("div"); colDiv.className = "kanban-col";
             const tasksCol = (proj.tasks || []).filter(t => t.status === col.key);
-            colDiv.innerHTML = `<div class="col-header"><span><i class="fas ${col.key === 'todo' ? 'fa-list' : (col.key === 'inprogress' ? 'fa-spinner' : 'fa-check-circle')}"></i> ${col.title}</span><span class="badge">${tasksCol.length}</span></div>`;
+            colDiv.innerHTML = `<div class="col-header"><span>${col.title}</span><span class="badge">${tasksCol.length}</span></div>`;
             const container = document.createElement("div");
             tasksCol.forEach(task => {
                 const member = getParticipantById(proj, task.assigneeId);
                 const sprint = task.sprintId ? getSprintById(proj, task.sprintId) : null;
-                const colorCode = getTaskColor(task, proj);
+                const colorCode = getTaskColor(task);
                 const colorName = task.status === "done" ? "Azul" : (colorCode === "#10b981" ? "Verde" : (colorCode === "#f59e0b" ? "Naranja" : "Rojo"));
-                const card = document.createElement("div"); card.className = "task-card"; card.style.borderLeftColor = task.status === "done" ? "#3b82f6" : (task.status === "inprogress" ? "#f59e0b" : "#94a3b8");
+                const card = document.createElement("div"); card.className = "task-card"; 
+                card.style.borderLeftColor = task.status === "done" ? "#3b82f6" : (task.status === "inprogress" ? "#f59e0b" : "#94a3b8");
                 card.setAttribute('data-taskid', task.id);
                 card.innerHTML = `<div class="task-title"><strong>${escapeHtml(task.title)}</strong> ${member ? `<span class="badge"><i class="fas fa-user"></i> ${escapeHtml(member.name)}</span>` : ""} <span class="badge" style="background:${colorCode}20; color:${colorCode};">● ${colorName}</span></div>
                 <div class="task-meta"><span><i class="far fa-calendar-alt"></i> ${formatDateDMY(task.startDate)} → ${formatDateDMY(task.endDate)} (${task.duration || 0}d)</span><span><i class="fas fa-tag"></i> ${sprint ? sprint.name : "Backlog"}</span></div>`;
@@ -1718,16 +1569,16 @@
     function renderSprintsAndBacklog() {
         const proj = currentProject(); 
         if(!proj) {
-            document.getElementById("sprintsListContainer").innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>📁 Selecciona o crea un proyecto</p>";
+            document.getElementById("sprintsListContainer").innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8;'>📁 Selecciona o crea un proyecto</p>";
             document.getElementById("backlogTasksList").innerHTML = "";
             return;
         }
         const container = document.getElementById("sprintsListContainer"); 
         container.innerHTML = "";
         if(!proj.sprints || proj.sprints.length === 0){
-            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8; font-size:0.85rem;'>🚀 No hay sprints. Crea tu primer sprint</p>";
+            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8;'>🚀 No hay sprints. Crea tu primer sprint</p>";
         } else {
-            (proj.sprints || []).forEach(sprint => {
+            proj.sprints.forEach(sprint => {
                 const tasksOfSprint = (proj.tasks || []).filter(t => t.sprintId === sprint.id);
                 const div = document.createElement("div"); div.className = "sprint-card";
                 div.setAttribute('data-sprint-id', sprint.id);
@@ -1758,111 +1609,142 @@
             if (isManager) div.addEventListener('dblclick', (e) => { e.stopPropagation(); showTaskModal(task.id); });
             backlogDiv.appendChild(div);
         });
-        document.querySelectorAll(".assign-sprint-select").forEach(sel => sel.addEventListener("change", (e) => { 
+        document.querySelectorAll(".assign-sprint-select").forEach(sel => sel.addEventListener("change", async (e) => { 
             if (!isManager) return;
             e.stopPropagation();
             const tid = sel.getAttribute("data-taskid"); 
             const sid = sel.value; 
             if (!sid) return;
             const task = proj.tasks.find(t => t.id === tid); 
-            const sprint = getSprintById(proj, sid);
-            if(task && sprint) { 
-                if (task.duration && task.startDate && task.endDate) {
-                    const taskStart = new Date(task.startDate);
-                    const taskEnd = new Date(task.endDate);
-                    const sprintStart = new Date(sprint.startDate);
-                    const sprintEnd = new Date(sprint.endDate);
-                    if (taskStart >= sprintStart && taskEnd <= sprintEnd) {
-                        task.sprintId = sid;
-                        saveLocal(); renderAll();
-                    } else { showTaskEditModalForAssign(tid, sid); }
-                } else { showTaskEditModalForAssign(tid, sid); }
+            if(task) { 
+                task.sprintId = sid;
+                await saveAndSync(); renderAll();
             }
             sel.value = "";
         }));
     }
     
-function renderGantt() {
-    const proj = currentProject();
-    if(!proj || !proj.sprints || proj.sprints.length === 0) { 
-        document.getElementById("ganttProfessionalContainer").innerHTML = "<div class='form-card' style='text-align:center;'>📊 Crea sprints primero para ver el diagrama de Gantt</div>"; 
-        return; 
-    }
-    const allSprints = [...proj.sprints].sort((a,b)=>a.startDate.localeCompare(b.startDate));
-    const globalStart = allSprints[0].startDate;
-    const globalEnd = allSprints[allSprints.length-1].endDate;
-    const totalDays = diffDaysInUTC(globalStart, globalEnd) + 1;
-    let dates = [];
-    for(let i = 0; i < totalDays; i++) { dates.push(addDaysToYMD(globalStart, i)); }
-    let view = data.ganttView || 'day';
-    let timelineUnits = [], unitWidth = 0;
-    if(view === 'day') { unitWidth = 38; timelineUnits = dates.map((d, idx) => ({ label: getDisplayDate(d), width: unitWidth, startDate: d, endDate: d, index: idx })); }
-    else if(view === 'week') {
-        let weeks = [], currentWeek = [];
-        for(let d of dates) { currentWeek.push(d); let { year, month, day } = parseDateYMD(d); let dateObj = new Date(Date.UTC(year, month, day)); if(dateObj.getUTCDay() === 6 || d === dates[dates.length-1]) { weeks.push([...currentWeek]); currentWeek = []; } }
-        unitWidth = 90; timelineUnits = weeks.map((week, idx) => ({ label: `${getDisplayDate(week[0])} - ${getDisplayDate(week[week.length-1])}`, width: unitWidth, startDate: week[0], endDate: week[week.length-1], index: idx }));
-    }
-    else if(view === 'month') {
-        let monthsMap = new Map();
-        for(let d of dates) { let { year, month } = parseDateYMD(d); let key = `${year}-${month}`; if(!monthsMap.has(key)) monthsMap.set(key, []); monthsMap.get(key).push(d); }
-        let months = Array.from(monthsMap.values()); unitWidth = 110;
-        timelineUnits = months.map((monthDays, idx) => { let { year, month } = parseDateYMD(monthDays[0]); let monthName = new Date(Date.UTC(year, month, 1)).toLocaleString('es', { month: 'short', timeZone: 'UTC' }); return { label: `${monthName} ${year}<br>${getDisplayDate(monthDays[0])} - ${getDisplayDate(monthDays[monthDays.length-1])}`, width: unitWidth, startDate: monthDays[0], endDate: monthDays[monthDays.length-1], index: idx }; });
-    }
-    let headerCells = timelineUnits.map(u => `<th style="min-width:${u.width}px; font-size:0.7rem; text-align:center;">${u.label}</th>`).join('');
-    let html = `<div class="gantt-container"><table class="gantt-table"><thead><tr>
-        <th style="min-width:220px; position:sticky; left:0; background:#f8fafc; z-index:3;">Tarea / Sprint</th>
-        <th style="width:75px">Duración</th>
-        <th style="width:100px">Inicio</th>
-        <th style="width:100px">Fin</th>
-        <th style="width:130px">Responsable</th>${headerCells}
-    </tr></thead><tbody>`;
-    for(let sprint of allSprints) {
-        const tasksInSprint = (proj.tasks || []).filter(t => t.sprintId === sprint.id && t.startDate && t.duration);
-        html += `<tr class="sprint-group-title">
-            <td style="position:sticky; left:0; background:#eef2ff; z-index:2; padding:12px 8px;">
-                <div><strong><i class="fas fa-rocket"></i> ${escapeHtml(sprint.name)}</strong></div>
-                <div style="font-size:0.7rem; font-weight:normal; margin-top:2px;">${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</div>
-              <\/td>
-            <td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td>${'<td style="background:#eef2ff;"></td>'.repeat(timelineUnits.length)}
-        <\/tr>`;
-        if(tasksInSprint.length === 0) { 
-            html += `<tr><td colspan="${5 + timelineUnits.length}" style="text-align:center; color:#999; padding:20px;">Sin tareas con fechas<\/td><\/tr>`;
-            continue; 
-        }
-        for(let task of tasksInSprint) {
-            const barColor = getTaskColor(task, proj);
-            const member = getParticipantById(proj, task.assigneeId);
-            const tooltipText = `Inicio: ${formatDateDMY(task.startDate)} → Fin: ${formatDateDMY(task.endDate)}`;
-            let startUnitIdx = -1, endUnitIdx = -1;
-            for(let i = 0; i < timelineUnits.length; i++) { 
-                const unit = timelineUnits[i]; 
-                if(task.startDate <= unit.endDate && task.endDate >= unit.startDate) { 
-                    if(startUnitIdx === -1) startUnitIdx = i; 
-                    endUnitIdx = i; 
-                } 
+    async function showSprintModal(sprintId) {
+        if (!isManager) return;
+        const proj = currentProject();
+        if(!proj) return;
+        const sprint = proj.sprints.find(s => s.id === sprintId);
+        if (!sprint) return;
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        modalOverlay.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header"><h3>Editar Sprint</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
+                <div class="form-row"><div class="form-group"><label>Nombre</label><input type="text" id="editSprintName" value="${escapeHtml(sprint.name)}"></div></div>
+                <div class="form-row"><div class="form-group"><label>Fecha inicio</label><input type="date" id="editSprintStart" value="${sprint.startDate || ''}"></div><div class="form-group"><label>Fecha fin</label><input type="date" id="editSprintEnd" value="${sprint.endDate || ''}"></div></div>
+                <div class="form-row"><div class="form-group"><label>Objetivo</label><input type="text" id="editSprintGoal" value="${escapeHtml(sprint.goal || '')}"></div></div>
+                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn">Eliminar</button><button id="modalSaveBtn">Guardar</button></div>
+            </div>
+        `;
+        document.body.appendChild(modalOverlay);
+        const closeModal = () => modalOverlay.remove();
+        modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
+        modalOverlay.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+        modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', async () => {
+            const newName = modalOverlay.querySelector('#editSprintName').value.trim();
+            if (!newName) { alert("El nombre es obligatorio"); return; }
+            sprint.name = newName;
+            sprint.startDate = modalOverlay.querySelector('#editSprintStart').value;
+            sprint.endDate = modalOverlay.querySelector('#editSprintEnd').value;
+            sprint.goal = modalOverlay.querySelector('#editSprintGoal').value;
+            await saveAndSync(); renderAll(); closeModal();
+        });
+        modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', async () => {
+            if (confirm(`¿Eliminar sprint "${sprint.name}"?`)) {
+                proj.tasks.forEach(t => { if (t.sprintId === sprintId) t.sprintId = null; });
+                proj.sprints = proj.sprints.filter(s => s.id !== sprintId);
+                await saveAndSync(); renderAll(); closeModal();
             }
-            html += `<tr>
-                <td style="position:sticky; left:0; background:white; z-index:1;" class="task-name-col">${escapeHtml(task.title)}<\/td>
-                <td class="text-center">${task.duration}d<\/td>
-                <td class="text-center text-nowrap">${formatDateDMY(task.startDate)}<\/td>
-                <td class="text-center text-nowrap">${formatDateDMY(task.endDate)}<\/td>
-                <td style="white-space: nowrap;">${member ? escapeHtml(member.name) : "—"}<\/td>`;
-            for(let i = 0; i < timelineUnits.length; i++) { 
-                const isInRange = (i >= startUnitIdx && i <= endUnitIdx); 
-                if(isInRange) { 
-                    html += `<td class="gantt-unit-cell" style="background:${barColor}20;"><div class="gantt-bar-bg" style="background:${barColor};" title="${tooltipText}"></div><\/td>`; 
-                } else { 
-                    html += `<td class="gantt-unit-cell"><\/td>`; 
-                } 
-            }
-            html += `<\/tr>`;
-        }
+        });
     }
-    html += `</tbody><\/table><\/div>`;
-    document.getElementById("ganttProfessionalContainer").innerHTML = html;
-    document.querySelectorAll(".view-btn").forEach(btn => btn.classList.remove("active"));
-    document.querySelector(`.view-btn[data-view="${view}"]`)?.classList.add("active");
-}
+    
+    function renderGantt() {
+        const proj = currentProject();
+        if(!proj || !proj.sprints || proj.sprints.length === 0) { 
+            document.getElementById("ganttProfessionalContainer").innerHTML = "<div class='form-card' style='text-align:center;'>📊 Crea sprints primero para ver el diagrama de Gantt</div>"; 
+            return; 
+        }
+        const allSprints = [...proj.sprints].sort((a,b)=>a.startDate.localeCompare(b.startDate));
+        const globalStart = allSprints[0].startDate;
+        const globalEnd = allSprints[allSprints.length-1].endDate;
+        const totalDays = diffDaysInUTC(globalStart, globalEnd) + 1;
+        let dates = [];
+        for(let i = 0; i < totalDays; i++) { dates.push(addDaysToYMD(globalStart, i)); }
+        let view = data.ganttView || 'day';
+        let timelineUnits = [], unitWidth = 0;
+        if(view === 'day') { unitWidth = 38; timelineUnits = dates.map((d, idx) => ({ label: formatDateDMY(d), width: unitWidth, startDate: d, endDate: d, index: idx })); }
+        else if(view === 'week') {
+            let weeks = [], currentWeek = [];
+            for(let d of dates) { currentWeek.push(d); if(currentWeek.length === 7 || d === dates[dates.length-1]) { weeks.push([...currentWeek]); currentWeek = []; } }
+            unitWidth = 90; timelineUnits = weeks.map((week, idx) => ({ label: `${formatDateDMY(week[0])} - ${formatDateDMY(week[week.length-1])}`, width: unitWidth, startDate: week[0], endDate: week[week.length-1], index: idx }));
+        }
+        else if(view === 'month') {
+            let monthsMap = new Map();
+            for(let d of dates) { let { year, month } = parseDateYMD(d); let key = `${year}-${month}`; if(!monthsMap.has(key)) monthsMap.set(key, []); monthsMap.get(key).push(d); }
+            let months = Array.from(monthsMap.values()); unitWidth = 110;
+            timelineUnits = months.map((monthDays, idx) => ({ label: formatDateDMY(monthDays[0]).split('/')[1] + '/' + monthDays[0].split('-')[0], width: unitWidth, startDate: monthDays[0], endDate: monthDays[monthDays.length-1], index: idx }));
+        }
+        let headerCells = timelineUnits.map(u => `<th style="min-width:${u.width}px; font-size:0.7rem; text-align:center;">${u.label}</th>`).join('');
+        let html = `<div class="gantt-container"><table class="gantt-table"><thead><tr>
+            <th style="min-width:220px; position:sticky; left:0; background:#f8fafc; z-index:3;">Tarea / Sprint</th>
+            <th style="width:75px">Duración</th>
+            <th style="width:100px">Inicio</th>
+            <th style="width:100px">Fin</th>
+            <th style="width:130px">Responsable</th>${headerCells}
+         </thead><tbody>`;
+        for(let sprint of allSprints) {
+            const tasksInSprint = (proj.tasks || []).filter(t => t.sprintId === sprint.id && t.startDate && t.duration);
+            html += `<tr class="sprint-group-title">
+                <td style="position:sticky; left:0; background:#eef2ff; z-index:2; padding:12px 8px;">
+                    <div><strong><i class="fas fa-rocket"></i> ${escapeHtml(sprint.name)}</strong></div>
+                    <div style="font-size:0.7rem; font-weight:normal; margin-top:2px;">${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</div>
+                  <\/td>
+                <td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td>${'<td style="background:#eef2ff;"></td>'.repeat(timelineUnits.length)}
+            <\/tr>`;
+            if(tasksInSprint.length === 0) { 
+                html += `<tr><td colspan="${5 + timelineUnits.length}" style="text-align:center; color:#999; padding:20px;">Sin tareas con fechas<\/td><\/tr>`;
+                continue; 
+            }
+            for(let task of tasksInSprint) {
+                const barColor = getTaskColor(task);
+                const member = getParticipantById(proj, task.assigneeId);
+                const tooltipText = `Inicio: ${formatDateDMY(task.startDate)} → Fin: ${formatDateDMY(task.endDate)}`;
+                let startUnitIdx = -1, endUnitIdx = -1;
+                for(let i = 0; i < timelineUnits.length; i++) { 
+                    const unit = timelineUnits[i]; 
+                    if(task.startDate <= unit.endDate && task.endDate >= unit.startDate) { 
+                        if(startUnitIdx === -1) startUnitIdx = i; 
+                        endUnitIdx = i; 
+                    } 
+                }
+                html += `<tr>
+                    <td style="position:sticky; left:0; background:white; z-index:1;" class="task-name-col">${escapeHtml(task.title)}<\/td>
+                    <td class="text-center">${task.duration}d<\/td>
+                    <td class="text-center text-nowrap">${formatDateDMY(task.startDate)}<\/td>
+                    <td class="text-center text-nowrap">${formatDateDMY(task.endDate)}<\/td>
+                    <td style="white-space: nowrap;">${member ? escapeHtml(member.name) : "—"}<\/td>`;
+                for(let i = 0; i < timelineUnits.length; i++) { 
+                    const isInRange = (i >= startUnitIdx && i <= endUnitIdx); 
+                    if(isInRange) { 
+                        html += `<td class="gantt-unit-cell" style="background:${barColor}20;"><div class="gantt-bar-bg" style="background:${barColor};" title="${tooltipText}"></div><\/td>`; 
+                    } else { 
+                        html += `<td class="gantt-unit-cell"><\/td>`; 
+                    } 
+                }
+                html += `<\/tr>`;
+            }
+        }
+        html += `</tbody></table></div>`;
+        document.getElementById("ganttProfessionalContainer").innerHTML = html;
+        document.querySelectorAll(".view-btn").forEach(btn => btn.classList.remove("active"));
+        document.querySelector(`.view-btn[data-view="${view}"]`)?.classList.add("active");
+    }
     
     function updateGlobalStats() {
         document.getElementById("statProjects").innerText = data.projects.length;
@@ -1896,7 +1778,8 @@ function renderGantt() {
     }
     setupCreateCongruence();
     
-    document.getElementById("addTaskBtn")?.addEventListener("click", () => {
+    // ========== EVENT LISTENERS PRINCIPALES ==========
+    document.getElementById("addTaskBtn")?.addEventListener("click", async () => {
         if (!isManager) return;
         let title = document.getElementById("taskTitle").value;
         if(!title) { alert("El título es obligatorio"); return; }
@@ -1923,7 +1806,7 @@ function renderGantt() {
             let newTask = { id: "t_"+Date.now()+Math.random(), title, assigneeId: document.getElementById("taskAssigneeSelect").value || null, sprintId: null, duration: (duration && duration > 0) ? duration : null, startDate: start || null, endDate: end || null, status: document.getElementById("taskStatus").value };
             proj.tasks.push(newTask);
         }
-        saveLocal(); renderAll();
+        await saveAndSync(); renderAll();
         document.getElementById("taskTitle").value = "";
         document.getElementById("taskDuration").value = "";
         document.getElementById("taskStartDate").value = "";
@@ -1931,7 +1814,7 @@ function renderGantt() {
         document.getElementById("createWarning").style.background = "#e6f7e6";
     });
     
-    document.getElementById("addMemberBtn")?.addEventListener("click", () => { 
+    document.getElementById("addMemberBtn")?.addEventListener("click", async () => { 
         if (!isManager) return;
         let n = document.getElementById("memberName").value; 
         if(!n) { alert("El nombre es obligatorio"); return; }
@@ -1939,7 +1822,7 @@ function renderGantt() {
         if(!proj) { alert("Debes seleccionar o crear un proyecto primero"); return; }
         proj.participants = proj.participants || [];
         proj.participants.push({id:"m_"+Date.now(), name:n, role:document.getElementById("memberRole").value, email:document.getElementById("memberEmail").value, phone:document.getElementById("memberPhone").value}); 
-        saveLocal(); renderAll(); 
+        await saveAndSync(); renderAll(); 
         document.getElementById("memberName").value = "";
         document.getElementById("memberRole").value = "";
         document.getElementById("memberEmail").value = "";
@@ -1947,7 +1830,7 @@ function renderGantt() {
     });
     
     document.getElementById("newProjectBtn")?.addEventListener("click", () => { if(isManager) showNewProjectModal(); });
-    document.getElementById("addSprintBtn")?.addEventListener("click", () => { 
+    document.getElementById("addSprintBtn")?.addEventListener("click", async () => { 
         if (!isManager) return;
         let name = document.getElementById("sprintName").value; 
         if(!name) { alert("El nombre del sprint es obligatorio"); return; } 
@@ -1959,7 +1842,7 @@ function renderGantt() {
         if(!proj) { alert("Debes seleccionar o crear un proyecto primero"); return; }
         proj.sprints = proj.sprints || [];
         proj.sprints.push({id:"spr_"+Date.now(), name, startDate:start, endDate:end, goal:goal}); 
-        saveLocal(); renderAll();
+        await saveAndSync(); renderAll();
         document.getElementById("sprintName").value = "";
         document.getElementById("sprintStart").value = "";
         document.getElementById("sprintEnd").value = "";
@@ -1980,36 +1863,25 @@ function renderGantt() {
     });
     
     document.querySelectorAll(".tab-btn").forEach(btn=>btn.addEventListener("click",()=>{ let tabId=btn.getAttribute("data-tab"); document.querySelectorAll(".tab-content").forEach(tc=>tc.classList.remove("active")); document.getElementById(tabId).classList.add("active"); document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }));
-    document.querySelectorAll(".view-btn").forEach(btn=>btn.addEventListener("click",(e)=>{ data.ganttView=btn.getAttribute("data-view"); saveLocal(); renderGantt(); }));
+    document.querySelectorAll(".view-btn").forEach(btn=>btn.addEventListener("click",async (e)=>{ data.ganttView=btn.getAttribute("data-view"); await saveAndSync(); renderGantt(); }));
     
     // ========== FUNCIONES DE SESIÓN ==========
-    
     function resetSessionTimer() {
         if (!sessionExpirationTime) return;
-        const newExpirationTime = Date.now() + SESSION_DURATION_MS;
-        sessionExpirationTime = newExpirationTime;
-        const currentSession = getStoredSession();
-        if (currentSession) {
-            currentSession.expiration = newExpirationTime;
-            localStorage.setItem("stride_session", JSON.stringify(currentSession));
-        }
+        sessionExpirationTime = Date.now() + SESSION_DURATION_MS;
+        const session = getStoredSession();
+        if (session) { session.expiration = sessionExpirationTime; localStorage.setItem("stride_session", JSON.stringify(session)); }
         updateTimerDisplay();
     }
     
     function setupActivityListeners() {
-        const events = ['click', 'mousemove', 'keydown', 'scroll', 'touchstart', 'input', 'change'];
-        const resetHandler = () => { resetSessionTimer(); };
-        events.forEach(event => { document.addEventListener(event, resetHandler); });
-        const appContainer = document.getElementById('appContainer');
-        if (appContainer) {
-            events.forEach(event => { appContainer.addEventListener(event, resetHandler); });
-        }
+        const events = ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'];
+        events.forEach(event => document.addEventListener(event, () => resetSessionTimer()));
+        document.getElementById('appContainer')?.addEventListener('mousemove', () => resetSessionTimer());
     }
     
     function saveSession(role, isManagerValue) {
-        const expirationTime = Date.now() + SESSION_DURATION_MS;
-        const sessionData = { role: role, isManager: isManagerValue, expiration: expirationTime };
-        localStorage.setItem("stride_session", JSON.stringify(sessionData));
+        localStorage.setItem("stride_session", JSON.stringify({ role, isManager: isManagerValue, expiration: Date.now() + SESSION_DURATION_MS }));
     }
     
     function getStoredSession() {
@@ -2017,20 +1889,16 @@ function renderGantt() {
         if (!stored) return null;
         try {
             const session = JSON.parse(stored);
-            if (session.expiration && Date.now() < session.expiration) {
-                return session;
-            } else {
-                localStorage.removeItem("stride_session");
-                return null;
-            }
+            if (session.expiration && Date.now() < session.expiration) return session;
+            localStorage.removeItem("stride_session");
+            return null;
         } catch(e) { return null; }
     }
     
     function clearSession() {
         localStorage.removeItem("stride_session");
-        if (sessionTimerInterval) { clearInterval(sessionTimerInterval); sessionTimerInterval = null; }
-        const timerDiv = document.getElementById("sessionTimer");
-        if (timerDiv) timerDiv.style.display = "none";
+        if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+        document.getElementById("sessionTimer").style.display = "none";
     }
     
     function updateTimerDisplay() {
@@ -2038,41 +1906,21 @@ function renderGantt() {
         const remaining = sessionExpirationTime - Date.now();
         const timerDiv = document.getElementById("sessionTimer");
         const timerDisplay = document.getElementById("timerDisplay");
-        
         if (remaining <= 0) {
-            if (timerDiv) timerDiv.style.display = "none";
-            if (sessionTimerInterval) clearInterval(sessionTimerInterval);
-            alert("Su sesión ha expirado. Será redirigido a la pantalla de inicio.");
+            timerDiv.style.display = "none";
+            clearInterval(sessionTimerInterval);
+            alert("Su sesión ha expirado.");
             clearSession();
             location.reload();
             return;
         }
-        
-        const totalSeconds = Math.floor(remaining / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        
-        if (timerDisplay) {
-            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-        
-        if (timerDiv) {
-            timerDiv.style.display = "flex";
-            if (remaining < 10000) {
-                timerDiv.classList.remove("warning");
-                timerDiv.classList.add("danger");
-            }
-            else if (remaining < 60000) {
-                timerDiv.classList.remove("danger");
-                timerDiv.classList.add("warning");
-            }
-            else {
-                timerDiv.classList.remove("warning");
-                timerDiv.classList.remove("danger");
-                timerDiv.style.background = "#1c5a7a";
-                timerDiv.style.animation = "none";
-            }
-        }
+        const minutes = Math.floor(remaining / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
+        timerDisplay.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        timerDiv.style.display = "flex";
+        if (remaining < 10000) timerDiv.className = "session-timer danger";
+        else if (remaining < 60000) timerDiv.className = "session-timer warning";
+        else timerDiv.className = "session-timer";
     }
     
     function startSessionTimer(expirationTime) {
@@ -2084,71 +1932,37 @@ function renderGantt() {
     }
     
     function toggleImportExportButtons() {
-        const btnsContainer = document.getElementById('importExportBtns');
-        if (btnsContainer) {
-            btnsContainer.classList.toggle('hidden');
-        }
+        document.getElementById('importExportBtns').classList.toggle('hidden');
     }
     
-    // ========== CARRUSEL 3D LOGIN ==========
+    // ========== LOGIN CORREGIDO ==========
     function showLogin() {
         const profiles = [
-            {
-                id: 'manager',
-                title: 'Manager',
-                icon: 'fa-user-tie',
-                description: 'Control total sobre proyectos, participantes y tareas',
-                badge: 'Acceso total',
-                color: '#1c5a7a'
-            },
-            {
-                id: 'stakeholder',
-                title: 'Stakeholder',
-                icon: 'fa-eye',
-                description: 'Visualización de proyectos y seguimiento de avances',
-                badge: 'Solo consulta',
-                color: '#10b981'
-            }
+            { id: 'manager', title: 'Manager', icon: 'fa-user-tie', description: 'Control total - Puede crear y editar todo', badge: 'Acceso total', color: '#1c5a7a' },
+            { id: 'stakeholder', title: 'Stakeholder', icon: 'fa-eye', description: 'Solo consulta - Visualiza los mismos datos', badge: 'Solo lectura', color: '#10b981' }
         ];
         
         let rotationAngle = 0;
-        const cardCount = profiles.length;
-        const angleStep = 360 / cardCount;
+        const angleStep = 360 / profiles.length;
         let isAnimating = false;
         
         const loginHtml = `
             <div class="login-overlay" id="loginOverlay">
                 <div class="carousel-container">
                     <div class="carousel-title">
-                        <div class="carousel-logo">
-                            <!-- ELIMINADO: cuadrado contenedor, solo la imagen del logo -->
-                            <img src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-BC.png" alt="Stride Logo" onerror="this.style.display='none'">
-                        </div>
+                        <div class="carousel-logo"><img src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-BC.png"></div>
                         <h2>Stride</h2>
                         <p>Project Manager · Coworking · Supervisión · Control</p>
+                        <p style="font-size:0.7rem; margin-top:8px; opacity:0.7;">📡 Datos compartidos en la nube</p>
                     </div>
                     <div class="carousel-3d" id="carousel3d">
-                        ${profiles.map((profile, idx) => `
-                            <div class="carousel-card" data-id="${profile.id}" data-index="${idx}" style="transform: rotateY(${idx * angleStep}deg) translateZ(250px);">
-                                <div class="card-icon" style="background: linear-gradient(135deg, ${profile.color} 0%, ${profile.color}cc 100%);">
-                                    <i class="fas ${profile.icon}"></i>
-                                </div>
-                                <div class="card-title">${profile.title}</div>
-                                <div class="card-desc">${profile.description}</div>
-                                <div class="card-badge">${profile.badge}</div>
-                            </div>
-                        `).join('')}
+                        ${profiles.map((p, idx) => `<div class="carousel-card" data-id="${p.id}" style="transform: rotateY(${idx * angleStep}deg) translateZ(250px);"><div class="card-icon" style="background: linear-gradient(135deg, ${p.color} 0%, ${p.color}cc 100%);"><i class="fas ${p.icon}"></i></div><div class="card-title">${p.title}</div><div class="card-desc">${p.description}</div><div class="card-badge">${p.badge}</div></div>`).join('')}
                     </div>
-                    <div class="nav-btn nav-left" id="carouselPrev">
-                        <i class="fas fa-chevron-left"></i>
-                    </div>
-                    <div class="nav-btn nav-right" id="carouselNext">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
+                    <div class="nav-btn nav-left" id="carouselPrev"><i class="fas fa-chevron-left"></i></div>
+                    <div class="nav-btn nav-right" id="carouselNext"><i class="fas fa-chevron-right"></i></div>
                 </div>
             </div>
         `;
-        
         document.body.insertAdjacentHTML('beforeend', loginHtml);
         
         const cards = document.querySelectorAll('.carousel-card');
@@ -2159,138 +1973,126 @@ function renderGantt() {
             if (isAnimating) return;
             isAnimating = true;
             cards.forEach((card, idx) => {
-                const angle = (idx * angleStep) + rotationAngle;
-                card.style.transform = `rotateY(${angle}deg) translateZ(250px)`;
-                card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                card.style.transform = `rotateY(${(idx * angleStep) + rotationAngle}deg) translateZ(250px)`;
+                card.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
             });
             setTimeout(() => { isAnimating = false; }, 500);
         }
         
-        function rotateLeft() { rotationAngle -= angleStep; updateCarousel(); updateActiveCard(); }
-        function rotateRight() { rotationAngle += angleStep; updateCarousel(); updateActiveCard(); }
-        
         function updateActiveCard() {
-            cards.forEach(card => card.classList.remove('active-card'));
-            let minAngle = Infinity;
-            let activeIndex = 0;
+            cards.forEach(c => c.classList.remove('active-card'));
+            let minAngle = Infinity, activeIndex = 0;
             cards.forEach((card, idx) => {
-                const angle = ((idx * angleStep) + rotationAngle) % 360;
-                let normalizedAngle = angle;
-                if (normalizedAngle > 180) normalizedAngle = 360 - normalizedAngle;
-                if (normalizedAngle < minAngle) {
-                    minAngle = normalizedAngle;
-                    activeIndex = idx;
-                }
+                let angle = Math.abs(((idx * angleStep + rotationAngle) % 360 + 360) % 360);
+                angle = angle > 180 ? 360 - angle : angle;
+                if (angle < minAngle) { minAngle = angle; activeIndex = idx; }
             });
             cards[activeIndex]?.classList.add('active-card');
         }
         
-        function performLogin(role, isManagerValue) {
-            const expirationTime = Date.now() + SESSION_DURATION_MS;
-            saveSession(role, isManagerValue);
-            startSessionTimer(expirationTime);
-            const loginOverlay = document.getElementById('loginOverlay');
-            if (loginOverlay) loginOverlay.remove();
-            document.getElementById('appContainer').style.display = 'block';
-            document.getElementById('importExportBtns').style.display = 'flex';
-            isManager = isManagerValue;
-            currentUser = role;
-            loadData();
-            setTimeout(() => {
-                const timer = document.getElementById('sessionTimer');
-                if (timer) timer.addEventListener('dblclick', toggleImportExportButtons);
-            }, 100);
+        function rotate(step) { rotationAngle += step; updateCarousel(); updateActiveCard(); }
+        prevBtn.onclick = () => rotate(-angleStep);
+        nextBtn.onclick = () => rotate(angleStep);
+        setTimeout(updateActiveCard, 100);
+        
+        let isLoggingIn = false;
+        
+        async function performLogin(role, isManagerValue) {
+            if (isLoggingIn) return;
+            isLoggingIn = true;
+            try {
+                saveSession(role, isManagerValue);
+                startSessionTimer(Date.now() + SESSION_DURATION_MS);
+                isManager = isManagerValue;
+                currentUser = role;
+                document.getElementById('loginOverlay')?.remove();
+                document.getElementById('appContainer').style.display = 'block';
+                document.getElementById('importExportBtns').style.display = 'flex';
+                await loadData();
+                document.getElementById('sessionTimer')?.addEventListener('dblclick', toggleImportExportButtons);
+            } finally { isLoggingIn = false; }
+        }
+        
+        function handleManagerLogin() {
+            const existingModal = document.querySelector('.password-modal');
+            if (existingModal) existingModal.remove();
+            
+            const modal = document.createElement('div');
+            modal.className = 'password-modal';
+            modal.innerHTML = `<div class="password-modal-content"><h3><i class="fas fa-lock"></i> Acceso Manager</h3><p>Ingresa la contraseña para acceder con control total</p><input type="password" id="managerPassword" placeholder="Contraseña" autofocus><div id="passError" class="error-msg-pass"></div><div class="password-modal-buttons"><button class="btn-cancel" id="cancelPassword">Cancelar</button><button class="btn-confirm" id="confirmPassword">Acceder</button></div></div>`;
+            document.body.appendChild(modal);
+            
+            const input = modal.querySelector('#managerPassword');
+            const errorDiv = modal.querySelector('#passError');
+            let isProcessing = false;
+            
+            const doLogin = () => {
+                if (isProcessing) return;
+                isProcessing = true;
+                
+                if (input.value === 'ControlInterno2026') {
+                    modal.remove();
+                    setTimeout(() => {
+                        performLogin('Manager', true);
+                        isProcessing = false;
+                    }, 50);
+                } else {
+                    errorDiv.textContent = 'Contraseña incorrecta';
+                    input.value = '';
+                    input.focus();
+                    input.style.border = '2px solid #dc2626';
+                    setTimeout(() => { 
+                        input.style.border = ''; 
+                        isProcessing = false;
+                    }, 500);
+                }
+            };
+            
+            modal.querySelector('#confirmPassword').onclick = doLogin;
+            modal.querySelector('#cancelPassword').onclick = () => modal.remove();
+            
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    doLogin();
+                }
+            });
+            
+            setTimeout(() => input.focus(), 50);
         }
         
         function selectProfile(profileId) {
             if (profileId === 'manager') {
-                showPasswordModal();
+                handleManagerLogin();
             } else {
                 performLogin('Stakeholder', false);
             }
         }
         
-        function showPasswordModal() {
-            if (document.querySelector('.password-modal')) return;
-            const passwordModal = document.createElement('div');
-            passwordModal.className = 'password-modal';
-            passwordModal.innerHTML = `
-                <div class="password-modal-content">
-                    <h3><i class="fas fa-lock"></i> Acceso Manager</h3>
-                    <p>Ingresa la contraseña para acceder con control total</p>
-                    <input type="password" id="managerPassword" placeholder="Contraseña" autofocus>
-                    <div id="passError" class="error-msg-pass"></div>
-                    <div class="password-modal-buttons">
-                        <button class="btn-cancel" id="cancelPassword">Cancelar</button>
-                        <button class="btn-confirm" id="confirmPassword">Acceder</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(passwordModal);
-            const passwordInput = document.getElementById('managerPassword');
-            const confirmBtn = document.getElementById('confirmPassword');
-            const cancelBtn = document.getElementById('cancelPassword');
-            const errorDiv = document.getElementById('passError');
-            const handleConfirm = () => {
-                const password = passwordInput.value;
-                if (password === 'ControlInterno2026') {
-                    passwordModal.remove();
-                    performLogin('Manager', true);
-                } else {
-                    errorDiv.textContent = 'Contraseña incorrecta';
-                    passwordInput.value = '';
-                    passwordInput.focus();
-                    passwordInput.style.border = '2px solid #dc2626';
-                    setTimeout(() => { passwordInput.style.border = ''; }, 500);
-                }
-            };
-            const handleCancel = () => { passwordModal.remove(); };
-            passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleConfirm(); });
-            confirmBtn.addEventListener('click', handleConfirm);
-            cancelBtn.addEventListener('click', handleCancel);
-            setTimeout(() => passwordInput.focus(), 50);
-        }
+        cards.forEach(card => card.onclick = () => selectProfile(card.dataset.id));
         
-        prevBtn.addEventListener('click', rotateLeft);
-        nextBtn.addEventListener('click', rotateRight);
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                const profileId = card.getAttribute('data-id');
-                selectProfile(profileId);
-            });
-        });
-        setTimeout(() => { updateActiveCard(); }, 100);
-        const keyHandler = (e) => {
-            if (!document.getElementById('loginOverlay')) {
-                document.removeEventListener('keydown', keyHandler);
-                return;
-            }
-            if (e.key === 'ArrowLeft') rotateLeft();
-            if (e.key === 'ArrowRight') rotateRight();
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('loginOverlay')) return;
+            if (e.key === 'ArrowLeft') rotate(-angleStep);
+            if (e.key === 'ArrowRight') rotate(angleStep);
             if (e.key === 'Enter') {
-                const activeCard = document.querySelector('.carousel-card.active-card');
-                if (activeCard) {
-                    const profileId = activeCard.getAttribute('data-id');
-                    selectProfile(profileId);
-                }
+                const active = document.querySelector('.carousel-card.active-card');
+                if (active) selectProfile(active.dataset.id);
             }
-        };
-        document.addEventListener('keydown', keyHandler);
+        });
     }
     
-    function initializeApp() {
-        const storedSession = getStoredSession();
-        if (storedSession) {
-            currentUser = storedSession.role;
-            isManager = storedSession.isManager;
-            startSessionTimer(storedSession.expiration);
+    async function initializeApp() {
+        const session = getStoredSession();
+        if (session) {
+            currentUser = session.role;
+            isManager = session.isManager;
+            startSessionTimer(session.expiration);
             document.getElementById('appContainer').style.display = 'block';
             document.getElementById('importExportBtns').style.display = 'flex';
-            loadData();
-            setTimeout(() => {
-                const timer = document.getElementById('sessionTimer');
-                if (timer) timer.addEventListener('dblclick', toggleImportExportButtons);
-            }, 100);
+            await loadData();
+            document.getElementById('sessionTimer').addEventListener('dblclick', toggleImportExportButtons);
         } else {
             showLogin();
         }
@@ -2301,19 +2103,11 @@ function renderGantt() {
 
 <footer>
     <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
-        <img src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-G.png" 
-             alt="Control Interno" 
-             style="height: 20px; width: auto; object-fit: contain; opacity: 0.5;">
-        <div style="width: 1px; height: 24px; background-color: #cbd5e1;"></div>
-        <div style="display: flex; flex-direction: column; line-height: 1.2; text-align: center;">
-            <span style="font-size: 0.5rem; color: #0A2540;">Control Interno</span>
-            <span style="font-size: 0.4rem; color: #94a3b8; font-weight: 500;">Ingeniería de Control</span>
-        </div>
-        <div style="width: 1px; height: 24px; background-color: #cbd5e1;"></div>
-        <div style="display: flex; flex-direction: column; line-height: 1.2; text-align: center;">
-            <span style="font-size: 0.5rem; color: #0A2540;">Stride</span>
-            <span style="font-size: 0.4rem; color: #94a3b8; font-weight: 500;">V1.0 | Mayo 2026</span>
-        </div>
+        <img src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-G.png" style="height: 20px; opacity: 0.5;">
+        <div style="width:1px; height:24px; background:#cbd5e1;"></div>
+        <div style="text-align:center;"><span style="font-size:0.5rem; color:#0A2540;">Control Interno</span><br><span style="font-size:0.4rem; color:#94a3b8;">Ingeniería de Control</span></div>
+        <div style="width:1px; height:24px; background:#cbd5e1;"></div>
+        <div style="text-align:center;"><span style="font-size:0.5rem; color:#0A2540;">Stride</span><br><span style="font-size:0.4rem; color:#94a3b8;">V1.0 | Datos en la nube</span></div>
     </div>
 </footer>
 
