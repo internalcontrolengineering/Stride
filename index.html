@@ -1680,10 +1680,41 @@
         let timelineUnits = [], unitWidth = 0;
         if(view === 'day') { unitWidth = 38; timelineUnits = dates.map((d, idx) => ({ label: formatDateDMY(d), width: unitWidth, startDate: d, endDate: d, index: idx })); }
         else if(view === 'week') {
-            let weeks = [], currentWeek = [];
-            for(let d of dates) { currentWeek.push(d); if(currentWeek.length === 7 || d === dates[dates.length-1]) { weeks.push([...currentWeek]); currentWeek = []; } }
-            unitWidth = 90; timelineUnits = weeks.map((week, idx) => ({ label: `${formatDateDMY(week[0])} - ${formatDateDMY(week[week.length-1])}`, width: unitWidth, startDate: week[0], endDate: week[week.length-1], index: idx }));
-        }
+    // Obtener el inicio de la semana (domingo) para la fecha global de inicio
+    let globalStartDate = new Date(globalStart);
+    let dayOfWeek = globalStartDate.getUTCDay(); // 0 = domingo, 1 = lunes, etc.
+    let daysToSunday = dayOfWeek; // días hasta el domingo más cercano (0 si ya es domingo)
+    
+    // Ajustar la fecha de inicio al domingo anterior o actual
+    let adjustedStart = new Date(globalStart);
+    adjustedStart.setUTCDate(adjustedStart.getUTCDate() - daysToSunday);
+    let adjustedStartYMD = `${adjustedStart.getUTCFullYear()}-${String(adjustedStart.getUTCMonth()+1).padStart(2,'0')}-${String(adjustedStart.getUTCDate()).padStart(2,'0')}`;
+    
+    // Generar semanas por calendario (domingo a sábado)
+    let weeks = [];
+    let currentDate = new Date(adjustedStart);
+    let endDateObj = new Date(globalEnd);
+    
+    while (currentDate <= endDateObj) {
+        let weekStart = currentDate.toISOString().split('T')[0];
+        let weekEnd = new Date(currentDate);
+        weekEnd.setUTCDate(weekEnd.getUTCDate() + 6);
+        let weekEndYMD = weekEnd.toISOString().split('T')[0];
+        
+        weeks.push([weekStart, weekEndYMD]);
+        
+        currentDate.setUTCDate(currentDate.getUTCDate() + 7);
+    }
+    
+    unitWidth = 90;
+    timelineUnits = weeks.map((week, idx) => ({
+        label: `${formatDateDMY(week[0])} - ${formatDateDMY(week[1])}`,
+        width: unitWidth,
+        startDate: week[0],
+        endDate: week[1],
+        index: idx
+    }));
+}
         else if(view === 'month') {
             let monthsMap = new Map();
             for(let d of dates) { let { year, month } = parseDateYMD(d); let key = `${year}-${month}`; if(!monthsMap.has(key)) monthsMap.set(key, []); monthsMap.get(key).push(d); }
