@@ -1015,7 +1015,40 @@
         let now = new Date();
         return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
     }
+
+    function diffDaysInUTC(startYMD, endYMD) {
+        if (!startYMD || !endYMD) return 0;
+        let s = parseDateYMD(startYMD);
+        let e = parseDateYMD(endYMD);
+        let startUTC = Date.UTC(s.year, s.month, s.day);
+        let endUTC = Date.UTC(e.year, e.month, e.day);
+        return Math.floor((endUTC - startUTC) / (1000 * 60 * 60 * 24));
+    }
     
+    function formatDateDMY(ymd) {
+        if (!ymd) return "—";
+        let { day, month, year } = parseDateYMD(ymd);
+        return `${day.toString().padStart(2,'0')}/${(month+1).toString().padStart(2,'0')}/${year}`;
+    }
+    
+    function getTodayYMD() {
+        let now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    }
+    
+    // ========== FUNCIÓN HELPER PARA ORDENAR TAREAS POR FECHA DE INICIO ==========
+    function sortTasksByStartDate(tasks) {
+        if (!tasks || !Array.isArray(tasks)) return [];
+        return [...tasks].sort((a, b) => {
+            // Si ambas no tienen fecha, mantener orden original
+            if (!a.startDate && !b.startDate) return 0;
+            // Las tareas sin fecha van al final
+            if (!a.startDate) return 1;
+            if (!b.startDate) return -1;
+            // Ordenar por fecha de inicio (más antigua primero)
+            return a.startDate.localeCompare(b.startDate);
+        });
+    }    
     async function loadData() {
         const success = await loadFromSupabase();
         if (!success) {
@@ -1215,14 +1248,64 @@
     
     // ========== FUNCIONES DE EXPORTACIÓN/IMPORTACIÓN ==========
     async function exportData() {
-        const exportData = { projects: data.projects, currentProjectId: data.currentProjectId, ganttView: data.ganttView };
-        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `stride_backup_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`;
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 100);
+        const exportDataObj = { 
+            projects: data.projects, 
+            currentProjectId: data.currentProjectId, 
+            ganttView: data.ganttView 
+        };
+        
+        const jsonData = JSON.stringify(exportDataObj, null, 2);
+        
+        // Método 1: Usar el diálogo nativo del navegador (funciona en Chrome/Edge)
+        if ('showSaveFilePicker' in window) {
+            try {
+                const blob = new Blob([jsonData], { type: 'application/json' });
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: `Stride_backup_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`,
+                    types: [{
+                        description: 'Archivo JSON',
+                        accept: { 'application/json': ['.json'] }
+                    }]
+                });
+                const writable = await handle.createWritable();
+                await writable.write(blob);
+                await writable.close();
+                alert("✅ Archivo exportado correctamente");
+                return;
+            } catch (err) {
+                // Usuario canceló o error
+                if (err.name === 'AbortError') return;
+                console.log("Error en showSaveFilePicker:", err);
+            }
+        }
+        
+        // Método 2: Crear un textarea y pedir que copien el contenido
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;display:flex;align-items:center;justify-content:center;';
+        modal.innerHTML = `
+            <div style="background:white;border-radius:16px;padding:24px;max-width:90%;width:600px;max-height:80vh;overflow:auto;">
+                <h3 style="margin-bottom:16px;">📥 Exportar datos</h3>
+                <p style="margin-bottom:12px;font-size:13px;color:#666;">Copia el siguiente JSON y guárdalo en un archivo .json:</p>
+                <textarea id="exportJsonText" style="width:100%;height:300px;font-family:monospace;font-size:11px;padding:12px;border:1px solid #ccc;border-radius:8px;margin-bottom:16px;" readonly>${jsonData}</textarea>
+                <div style="display:flex;gap:12px;justify-content:flex-end;">
+                    <button id="copyJsonBtn" style="background:#1c5a7a;color:white;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;">📋 Copiar al portapapeles</button>
+                    <button id="closeExportModal" style="background:#e2e8f0;color:#334155;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;">Cerrar</button>
+                </div>
+                <p style="margin-top:12px;font-size:11px;color:#999;">💡 Sugerencia: Pega el contenido en un bloc de notas y guárdalo con extensión .json</p>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        document.getElementById('copyJsonBtn').addEventListener('click', async () => {
+            const textarea = document.getElementById('exportJsonText');
+            textarea.select();
+            await navigator.clipboard.writeText(textarea.value);
+            alert("✅ JSON copiado al portapapeles");
+        });
+        
+        document.getElementById('closeExportModal').addEventListener('click', () => {
+            modal.remove();
+        });
     }
     
     function importData() {
@@ -1536,7 +1619,7 @@
         board.innerHTML = "";
         states.forEach(col => {
             const colDiv = document.createElement("div"); colDiv.className = "kanban-col";
-            const tasksCol = (proj.tasks || []).filter(t => t.status === col.key);
+            const tasksCol = sortTasksByStartDate((proj.tasks || []).filter(t => t.status === col.key));
             colDiv.innerHTML = `<div class="col-header"><span>${col.title}</span><span class="badge">${tasksCol.length}</span></div>`;
             const container = document.createElement("div");
             tasksCol.forEach(task => {
@@ -1579,7 +1662,7 @@
             container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8;'>🚀 No hay sprints. Crea tu primer sprint</p>";
         } else {
             proj.sprints.forEach(sprint => {
-                const tasksOfSprint = (proj.tasks || []).filter(t => t.sprintId === sprint.id);
+                const tasksOfSprint = sortTasksByStartDate((proj.tasks || []).filter(t => t.sprintId === sprint.id));
                 const div = document.createElement("div"); div.className = "sprint-card";
                 div.setAttribute('data-sprint-id', sprint.id);
                 div.innerHTML = `<div><strong><i class="fas fa-calendar-alt"></i> ${escapeHtml(sprint.name)}</strong><br><small>📅 ${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</small><br><small>🎯 ${escapeHtml(sprint.goal || "Sin objetivo")}</small></div><div class="sprint-tasks-list"></div>`;
@@ -1598,7 +1681,7 @@
             });
         }
         const backlogDiv = document.getElementById("backlogTasksList");
-        const backlogTasks = (proj.tasks || []).filter(t => !t.sprintId);
+        const backlogTasks = sortTasksByStartDate((proj.tasks || []).filter(t => !t.sprintId));
         backlogDiv.innerHTML = backlogTasks.length ? "" : "<p style='padding:16px; text-align:center; color:#888; font-size:0.8rem;'>📦 Backlog vacío</p>";
         backlogTasks.forEach(task => {
             const member = getParticipantById(proj, task.assigneeId);
@@ -1730,7 +1813,7 @@
             <th style="width:130px">Responsable</th>${headerCells}
          </thead><tbody>`;
         for(let sprint of allSprints) {
-            const tasksInSprint = (proj.tasks || []).filter(t => t.sprintId === sprint.id && t.startDate && t.duration);
+            const tasksInSprint = sortTasksByStartDate((proj.tasks || []).filter(t => t.sprintId === sprint.id && t.startDate && t.duration));
             html += `<tr class="sprint-group-title">
                 <td style="position:sticky; left:0; background:#eef2ff; z-index:2; padding:12px 8px;">
                     <div><strong><i class="fas fa-rocket"></i> ${escapeHtml(sprint.name)}</strong></div>
