@@ -706,6 +706,47 @@
         }
         .loading-spinner i { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+.btn-warning:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245,158,11,0.3);
+}
+
+.move-sprint-select, .assign-sprint-select {
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.move-sprint-select:hover, .assign-sprint-select:hover {
+    background: #e2e8f0;
+    border-color: #1c5a7a;
+}
+
+.task-row-sprint {
+    transition: all 0.2s ease;
+}
+
+.task-row-sprint:hover {
+    transform: translateX(4px);
+    background: #fefce8;
+    border-color: #fde047;
+}
+
     </style>
 </head>
 <body>
@@ -826,8 +867,6 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtcGh3b3lhdXB1ZmZqZnFubmV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NDcxODAsImV4cCI6MjA5NTEyMzE4MH0.3qqYF2nQqYeIT11s4Jxxc6pzZIl2W_LBsU8cgAvuEGU';
     
     // ========== ID DE USUARIO FIJO PARA COMPARTIR DATOS ==========
-    // TODOS los usuarios (Manager y Stakeholder) usan el MISMO userId
-    // Así los datos se comparten entre todos
     const SHARED_USER_ID = 'stride_shared_company_data';
     
     let supabaseClient = null;
@@ -839,7 +878,7 @@
     }
     
     // ========== CONFIGURACIÓN DE SESIÓN ==========
-    const SESSION_DURATION_MINUTES = 10; // 10 minutos de sesión
+    const SESSION_DURATION_MINUTES = 10;
     const SESSION_DURATION_MS = SESSION_DURATION_MINUTES * 60 * 1000;
     
     let sessionTimerInterval = null;
@@ -863,14 +902,12 @@
         if (span) span.textContent = message;
     }
     
-    // ========== FUNCIONES DE SUPABASE (CON ID FIJO) ==========
+    // ========== FUNCIONES DE SUPABASE ==========
     async function loadFromSupabase() {
         if (!supabaseClient) return false;
         try {
             showLoading(true);
             updateSyncStatus('syncing', 'Cargando desde la nube...');
-            
-            console.log("🔄 Cargando datos compartidos con ID:", SHARED_USER_ID);
             
             const { data: result, error } = await supabaseClient
                 .from('app_data')
@@ -879,8 +916,8 @@
                 .maybeSingle();
             
             if (error) {
-                console.error('❌ Error loading from Supabase:', error);
-                alert('Error al cargar desde Supabase:\n' + error.message + '\nCódigo: ' + (error.code || 'N/A'));
+                console.error('Error loading from Supabase:', error);
+                alert('Error al cargar desde Supabase:\n' + error.message);
                 updateSyncStatus('error', 'Error DB');
                 return false;
             }
@@ -889,18 +926,16 @@
                 data = result.data;
                 if (!data.ganttView) data.ganttView = 'day';
                 if (!data.projects) data.projects = [];
-                console.log("✅ Datos cargados desde Supabase:", data);
                 updateSyncStatus('synced', 'Sincronizado');
                 return true;
             } else {
-                console.log("📝 No hay datos, creando registro inicial...");
                 const initialData = { projects: [], currentProjectId: null, ganttView: 'day' };
                 const { error: insertError } = await supabaseClient
                     .from('app_data')
                     .insert({ user_id: SHARED_USER_ID, data: initialData });
                 
                 if (insertError) {
-                    console.error('❌ Error creando datos iniciales:', insertError);
+                    console.error('Error creando datos iniciales:', insertError);
                     alert('Error creando registro inicial:\n' + insertError.message);
                     updateSyncStatus('error', 'Error');
                     return false;
@@ -910,7 +945,7 @@
                 return true;
             }
         } catch (err) {
-            console.error('❌ Error general en loadFromSupabase:', err);
+            console.error('Error general en loadFromSupabase:', err);
             alert('Error inesperado al cargar:\n' + err.message);
             updateSyncStatus('error', 'Error');
             return false;
@@ -929,8 +964,6 @@
             syncInProgress = true;
             updateSyncStatus('syncing', 'Guardando en la nube...');
             
-            console.log("🔄 Intentando guardar en Supabase...");
-            
             const { error } = await supabaseClient
                 .from('app_data')
                 .upsert({ 
@@ -940,15 +973,14 @@
                 }, { onConflict: 'user_id' });
             
             if (error) {
-                console.error('❌ Error saving to Supabase:', error);
-                alert('Error al guardar en Supabase:\n' + error.message + '\nCódigo: ' + (error.code || 'N/A'));
+                console.error('Error saving to Supabase:', error);
+                alert('Error al guardar en Supabase:\n' + error.message);
                 updateSyncStatus('error', 'Error: ' + error.message);
             } else {
-                console.log("✅ Datos guardados correctamente en Supabase");
                 updateSyncStatus('synced', 'Sincronizado');
             }
         } catch (err) {
-            console.error('❌ Error general en saveToSupabase:', err);
+            console.error('Error general en saveToSupabase:', err);
             alert('Error inesperado al guardar:\n' + err.message);
             updateSyncStatus('error', 'Error');
         } finally {
@@ -975,7 +1007,6 @@
             data = JSON.parse(stored);
             if (!data.ganttView) data.ganttView = 'day';
             if (!data.projects) data.projects = [];
-            console.log("Cargado desde backup local");
             return true;
         }
         return false;
@@ -1015,44 +1046,20 @@
         let now = new Date();
         return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
     }
-
-    function diffDaysInUTC(startYMD, endYMD) {
-        if (!startYMD || !endYMD) return 0;
-        let s = parseDateYMD(startYMD);
-        let e = parseDateYMD(endYMD);
-        let startUTC = Date.UTC(s.year, s.month, s.day);
-        let endUTC = Date.UTC(e.year, e.month, e.day);
-        return Math.floor((endUTC - startUTC) / (1000 * 60 * 60 * 24));
-    }
     
-    function formatDateDMY(ymd) {
-        if (!ymd) return "—";
-        let { day, month, year } = parseDateYMD(ymd);
-        return `${day.toString().padStart(2,'0')}/${(month+1).toString().padStart(2,'0')}/${year}`;
-    }
-    
-    function getTodayYMD() {
-        let now = new Date();
-        return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-    }
-    
-    // ========== FUNCIÓN HELPER PARA ORDENAR TAREAS POR FECHA DE INICIO ==========
     function sortTasksByStartDate(tasks) {
         if (!tasks || !Array.isArray(tasks)) return [];
         return [...tasks].sort((a, b) => {
-            // Si ambas no tienen fecha, mantener orden original
             if (!a.startDate && !b.startDate) return 0;
-            // Las tareas sin fecha van al final
             if (!a.startDate) return 1;
             if (!b.startDate) return -1;
-            // Ordenar por fecha de inicio (más antigua primero)
             return a.startDate.localeCompare(b.startDate);
         });
-    }    
+    }
+    
     async function loadData() {
         const success = await loadFromSupabase();
         if (!success) {
-            console.log("Usando backup local");
             loadLocalBackup();
         }
         if(!data.currentProjectId && data.projects.length) data.currentProjectId = data.projects[0]?.id;
@@ -1063,27 +1070,158 @@
     function getParticipantById(project, id) { return project?.participants?.find(p => p.id === id); }
     function getSprintById(project, sprintId) { return project?.sprints?.find(s => s.id === sprintId); }
     
-    function validateSprintRange(project, sprintId, startDate, endDate, duration) {
-        if (!sprintId) return { valid: true, message: "" };
-        const sprint = getSprintById(project, sprintId);
+    // VALIDACIÓN DE TAREA CONTRA SPRINT
+    function validateTaskAgainstSprint(project, task, newSprintId) {
+        if (!newSprintId) return { valid: true, message: "" };
+        
+        const sprint = getSprintById(project, newSprintId);
         if (!sprint) return { valid: true, message: "" };
-        if (!startDate || !endDate || !duration) {
-            return { valid: false, message: "⚠️ Para un sprint es obligatorio: Duración, Fecha inicio y Fecha fin" };
+        
+        if (!task.startDate || !task.endDate || !task.duration) {
+            return { 
+                valid: false, 
+                message: "⚠️ Para asignar a un sprint, la tarea debe tener: Duración, Fecha inicio y Fecha fin definidas" 
+            };
         }
+        
         const sprintStart = new Date(sprint.startDate);
         const sprintEnd = new Date(sprint.endDate);
-        const taskStart = new Date(startDate);
-        const taskEnd = new Date(endDate);
+        const taskStart = new Date(task.startDate);
+        const taskEnd = new Date(task.endDate);
+        
         if (taskStart < sprintStart) {
-            return { valid: false, message: `⚠️ La fecha inicio es anterior al inicio del sprint` };
+            return { 
+                valid: false, 
+                message: `⚠️ La fecha inicio (${formatDateDMY(task.startDate)}) es anterior al inicio del sprint (${formatDateDMY(sprint.startDate)})` 
+            };
         }
+        
         if (taskEnd > sprintEnd) {
-            return { valid: false, message: `⚠️ La fecha fin es posterior al fin del sprint` };
+            return { 
+                valid: false, 
+                message: `⚠️ La fecha fin (${formatDateDMY(task.endDate)}) es posterior al fin del sprint (${formatDateDMY(sprint.endDate)})` 
+            };
         }
+        
         if (taskStart > taskEnd) {
-            return { valid: false, message: "⚠️ La fecha inicio no puede ser posterior a la fecha fin" };
+            return { 
+                valid: false, 
+                message: "⚠️ La fecha inicio no puede ser posterior a la fecha fin" 
+            };
         }
-        return { valid: true, message: "✅ Fechas válidas dentro del sprint" };
+        
+        return { valid: true, message: "✅ Tarea dentro del rango del sprint" };
+    }
+    
+    // MOVER TAREA ENTRE SPRINTS
+    async function moveTaskToSprint(taskId, newSprintId) {
+        if (!isManager) return;
+        
+        const proj = currentProject();
+        if (!proj) return;
+        
+        const task = proj.tasks.find(t => t.id === taskId);
+        if (!task) return;
+        
+        if (task.sprintId === newSprintId) return;
+        
+        if (!newSprintId) {
+            task.sprintId = null;
+            await saveAndSync();
+            renderAll();
+            return;
+        }
+        
+        const validation = validateTaskAgainstSprint(proj, task, newSprintId);
+        
+        if (!validation.valid) {
+            showSprintAssignmentWarning(task, newSprintId, validation.message);
+            return;
+        }
+        
+        task.sprintId = newSprintId;
+        await saveAndSync();
+        renderAll();
+        
+        const sprint = getSprintById(proj, newSprintId);
+        showToast(`✅ Tarea "${task.title}" movida al sprint "${sprint?.name || 'Backlog'}"`, 'success');
+    }
+    
+    // MODAL DE ADVERTENCIA
+    function showSprintAssignmentWarning(task, targetSprintId, warningMessage) {
+        const proj = currentProject();
+        const targetSprint = getSprintById(proj, targetSprintId);
+        
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        modalOverlay.innerHTML = `
+            <div class="modal-content" style="max-width: 550px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i> Advertencia de Sprint</h3>
+                    <button class="modal-close"><i class="fas fa-times"></i></button>
+                </div>
+                <div style="background: #fef3c7; padding: 12px; border-radius: 12px; margin-bottom: 16px; border-left: 4px solid #f59e0b;">
+                    <p style="color: #92400e; font-size: 0.85rem; margin-bottom: 8px;"><strong>⚠️ La tarea no está dentro del rango del sprint</strong></p>
+                    <p style="color: #78350f; font-size: 0.75rem;">${warningMessage}</p>
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <p style="font-size: 0.8rem; margin-bottom: 8px;"><strong>Tarea:</strong> ${escapeHtml(task.title)}</p>
+                    <p style="font-size: 0.8rem; margin-bottom: 8px;"><strong>Fechas actuales:</strong> ${formatDateDMY(task.startDate)} → ${formatDateDMY(task.endDate)}</p>
+                    <p style="font-size: 0.8rem; margin-bottom: 8px;"><strong>Sprint destino:</strong> ${escapeHtml(targetSprint?.name)} (${formatDateDMY(targetSprint?.startDate)} → ${formatDateDMY(targetSprint?.endDate)})</p>
+                </div>
+                <div style="background: #e6f7e6; padding: 12px; border-radius: 12px; margin-bottom: 16px;">
+                    <p style="font-size: 0.75rem; color: #065f46; margin-bottom: 8px;"><strong>💡 Sugerencias:</strong></p>
+                    <ul style="font-size: 0.7rem; color: #065f46; margin-left: 20px;">
+                        <li>Ajusta las fechas de la tarea para que estén dentro del rango del sprint</li>
+                        <li>O extiende el rango del sprint para cubrir las fechas de la tarea</li>
+                        <li>Mantén la tarea en el backlog hasta ajustar las fechas</li>
+                    </ul>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn-secondary" id="cancelMoveBtn">Cancelar</button>
+                    <button class="btn-warning" id="adjustDatesBtn" style="background: #f59e0b;"><i class="fas fa-calendar-alt"></i> Ajustar Fechas</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modalOverlay);
+        
+        const closeModal = () => modalOverlay.remove();
+        modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
+        modalOverlay.querySelector('#cancelMoveBtn').addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+        
+        modalOverlay.querySelector('#adjustDatesBtn').addEventListener('click', () => {
+            closeModal();
+            showTaskModal(task.id);
+        });
+    }
+    
+    // TOAST NOTIFICATIONS
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: ${type === 'success' ? '#10b981' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 2000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideInRight 0.3s ease;
+            max-width: 300px;
+        `;
+        toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i> ${message}`;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
     }
     
     function getTaskColor(task) {
@@ -1256,7 +1394,6 @@
         
         const jsonData = JSON.stringify(exportDataObj, null, 2);
         
-        // Método 1: Usar el diálogo nativo del navegador (funciona en Chrome/Edge)
         if ('showSaveFilePicker' in window) {
             try {
                 const blob = new Blob([jsonData], { type: 'application/json' });
@@ -1273,13 +1410,11 @@
                 alert("✅ Archivo exportado correctamente");
                 return;
             } catch (err) {
-                // Usuario canceló o error
                 if (err.name === 'AbortError') return;
                 console.log("Error en showSaveFilePicker:", err);
             }
         }
         
-        // Método 2: Crear un textarea y pedir que copien el contenido
         const modal = document.createElement('div');
         modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;display:flex;align-items:center;justify-content:center;';
         modal.innerHTML = `
@@ -1480,21 +1615,71 @@
     async function showTaskModal(taskId) {
         if (!isManager) return;
         const proj = currentProject();
-        if(!proj) return;
+        if (!proj) return;
         const task = proj.tasks.find(t => t.id === taskId);
         if (!task) return;
+        
         const modalOverlay = document.createElement('div');
         modalOverlay.className = 'modal-overlay';
         modalOverlay.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-header"><h3>Editar tarea</h3><button class="modal-close"><i class="fas fa-times"></i></button></div>
-                <div class="form-row"><div class="form-group" style="flex:2;"><label>Título</label><input type="text" id="editTaskTitle" value="${escapeHtml(task.title)}"></div><div class="form-group"><label>Asignado a</label><select id="editTaskAssignee"><option value="">-- Sin asignar --</option>${(proj.participants || []).map(m => `<option value="${m.id}" ${task.assigneeId === m.id ? 'selected' : ''}>${escapeHtml(m.name)}</option>`).join('')}</select></div></div>
-                <div class="form-row"><div class="form-group"><label>Sprint</label><select id="editTaskSprint"><option value="">📦 Backlog</option>${(proj.sprints || []).map(s => `<option value="${s.id}" ${task.sprintId === s.id ? 'selected' : ''}>${escapeHtml(s.name)}</option>`).join('')}</select></div><div class="form-group"><label>Duración</label><input type="number" id="editTaskDuration" value="${task.duration || ''}" min="1"></div></div>
-                <div class="form-row"><div class="form-group"><label>Fecha inicio</label><input type="date" id="editTaskStartDate" value="${task.startDate || ''}"></div><div class="form-group"><label>Fecha fin</label><input type="date" id="editTaskEndDate" value="${task.endDate || ''}"></div><div class="form-group"><label>Estado</label><select id="editTaskStatus"><option value="todo" ${task.status === 'todo' ? 'selected' : ''}>📋 To Do</option><option value="inprogress" ${task.status === 'inprogress' ? 'selected' : ''}>⚙️ En Progreso</option><option value="done" ${task.status === 'done' ? 'selected' : ''}>✅ Hecho</option></select></div></div>
+            <div class="modal-content" style="max-width: 650px;">
+                <div class="modal-header">
+                    <h3>Editar tarea</h3>
+                    <button class="modal-close"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2;">
+                        <label>Título</label>
+                        <input type="text" id="editTaskTitle" value="${escapeHtml(task.title)}">
+                    </div>
+                    <div class="form-group">
+                        <label>Asignado a</label>
+                        <select id="editTaskAssignee">
+                            <option value="">-- Sin asignar --</option>
+                            ${(proj.participants || []).map(m => `<option value="${m.id}" ${task.assigneeId === m.id ? 'selected' : ''}>${escapeHtml(m.name)}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sprint</label>
+                        <select id="editTaskSprint">
+                            <option value="">📦 Backlog</option>
+                            ${(proj.sprints || []).map(s => `<option value="${s.id}" ${task.sprintId === s.id ? 'selected' : ''}>🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Duración (días)</label>
+                        <input type="number" id="editTaskDuration" value="${task.duration || ''}" min="1">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha inicio</label>
+                        <input type="date" id="editTaskStartDate" value="${task.startDate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha fin</label>
+                        <input type="date" id="editTaskEndDate" value="${task.endDate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <select id="editTaskStatus">
+                            <option value="todo" ${task.status === 'todo' ? 'selected' : ''}>📋 To Do</option>
+                            <option value="inprogress" ${task.status === 'inprogress' ? 'selected' : ''}>⚙️ En Progreso</option>
+                            <option value="done" ${task.status === 'done' ? 'selected' : ''}>✅ Hecho</option>
+                        </select>
+                    </div>
+                </div>
                 <div id="editWarning" class="warning-text" style="background:#fef3c7; padding:8px; border-radius:12px; margin-bottom:12px;"></div>
-                <div class="modal-buttons"><button class="btn-secondary" id="modalCancelBtn">Cancelar</button><button class="btn-danger" id="modalDeleteBtn">Eliminar</button><button id="modalSaveBtn">Guardar</button></div>
+                <div class="modal-buttons">
+                    <button class="btn-secondary" id="modalCancelBtn">Cancelar</button>
+                    <button class="btn-danger" id="modalDeleteBtn">Eliminar</button>
+                    <button id="modalSaveBtn">Guardar</button>
+                </div>
             </div>
         `;
+        
         document.body.appendChild(modalOverlay);
         const closeModal = () => modalOverlay.remove();
         modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
@@ -1507,48 +1692,132 @@
         const sprintSelect = modalOverlay.querySelector('#editTaskSprint');
         const warningDiv = modalOverlay.querySelector('#editWarning');
         
-        const recalculate = () => {
-            const start = startDateInput.value, end = endDateInput.value, dur = durationInput.value;
-            if (start && end) {
-                const newDur = diffDaysInUTC(start, end) + 1;
-                if (newDur > 0 && durationInput.value != newDur) durationInput.value = newDur;
-            }
-            if (start && dur && dur > 0) {
-                const newEnd = addDaysToYMD(start, dur - 1);
-                if (newEnd && endDateInput.value !== newEnd) endDateInput.value = newEnd;
-            }
+        const validateChanges = () => {
+            const start = startDateInput.value;
+            const end = endDateInput.value;
+            const dur = durationInput.value;
             const sprintId = sprintSelect.value;
-            if (sprintId && sprintId !== "" && start && end && dur) {
-                const validation = validateSprintRange(proj, sprintId, start, end, parseInt(dur));
-                warningDiv.innerHTML = validation.message;
-                warningDiv.style.background = validation.valid ? "#d1fae5" : "#fee2e2";
+            
+            if (start && dur && dur > 0) {
+                const newEnd = addDaysToYMD(start, parseInt(dur) - 1);
+                if (newEnd && endDateInput.value !== newEnd) {
+                    endDateInput.value = newEnd;
+                }
+            }
+            if (start && end && !dur) {
+                const newDur = diffDaysInUTC(start, end) + 1;
+                if (newDur > 0 && durationInput.value != newDur) {
+                    durationInput.value = newDur;
+                }
+            }
+            
+            if (sprintId && sprintId !== "") {
+                if (!start || !end || !dur) {
+                    warningDiv.innerHTML = "⚠️ Para un sprint es obligatorio: Duración, Fecha inicio y Fecha fin";
+                    warningDiv.style.background = "#fee2e2";
+                    warningDiv.style.color = "#991b1b";
+                    return false;
+                }
+                
+                const sprint = getSprintById(proj, sprintId);
+                if (sprint) {
+                    const sprintStart = new Date(sprint.startDate);
+                    const sprintEnd = new Date(sprint.endDate);
+                    const taskStart = new Date(start);
+                    const taskEnd = new Date(end);
+                    
+                    if (taskStart < sprintStart) {
+                        warningDiv.innerHTML = `⚠️ La fecha inicio (${formatDateDMY(start)}) es anterior al inicio del sprint (${formatDateDMY(sprint.startDate)})`;
+                        warningDiv.style.background = "#fee2e2";
+                        warningDiv.style.color = "#991b1b";
+                        return false;
+                    }
+                    if (taskEnd > sprintEnd) {
+                        warningDiv.innerHTML = `⚠️ La fecha fin (${formatDateDMY(end)}) es posterior al fin del sprint (${formatDateDMY(sprint.endDate)})`;
+                        warningDiv.style.background = "#fee2e2";
+                        warningDiv.style.color = "#991b1b";
+                        return false;
+                    }
+                    if (taskStart > taskEnd) {
+                        warningDiv.innerHTML = "⚠️ La fecha inicio no puede ser posterior a la fecha fin";
+                        warningDiv.style.background = "#fee2e2";
+                        warningDiv.style.color = "#991b1b";
+                        return false;
+                    }
+                    warningDiv.innerHTML = "✅ Tarea dentro del rango del sprint";
+                    warningDiv.style.background = "#d1fae5";
+                    warningDiv.style.color = "#065f46";
+                    return true;
+                }
             } else {
                 warningDiv.innerHTML = "📦 Backlog: Duración y fechas son opcionales";
                 warningDiv.style.background = "#e6f7e6";
+                warningDiv.style.color = "#065f46";
+                return true;
             }
+            return true;
         };
-        durationInput.addEventListener('input', recalculate);
-        startDateInput.addEventListener('change', recalculate);
-        endDateInput.addEventListener('change', recalculate);
-        sprintSelect.addEventListener('change', recalculate);
-        recalculate();
+        
+        durationInput.addEventListener('input', validateChanges);
+        startDateInput.addEventListener('change', validateChanges);
+        endDateInput.addEventListener('change', validateChanges);
+        sprintSelect.addEventListener('change', validateChanges);
+        validateChanges();
         
         modalOverlay.querySelector('#modalSaveBtn').addEventListener('click', async () => {
             const newTitle = modalOverlay.querySelector('#editTaskTitle').value.trim();
             if (!newTitle) { alert("El título es obligatorio"); return; }
+            
+            const newSprintId = sprintSelect.value || null;
+            const newStartDate = startDateInput.value || null;
+            const newEndDate = endDateInput.value || null;
+            const newDuration = durationInput.value ? parseInt(durationInput.value) : null;
+            
+            if (newSprintId) {
+                if (!newStartDate || !newEndDate || !newDuration) {
+                    alert("Para asignar a un sprint, la tarea debe tener: Duración, Fecha inicio y Fecha fin");
+                    return;
+                }
+                
+                const sprint = getSprintById(proj, newSprintId);
+                if (sprint) {
+                    const sprintStart = new Date(sprint.startDate);
+                    const sprintEnd = new Date(sprint.endDate);
+                    const taskStart = new Date(newStartDate);
+                    const taskEnd = new Date(newEndDate);
+                    
+                    if (taskStart < sprintStart) {
+                        alert(`La fecha inicio (${formatDateDMY(newStartDate)}) es anterior al inicio del sprint (${formatDateDMY(sprint.startDate)})\n\nAjusta las fechas para continuar.`);
+                        return;
+                    }
+                    if (taskEnd > sprintEnd) {
+                        alert(`La fecha fin (${formatDateDMY(newEndDate)}) es posterior al fin del sprint (${formatDateDMY(sprint.endDate)})\n\nAjusta las fechas para continuar.`);
+                        return;
+                    }
+                }
+            }
+            
             task.title = newTitle;
             task.assigneeId = modalOverlay.querySelector('#editTaskAssignee').value || null;
-            task.sprintId = sprintSelect.value || null;
-            task.duration = parseInt(durationInput.value) || null;
-            task.startDate = startDateInput.value || null;
-            task.endDate = endDateInput.value || null;
+            task.sprintId = newSprintId;
+            task.duration = newDuration;
+            task.startDate = newStartDate;
+            task.endDate = newEndDate;
             task.status = modalOverlay.querySelector('#editTaskStatus').value;
-            await saveAndSync(); renderAll(); closeModal();
+            
+            await saveAndSync();
+            renderAll();
+            closeModal();
+            showToast(`✅ Tarea "${task.title}" actualizada`, 'success');
         });
+        
         modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', async () => {
             if (confirm(`¿Eliminar "${task.title}"?`)) {
                 proj.tasks = proj.tasks.filter(t => t.id !== taskId);
-                await saveAndSync(); renderAll(); closeModal();
+                await saveAndSync();
+                renderAll();
+                closeModal();
+                showToast(`🗑️ Tarea "${task.title}" eliminada`, 'info');
             }
         });
     }
@@ -1665,7 +1934,14 @@
                 const tasksOfSprint = sortTasksByStartDate((proj.tasks || []).filter(t => t.sprintId === sprint.id));
                 const div = document.createElement("div"); div.className = "sprint-card";
                 div.setAttribute('data-sprint-id', sprint.id);
-                div.innerHTML = `<div><strong><i class="fas fa-calendar-alt"></i> ${escapeHtml(sprint.name)}</strong><br><small>📅 ${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</small><br><small>🎯 ${escapeHtml(sprint.goal || "Sin objetivo")}</small></div><div class="sprint-tasks-list"></div>`;
+                div.innerHTML = `
+                    <div>
+                        <strong><i class="fas fa-calendar-alt"></i> ${escapeHtml(sprint.name)}</strong>
+                        <br><small>📅 ${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</small>
+                        <br><small>🎯 ${escapeHtml(sprint.goal || "Sin objetivo")}</small>
+                    </div>
+                    <div class="sprint-tasks-list"></div>
+                `;
                 if (isManager) div.addEventListener('dblclick', (e) => { e.stopPropagation(); showSprintModal(sprint.id); });
                 container.appendChild(div);
                 const taskContainer = div.querySelector('.sprint-tasks-list');
@@ -1674,12 +1950,42 @@
                     const member = getParticipantById(proj, task.assigneeId);
                     const row = document.createElement("div"); row.className = "task-row-sprint";
                     row.setAttribute('data-task-id', task.id);
-                    row.innerHTML = `<div><strong>${escapeHtml(task.title)}</strong><br><small>${member ? member.name : "Sin asignar"} | ${formatDateDMY(task.startDate)} → ${formatDateDMY(task.endDate)} (${task.duration}d) | Estado: ${task.status === 'done' ? '✅ Hecho' : (task.status === 'inprogress' ? '⚙️ En Progreso' : '📋 To Do')}</small></div><div><i class="fas fa-grip-vertical" style="color:#94a3b8;"></i></div>`;
-                    if (isManager) row.addEventListener('dblclick', (e) => { e.stopPropagation(); showTaskModal(task.id); });
+                    row.style.flexDirection = "column";
+                    row.style.alignItems = "flex-start";
+                    row.innerHTML = `
+                        <div style="width: 100%;">
+                            <strong>${escapeHtml(task.title)}</strong>
+                            <br><small>${member ? member.name : "Sin asignar"} | ${formatDateDMY(task.startDate)} → ${formatDateDMY(task.endDate)} (${task.duration}d) | Estado: ${task.status === 'done' ? '✅ Hecho' : (task.status === 'inprogress' ? '⚙️ En Progreso' : '📋 To Do')}</small>
+                        </div>
+                        <div style="width: 100%; margin-top: 8px;">
+                            <select class="move-sprint-select" data-taskid="${task.id}" ${!isManager ? 'disabled' : ''} style="width: auto; min-width: 180px;">
+                                <option value="">📋 Mover a Sprint...</option>
+                                ${(proj.sprints || []).filter(s => s.id !== sprint.id).map(s => `<option value="${s.id}">🚀 ${escapeHtml(s.name)}</option>`).join("")}
+                                <option value="backlog">📦 Mover a Backlog</option>
+                            </select>
+                        </div>
+                    `;
+                    if (isManager) {
+                        row.addEventListener('dblclick', (e) => { e.stopPropagation(); showTaskModal(task.id); });
+                        const moveSelect = row.querySelector('.move-sprint-select');
+                        moveSelect.addEventListener('change', async (e) => {
+                            e.stopPropagation();
+                            const targetValue = e.target.value;
+                            if (!targetValue) return;
+                            
+                            if (targetValue === 'backlog') {
+                                await moveTaskToSprint(task.id, null);
+                            } else {
+                                await moveTaskToSprint(task.id, targetValue);
+                            }
+                            moveSelect.value = '';
+                        });
+                    }
                     taskContainer.appendChild(row);
                 });
             });
         }
+        
         const backlogDiv = document.getElementById("backlogTasksList");
         const backlogTasks = sortTasksByStartDate((proj.tasks || []).filter(t => !t.sprintId));
         backlogDiv.innerHTML = backlogTasks.length ? "" : "<p style='padding:16px; text-align:center; color:#888; font-size:0.8rem;'>📦 Backlog vacío</p>";
@@ -1687,24 +1993,33 @@
             const member = getParticipantById(proj, task.assigneeId);
             const div = document.createElement("div"); div.className = "task-row-sprint";
             div.setAttribute('data-task-id', task.id);
-            div.innerHTML = `<div><strong>${escapeHtml(task.title)}</strong><br><small>${member ? member.name : "Sin asignar"} | ${formatDateDMY(task.startDate) || "sin fecha"} → ${formatDateDMY(task.endDate) || "sin fecha"} (${task.duration || 0}d)</small></div>
-                <div><select class="assign-sprint-select" data-taskid="${task.id}" ${!isManager ? 'disabled' : ''}><option value="">📋 Asignar a Sprint...</option>${(proj.sprints || []).map(s => `<option value="${s.id}">🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join("")}</select></div>`;
-            if (isManager) div.addEventListener('dblclick', (e) => { e.stopPropagation(); showTaskModal(task.id); });
+            div.style.flexDirection = "column";
+            div.style.alignItems = "flex-start";
+            div.innerHTML = `
+                <div style="width: 100%;">
+                    <strong>${escapeHtml(task.title)}</strong>
+                    <br><small>${member ? member.name : "Sin asignar"} | ${formatDateDMY(task.startDate) || "sin fecha"} → ${formatDateDMY(task.endDate) || "sin fecha"} (${task.duration || 0}d)</small>
+                </div>
+                <div style="width: 100%; margin-top: 8px;">
+                    <select class="assign-sprint-select" data-taskid="${task.id}" ${!isManager ? 'disabled' : ''} style="width: auto; min-width: 180px;">
+                        <option value="">📋 Asignar a Sprint...</option>
+                        ${(proj.sprints || []).map(s => `<option value="${s.id}">🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join("")}
+                    </select>
+                </div>
+            `;
+            if (isManager) {
+                div.addEventListener('dblclick', (e) => { e.stopPropagation(); showTaskModal(task.id); });
+                const assignSelect = div.querySelector('.assign-sprint-select');
+                assignSelect.addEventListener('change', async (e) => {
+                    e.stopPropagation();
+                    const sprintId = e.target.value;
+                    if (!sprintId) return;
+                    await moveTaskToSprint(task.id, sprintId);
+                    assignSelect.value = '';
+                });
+            }
             backlogDiv.appendChild(div);
         });
-        document.querySelectorAll(".assign-sprint-select").forEach(sel => sel.addEventListener("change", async (e) => { 
-            if (!isManager) return;
-            e.stopPropagation();
-            const tid = sel.getAttribute("data-taskid"); 
-            const sid = sel.value; 
-            if (!sid) return;
-            const task = proj.tasks.find(t => t.id === tid); 
-            if(task) { 
-                task.sprintId = sid;
-                await saveAndSync(); renderAll();
-            }
-            sel.value = "";
-        }));
     }
     
     async function showSprintModal(sprintId) {
@@ -1763,41 +2078,32 @@
         let timelineUnits = [], unitWidth = 0;
         if(view === 'day') { unitWidth = 38; timelineUnits = dates.map((d, idx) => ({ label: formatDateDMY(d), width: unitWidth, startDate: d, endDate: d, index: idx })); }
         else if(view === 'week') {
-    // Obtener el inicio de la semana (domingo) para la fecha global de inicio
-    let globalStartDate = new Date(globalStart);
-    let dayOfWeek = globalStartDate.getUTCDay(); // 0 = domingo, 1 = lunes, etc.
-    let daysToSunday = dayOfWeek; // días hasta el domingo más cercano (0 si ya es domingo)
-    
-    // Ajustar la fecha de inicio al domingo anterior o actual
-    let adjustedStart = new Date(globalStart);
-    adjustedStart.setUTCDate(adjustedStart.getUTCDate() - daysToSunday);
-    let adjustedStartYMD = `${adjustedStart.getUTCFullYear()}-${String(adjustedStart.getUTCMonth()+1).padStart(2,'0')}-${String(adjustedStart.getUTCDate()).padStart(2,'0')}`;
-    
-    // Generar semanas por calendario (domingo a sábado)
-    let weeks = [];
-    let currentDate = new Date(adjustedStart);
-    let endDateObj = new Date(globalEnd);
-    
-    while (currentDate <= endDateObj) {
-        let weekStart = currentDate.toISOString().split('T')[0];
-        let weekEnd = new Date(currentDate);
-        weekEnd.setUTCDate(weekEnd.getUTCDate() + 6);
-        let weekEndYMD = weekEnd.toISOString().split('T')[0];
-        
-        weeks.push([weekStart, weekEndYMD]);
-        
-        currentDate.setUTCDate(currentDate.getUTCDate() + 7);
-    }
-    
-    unitWidth = 90;
-    timelineUnits = weeks.map((week, idx) => ({
-        label: `${formatDateDMY(week[0])} - ${formatDateDMY(week[1])}`,
-        width: unitWidth,
-        startDate: week[0],
-        endDate: week[1],
-        index: idx
-    }));
-}
+            let globalStartDate = new Date(globalStart);
+            let dayOfWeek = globalStartDate.getUTCDay();
+            let daysToSunday = dayOfWeek;
+            let adjustedStart = new Date(globalStart);
+            adjustedStart.setUTCDate(adjustedStart.getUTCDate() - daysToSunday);
+            let weeks = [];
+            let currentDate = new Date(adjustedStart);
+            let endDateObj = new Date(globalEnd);
+            
+            while (currentDate <= endDateObj) {
+                let weekStart = currentDate.toISOString().split('T')[0];
+                let weekEnd = new Date(currentDate);
+                weekEnd.setUTCDate(weekEnd.getUTCDate() + 6);
+                let weekEndYMD = weekEnd.toISOString().split('T')[0];
+                weeks.push([weekStart, weekEndYMD]);
+                currentDate.setUTCDate(currentDate.getUTCDate() + 7);
+            }
+            unitWidth = 90;
+            timelineUnits = weeks.map((week, idx) => ({
+                label: `${formatDateDMY(week[0])} - ${formatDateDMY(week[1])}`,
+                width: unitWidth,
+                startDate: week[0],
+                endDate: week[1],
+                index: idx
+            }));
+        }
         else if(view === 'month') {
             let monthsMap = new Map();
             for(let d of dates) { let { year, month } = parseDateYMD(d); let key = `${year}-${month}`; if(!monthsMap.has(key)) monthsMap.set(key, []); monthsMap.get(key).push(d); }
@@ -1872,26 +2178,6 @@
     
     function escapeHtml(s) { if(!s) return ""; return s.replace(/[&<>]/g, m=>({ "&":"&amp;", "<":"&lt;", ">":"&gt;" }[m])); }
     
-    function setupCreateCongruence() {
-        const durationInput = document.getElementById("taskDuration");
-        const startDateInput = document.getElementById("taskStartDate");
-        if (!durationInput || !startDateInput) return;
-        let updating = false;
-        const updateEndDate = () => {
-            if (updating) return;
-            const dur = parseInt(durationInput.value);
-            const start = startDateInput.value;
-            if (start && dur && dur > 0) {
-                updating = true;
-                const newEnd = addDaysToYMD(start, dur - 1);
-                updating = false;
-            }
-        };
-        durationInput.addEventListener('input', updateEndDate);
-        startDateInput.addEventListener('change', updateEndDate);
-    }
-    setupCreateCongruence();
-    
     // ========== EVENT LISTENERS PRINCIPALES ==========
     document.getElementById("addTaskBtn")?.addEventListener("click", async () => {
         if (!isManager) return;
@@ -1908,11 +2194,25 @@
             alert("La duración debe ser un número positivo mayor a 0");
             return;
         }
+        
+        // Crear tarea temporal para validación
+        let tempTask = {
+            startDate: start || null,
+            endDate: (start && duration && duration > 0) ? addDaysToYMD(start, duration - 1) : null,
+            duration: duration
+        };
+        
         if (sprintId) {
-            if (!start || !duration || duration <= 0) { alert("Para un sprint es obligatorio: Duración positiva y Fecha inicio"); return; }
+            if (!start || !duration || duration <= 0) { 
+                alert("Para un sprint es obligatorio: Duración positiva y Fecha inicio"); 
+                return; 
+            }
             let end = addDaysToYMD(start, duration - 1);
-            const validation = validateSprintRange(proj, sprintId, start, end, duration);
-            if (!validation.valid) { alert(validation.message); return; }
+            const validation = validateTaskAgainstSprint(proj, tempTask, sprintId);
+            if (!validation.valid) { 
+                alert(validation.message); 
+                return; 
+            }
             let newTask = { id: "t_"+Date.now()+Math.random(), title, assigneeId: document.getElementById("taskAssigneeSelect").value || null, sprintId, duration: duration, startDate: start, endDate: end, status: document.getElementById("taskStatus").value };
             proj.tasks.push(newTask);
         } else {
@@ -2049,7 +2349,7 @@
         document.getElementById('importExportBtns').classList.toggle('hidden');
     }
     
-    // ========== LOGIN CORREGIDO ==========
+    // ========== LOGIN ==========
     function showLogin() {
         const profiles = [
             { id: 'manager', title: 'Manager', icon: 'fa-user-tie', description: 'Control y Administración del Proyecto', badge: 'Acceso total', color: '#1c5a7a' },
