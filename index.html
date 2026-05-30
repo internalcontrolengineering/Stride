@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* ========== ESTILOS COMPLETOS (MANTENER LOS MISMOS) ========== */
+        /* ========== ESTILOS COMPLETOS ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: #eef2f7; padding: 12px; }
         @media (min-width: 768px) { body { padding: 20px; } }
@@ -224,6 +224,28 @@
         
         .badge { background: #eef2ff; padding: 3px 8px; border-radius: 30px; font-size: 0.65rem; font-weight: 500; }
         @media (max-width: 640px) { .badge { padding: 2px 6px; font-size: 0.6rem; } }
+        
+        .assignees-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #eef2ff;
+            padding: 3px 8px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+        }
+        .assignee-avatar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: #1c5a7a;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
         
         .project-btn { 
             background: #e2e8f0;
@@ -640,9 +662,88 @@
             margin-top: 8px;
         }
         
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: white; border-radius: 24px; width: 90%; max-width: 500px; padding: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-height: 85vh; overflow-y: auto; }
-        @media (max-width: 640px) { .modal-content { padding: 16px; border-radius: 20px; } }
+        /* ========== ESTILOS FIX PARA MODALES ========== */
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.5); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 1000; 
+        }
+        
+        .modal-content { 
+            background: white; 
+            border-radius: 24px; 
+            width: 90%; 
+            max-width: 650px; 
+            padding: 20px; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
+            max-height: 85vh; 
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Fix para que el dropdown se abra hacia arriba */
+        .modal-content .multi-select-wrapper {
+            position: relative;
+        }
+        
+        .modal-content .multi-select-dropdown {
+            position: absolute;
+            bottom: 100%;
+            top: auto !important;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            margin-top: 0;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 1060;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .modal-content .modal-buttons {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            margin-top: 24px;
+            padding: 16px 20px 8px 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            z-index: 15;
+        }
+        
+        /* Asegurar que el modal tenga scroll interno */
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            flex-shrink: 0;
+        }
+        
+        .modal-buttons {
+            flex-shrink: 0;
+        }
+        
+        @media (max-width: 640px) { 
+            .modal-content { 
+                padding: 16px; 
+                border-radius: 20px;
+                max-height: 90vh;
+            }
+        }
         
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
         .modal-header h3 { font-size: 1.1rem; font-weight: 600; }
@@ -667,6 +768,95 @@
         .full-width { width: 100%; }
         .assign-sprint-select { padding: 6px 12px; border-radius: 12px; font-size: 0.7rem; background: #f1f5f9; border: 1px solid #cbd5e1; cursor: pointer; }
         @media (max-width: 640px) { .assign-sprint-select { padding: 4px 8px; font-size: 0.6rem; } }
+        
+        /* Estilos para desplegable múltiple */
+        .multi-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        
+        .multi-select-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        
+        .multi-select-trigger:hover {
+            border-color: #1c5a7a;
+        }
+        
+        .multi-select-trigger i {
+            transition: transform 0.2s;
+        }
+        
+        .multi-select-trigger.open i {
+            transform: rotate(180deg);
+        }
+        
+        .multi-select-search {
+            padding: 8px;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #1c5a7a;
+        }
+        
+        .select-all-option {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        
+        .assignees-checkbox-list {
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        
+        .assignee-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.8rem;
+        }
+        
+        .assignee-checkbox:hover {
+            background: #f1f5f9;
+        }
+        
+        .assignee-checkbox input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .assignee-checkbox span {
+            flex: 1;
+        }
         
         footer {
             margin-top: 24px;
@@ -707,46 +897,45 @@
         .loading-spinner i { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-@keyframes slideInRight {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
 
-@keyframes slideOutRight {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(100%); opacity: 0; }
-}
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
 
-.btn-warning:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(245,158,11,0.3);
-}
+        .btn-warning:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245,158,11,0.3);
+        }
 
-.move-sprint-select, .assign-sprint-select {
-    padding: 6px 12px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    background: #f1f5f9;
-    border: 1px solid #cbd5e1;
-    cursor: pointer;
-    transition: all 0.2s;
-}
+        .move-sprint-select, .assign-sprint-select {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-.move-sprint-select:hover, .assign-sprint-select:hover {
-    background: #e2e8f0;
-    border-color: #1c5a7a;
-}
+        .move-sprint-select:hover, .assign-sprint-select:hover {
+            background: #e2e8f0;
+            border-color: #1c5a7a;
+        }
 
-.task-row-sprint {
-    transition: all 0.2s ease;
-}
+        .task-row-sprint {
+            transition: all 0.2s ease;
+        }
 
-.task-row-sprint:hover {
-    transform: translateX(4px);
-    background: #fefce8;
-    border-color: #fde047;
-}
-
+        .task-row-sprint:hover {
+            transform: translateX(4px);
+            background: #fefce8;
+            border-color: #fde047;
+        }
     </style>
 </head>
 <body>
@@ -811,13 +1000,37 @@
             <h3><i class="fas fa-plus-circle"></i> Crear Tarea</h3>
             <div class="form-row">
                 <div class="form-group" style="flex: 2;"><label>Título</label><input type="text" id="taskTitle" placeholder="Tarea"></div>
-                <div class="form-group"><label>Asignado a</label><select id="taskAssigneeSelect"></select></div>
+                <div class="form-group"><label>Duración (días)</label><input type="number" id="taskDuration" placeholder="Número" min="1"></div>
             </div>
             <div class="form-row">
-                <div class="form-group" style="min-width: 240px;"><label>Sprint</label><select id="taskSprintSelect" class="sprint-select"></select></div>
-                <div class="form-group"><label>Duración (días)</label><input type="number" id="taskDuration" placeholder="Número" min="1"></div>
                 <div class="form-group"><label>Fecha inicio</label><input type="date" id="taskStartDate"></div>
                 <div class="form-group"><label>Estado</label><select id="taskStatus"><option value="todo">📋 To Do</option><option value="inprogress">⚙️ En Progreso</option><option value="done">✅ Hecho</option></select></div>
+                <div class="form-group" style="min-width: 240px;"><label>Sprint</label><select id="taskSprintSelect" class="sprint-select"></select></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Asignar a (selección múltiple)</label>
+                    <div class="assignees-container" id="assigneesContainer">
+                        <div class="multi-select-wrapper">
+                            <div class="multi-select-trigger" id="multiSelectTrigger">
+                                <span id="selectedCountText">Seleccionar participantes</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="multi-select-dropdown" id="multiSelectDropdown" style="display: none;">
+                                <div class="multi-select-search">
+                                    <input type="text" id="assigneeSearchInput" placeholder="Buscar participante..." class="search-input">
+                                </div>
+                                <div class="select-all-option">
+                                    <label class="assignee-checkbox">
+                                        <input type="checkbox" id="selectAllAssigneesCheckbox">
+                                        <span><strong>✓ Seleccionar todos</strong></span>
+                                    </label>
+                                </div>
+                                <div id="assigneesCheckboxList" class="assignees-checkbox-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="createWarning" class="warning-text" style="background:#fef3c7; padding:8px; border-radius:12px; margin-bottom:12px;"></div>
             <button id="addTaskBtn">Crear Tarea</button>
@@ -926,6 +1139,18 @@
                 data = result.data;
                 if (!data.ganttView) data.ganttView = 'day';
                 if (!data.projects) data.projects = [];
+                // Migrar tareas antiguas de assigneeId a assignees
+                for (const proj of data.projects) {
+                    if (proj.tasks) {
+                        for (const task of proj.tasks) {
+                            if (task.assigneeId && !task.assignees) {
+                                task.assignees = [task.assigneeId];
+                                delete task.assigneeId;
+                            }
+                            if (!task.assignees) task.assignees = [];
+                        }
+                    }
+                }
                 updateSyncStatus('synced', 'Sincronizado');
                 return true;
             } else {
@@ -1007,6 +1232,18 @@
             data = JSON.parse(stored);
             if (!data.ganttView) data.ganttView = 'day';
             if (!data.projects) data.projects = [];
+            // Migrar tareas antiguas
+            for (const proj of data.projects) {
+                if (proj.tasks) {
+                    for (const task of proj.tasks) {
+                        if (task.assigneeId && !task.assignees) {
+                            task.assignees = [task.assigneeId];
+                            delete task.assigneeId;
+                        }
+                        if (!task.assignees) task.assignees = [];
+                    }
+                }
+            }
             return true;
         }
         return false;
@@ -1233,11 +1470,11 @@
         return "#10b981";
     }
     
-    // ========== FUNCIONES DE COMUNICACIÓN ==========
+    // ========== FUNCIONES DE COMUNICACIÓN CON ASIGNACIÓN MÚLTIPLE ==========
     function generateTaskSummary(participantId, project, skipFooter = false) {
         const participant = project.participants.find(p => p.id === participantId);
         if (!participant) return null;
-        const userTasks = project.tasks.filter(t => t.assigneeId === participantId);
+        const userTasks = project.tasks.filter(t => t.assignees && t.assignees.includes(participantId));
         const todoTasks = userTasks.filter(t => t.status === "todo");
         const inProgressTasks = userTasks.filter(t => t.status === "inprogress");
         const doneTasks = userTasks.filter(t => t.status === "done");
@@ -1460,6 +1697,14 @@
                             if (!proj.participants) proj.participants = [];
                             if (!proj.tasks) proj.tasks = [];
                             if (!proj.sprints) proj.sprints = [];
+                            // Migrar tareas importadas
+                            for (const task of proj.tasks) {
+                                if (task.assigneeId && !task.assignees) {
+                                    task.assignees = [task.assigneeId];
+                                    delete task.assigneeId;
+                                }
+                                if (!task.assignees) task.assignees = [];
+                            }
                             data.projects.push(proj);
                         }
                     }
@@ -1511,11 +1756,10 @@
     
     function updateSelectors() {
         const proj = currentProject();
-        const assign = document.getElementById("taskAssigneeSelect");
-        if(assign && proj) {
-            assign.innerHTML = `<option value="">-- Sin asignar --</option>` + (proj.participants || []).map(m => `<option value="${m.id}">${escapeHtml(m.name)} (${escapeHtml(m.role)})</option>`).join("");
-            assign.disabled = !isManager;
-        }
+        
+        // Actualizar checkboxes de asignación múltiple
+        renderAssigneesCheckboxes();
+        
         const sprintSel = document.getElementById("taskSprintSelect");
         if(sprintSel && proj) {
             sprintSel.innerHTML = `<option value="">📦 Backlog (sin sprint)</option>` + (proj.sprints || []).map(s => `<option value="${s.id}">🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join("");
@@ -1531,6 +1775,121 @@
                 warn.style.background = "#e6f7e6";
             }
         });
+    }
+    
+    function updateSelectedCount() {
+        const selectedCount = getSelectedAssignees().length;
+        const proj = currentProject();
+        const totalCount = proj?.participants?.length || 0;
+        const selectedText = document.getElementById('selectedCountText');
+        if (selectedText) {
+            if (selectedCount === 0) {
+                selectedText.textContent = `Seleccionar participantes (${totalCount})`;
+            } else {
+                selectedText.textContent = `${selectedCount} seleccionado${selectedCount !== 1 ? 's' : ''}`;
+            }
+        }
+    }
+    
+    function renderAssigneesCheckboxes() {
+        const proj = currentProject();
+        const container = document.getElementById('assigneesCheckboxList');
+        if (!container) return;
+        
+        if (!proj || !proj.participants || proj.participants.length === 0) {
+            container.innerHTML = '<div style="color:#94a3b8; font-size:0.7rem; padding:12px;">No hay participantes registrados</div>';
+            updateSelectedCount();
+            return;
+        }
+        
+        // Guardar selección actual
+        const currentSelection = getSelectedAssignees();
+        
+        container.innerHTML = '';
+        proj.participants.forEach(participant => {
+            const isChecked = currentSelection.includes(participant.id);
+            const checkboxDiv = document.createElement('label');
+            checkboxDiv.className = 'assignee-checkbox';
+            checkboxDiv.setAttribute('data-participant-id', participant.id);
+            checkboxDiv.innerHTML = `
+                <input type="checkbox" value="${participant.id}" class="assignee-checkbox-input" ${isChecked ? 'checked' : ''}>
+                <span>${escapeHtml(participant.name)} <small style="color:#64748b;">(${escapeHtml(participant.role)})</small></span>
+            `;
+            container.appendChild(checkboxDiv);
+        });
+        
+        // Evento para el checkbox de seleccionar todos
+        const selectAllCheckbox = document.getElementById('selectAllAssigneesCheckbox');
+        if (selectAllCheckbox) {
+            selectAllCheckbox.onchange = () => {
+                const allCheckboxes = document.querySelectorAll('#assigneesCheckboxList .assignee-checkbox-input');
+                const isChecked = selectAllCheckbox.checked;
+                allCheckboxes.forEach(cb => cb.checked = isChecked);
+                updateSelectedCount();
+            };
+        }
+        
+        // Eventos para los checkboxes individuales
+        document.querySelectorAll('#assigneesCheckboxList .assignee-checkbox-input').forEach(cb => {
+            cb.addEventListener('change', () => {
+                updateSelectedCount();
+                // Actualizar estado del checkbox "seleccionar todos"
+                const allCheckboxes = document.querySelectorAll('#assigneesCheckboxList .assignee-checkbox-input');
+                const allChecked = Array.from(allCheckboxes).every(c => c.checked);
+                if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+            });
+        });
+        
+        // Evento de búsqueda
+        const searchInput = document.getElementById('assigneeSearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const items = container.querySelectorAll('.assignee-checkbox');
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(searchTerm) ? 'flex' : 'none';
+                });
+            });
+        }
+        
+        updateSelectedCount();
+    }
+    
+    function getSelectedAssignees() {
+        const checkboxes = document.querySelectorAll('#assigneesCheckboxList .assignee-checkbox-input:checked');
+        return Array.from(checkboxes).map(cb => cb.value);
+    }
+    
+    function initMultiSelect() {
+        const trigger = document.getElementById('multiSelectTrigger');
+        const dropdown = document.getElementById('multiSelectDropdown');
+        
+        if (trigger && dropdown) {
+            // Limpiar event listeners previos
+            const newTrigger = trigger.cloneNode(true);
+            trigger.parentNode.replaceChild(newTrigger, trigger);
+            const newDropdown = dropdown.cloneNode(true);
+            dropdown.parentNode.replaceChild(newDropdown, dropdown);
+            
+            const finalTrigger = document.getElementById('multiSelectTrigger');
+            const finalDropdown = document.getElementById('multiSelectDropdown');
+            
+            finalTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = finalDropdown.style.display === 'block';
+                finalDropdown.style.display = isOpen ? 'none' : 'block';
+                finalTrigger.classList.toggle('open', !isOpen);
+            });
+            
+            // Cerrar al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                if (!finalTrigger.contains(e.target) && !finalDropdown.contains(e.target)) {
+                    finalDropdown.style.display = 'none';
+                    finalTrigger.classList.remove('open');
+                }
+            });
+        }
     }
     
     function renderProjectSelector() {
@@ -1633,22 +1992,6 @@
                         <input type="text" id="editTaskTitle" value="${escapeHtml(task.title)}">
                     </div>
                     <div class="form-group">
-                        <label>Asignado a</label>
-                        <select id="editTaskAssignee">
-                            <option value="">-- Sin asignar --</option>
-                            ${(proj.participants || []).map(m => `<option value="${m.id}" ${task.assigneeId === m.id ? 'selected' : ''}>${escapeHtml(m.name)}</option>`).join('')}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Sprint</label>
-                        <select id="editTaskSprint">
-                            <option value="">📦 Backlog</option>
-                            ${(proj.sprints || []).map(s => `<option value="${s.id}" ${task.sprintId === s.id ? 'selected' : ''}>🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="form-group">
                         <label>Duración (días)</label>
                         <input type="number" id="editTaskDuration" value="${task.duration || ''}" min="1">
                     </div>
@@ -1671,6 +2014,40 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sprint</label>
+                        <select id="editTaskSprint">
+                            <option value="">📦 Backlog</option>
+                            ${(proj.sprints || []).map(s => `<option value="${s.id}" ${task.sprintId === s.id ? 'selected' : ''}>🚀 ${escapeHtml(s.name)} (${formatDateDMY(s.startDate)} → ${formatDateDMY(s.endDate)})</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label>Asignar a (selección múltiple)</label>
+                        <div class="assignees-container">
+                            <div class="multi-select-wrapper">
+                                <div class="multi-select-trigger edit-multi-select-trigger">
+                                    <span id="editSelectedCountText">Seleccionar participantes</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="multi-select-dropdown edit-multi-select-dropdown" style="display: none;">
+                                    <div class="multi-select-search">
+                                        <input type="text" id="editAssigneeSearchInput" placeholder="Buscar participante..." class="search-input">
+                                    </div>
+                                    <div class="select-all-option">
+                                        <label class="assignee-checkbox">
+                                            <input type="checkbox" id="editSelectAllAssigneesCheckbox">
+                                            <span><strong>✓ Seleccionar todos</strong></span>
+                                        </label>
+                                    </div>
+                                    <div id="editAssigneesList" class="assignees-checkbox-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="editWarning" class="warning-text" style="background:#fef3c7; padding:8px; border-radius:12px; margin-bottom:12px;"></div>
                 <div class="modal-buttons">
                     <button class="btn-secondary" id="modalCancelBtn">Cancelar</button>
@@ -1685,6 +2062,88 @@
         modalOverlay.querySelector('.modal-close').addEventListener('click', closeModal);
         modalOverlay.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+        
+        // Función para actualizar contador en edición
+        function updateEditSelectedCount() {
+            const selectedCheckboxes = modalOverlay.querySelectorAll('#editAssigneesList .edit-assignee-checkbox:checked');
+            const selectedCount = selectedCheckboxes.length;
+            const selectedText = modalOverlay.querySelector('#editSelectedCountText');
+            if (selectedText) {
+                if (selectedCount === 0) {
+                    selectedText.textContent = `Seleccionar participantes (${proj.participants.length})`;
+                } else {
+                    selectedText.textContent = `${selectedCount} seleccionado${selectedCount !== 1 ? 's' : ''}`;
+                }
+            }
+        }
+        
+        // Rellenar checkboxes de edit
+        const editAssigneesContainer = modalOverlay.querySelector('#editAssigneesList');
+        if (proj.participants && proj.participants.length > 0) {
+            editAssigneesContainer.innerHTML = '';
+            proj.participants.forEach(participant => {
+                const isChecked = task.assignees && task.assignees.includes(participant.id);
+                const checkboxDiv = document.createElement('label');
+                checkboxDiv.className = 'assignee-checkbox';
+                checkboxDiv.innerHTML = `
+                    <input type="checkbox" value="${participant.id}" class="edit-assignee-checkbox" ${isChecked ? 'checked' : ''}>
+                    <span>${escapeHtml(participant.name)} <small style="color:#64748b;">(${escapeHtml(participant.role)})</small></span>
+                `;
+                editAssigneesContainer.appendChild(checkboxDiv);
+            });
+        } else {
+            editAssigneesContainer.innerHTML = '<div style="color:#94a3b8; font-size:0.7rem; padding:12px;">No hay participantes registrados</div>';
+        }
+        
+        // Inicializar desplegable de edición
+        const editTrigger = modalOverlay.querySelector('.edit-multi-select-trigger');
+        const editDropdown = modalOverlay.querySelector('.edit-multi-select-dropdown');
+        if (editTrigger && editDropdown) {
+            editTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = editDropdown.style.display === 'block';
+                editDropdown.style.display = isOpen ? 'none' : 'block';
+                editTrigger.classList.toggle('open', !isOpen);
+            });
+            
+            // Cerrar al hacer clic fuera
+            const closeEditDropdown = (e) => {
+                if (!editTrigger.contains(e.target) && !editDropdown.contains(e.target)) {
+                    editDropdown.style.display = 'none';
+                    editTrigger.classList.remove('open');
+                }
+            };
+            document.addEventListener('click', closeEditDropdown);
+            
+            // Guardar referencia para limpiar
+            modalOverlay._closeHandler = closeEditDropdown;
+        }
+        
+        // Configurar búsqueda en edición
+        const editSearchInput = modalOverlay.querySelector('#editAssigneeSearchInput');
+        if (editSearchInput) {
+            editSearchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const items = modalOverlay.querySelectorAll('#editAssigneesList .assignee-checkbox');
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(searchTerm) ? 'flex' : 'none';
+                });
+            });
+        }
+        
+        // Configurar seleccionar todos en edición
+        const editSelectAll = modalOverlay.querySelector('#editSelectAllAssigneesCheckbox');
+        if (editSelectAll) {
+            editSelectAll.onchange = () => {
+                const allCheckboxes = modalOverlay.querySelectorAll('#editAssigneesList .edit-assignee-checkbox');
+                allCheckboxes.forEach(cb => cb.checked = editSelectAll.checked);
+                updateEditSelectedCount();
+            };
+        }
+        
+        // Llamar updateEditSelectedCount después de cargar los checkboxes
+        setTimeout(updateEditSelectedCount, 100);
         
         const durationInput = modalOverlay.querySelector('#editTaskDuration');
         const startDateInput = modalOverlay.querySelector('#editTaskStartDate');
@@ -1773,6 +2232,9 @@
             const newEndDate = endDateInput.value || null;
             const newDuration = durationInput.value ? parseInt(durationInput.value) : null;
             
+            // Obtener asignados seleccionados
+            const selectedAssignees = Array.from(modalOverlay.querySelectorAll('#editAssigneesList .edit-assignee-checkbox:checked')).map(cb => cb.value);
+            
             if (newSprintId) {
                 if (!newStartDate || !newEndDate || !newDuration) {
                     alert("Para asignar a un sprint, la tarea debe tener: Duración, Fecha inicio y Fecha fin");
@@ -1798,7 +2260,7 @@
             }
             
             task.title = newTitle;
-            task.assigneeId = modalOverlay.querySelector('#editTaskAssignee').value || null;
+            task.assignees = selectedAssignees;
             task.sprintId = newSprintId;
             task.duration = newDuration;
             task.startDate = newStartDate;
@@ -1871,7 +2333,12 @@
         modalOverlay.querySelector('#modalDeleteBtn').addEventListener('click', async () => {
             if (confirm(`¿Eliminar a "${member.name}"?`)) {
                 proj.participants = proj.participants.filter(m => m.id !== memberId);
-                proj.tasks.forEach(t => { if (t.assigneeId === memberId) t.assigneeId = null; });
+                // Limpiar asignaciones de tareas donde estaba este participante
+                proj.tasks.forEach(t => {
+                    if (t.assignees && t.assignees.includes(memberId)) {
+                        t.assignees = t.assignees.filter(id => id !== memberId);
+                    }
+                });
                 await saveAndSync(); renderAll(); closeModal();
             }
         });
@@ -1892,14 +2359,31 @@
             colDiv.innerHTML = `<div class="col-header"><span>${col.title}</span><span class="badge">${tasksCol.length}</span></div>`;
             const container = document.createElement("div");
             tasksCol.forEach(task => {
-                const member = getParticipantById(proj, task.assigneeId);
+                const assignees = (task.assignees || []).map(id => getParticipantById(proj, id)).filter(p => p);
                 const sprint = task.sprintId ? getSprintById(proj, task.sprintId) : null;
                 const colorCode = getTaskColor(task);
                 const colorName = task.status === "done" ? "Azul" : (colorCode === "#10b981" ? "Verde" : (colorCode === "#f59e0b" ? "Naranja" : "Rojo"));
                 const card = document.createElement("div"); card.className = "task-card"; 
                 card.style.borderLeftColor = task.status === "done" ? "#3b82f6" : (task.status === "inprogress" ? "#f59e0b" : "#94a3b8");
                 card.setAttribute('data-taskid', task.id);
-                card.innerHTML = `<div class="task-title"><strong>${escapeHtml(task.title)}</strong> ${member ? `<span class="badge"><i class="fas fa-user"></i> ${escapeHtml(member.name)}</span>` : ""} <span class="badge" style="background:${colorCode}20; color:${colorCode};">● ${colorName}</span></div>
+                
+                // Mostrar múltiples asignados
+                let assigneesHtml = '';
+                if (assignees.length > 0) {
+                    assigneesHtml = `<span class="assignees-badge" title="${assignees.map(a => a.name).join(', ')}">`;
+                    assignees.forEach((a, idx) => {
+                        if (idx < 3) {
+                            const initials = a.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+                            assigneesHtml += `<span class="assignee-avatar" style="background:#1c5a7a;">${initials}</span>`;
+                        }
+                    });
+                    if (assignees.length > 3) assigneesHtml += `<span style="font-size:0.6rem;">+${assignees.length-3}</span>`;
+                    assigneesHtml += `</span>`;
+                } else {
+                    assigneesHtml = `<span class="badge"><i class="fas fa-user"></i> Sin asignar</span>`;
+                }
+                
+                card.innerHTML = `<div class="task-title"><strong>${escapeHtml(task.title)}</strong> ${assigneesHtml} <span class="badge" style="background:${colorCode}20; color:${colorCode};">● ${colorName}</span></div>
                 <div class="task-meta"><span><i class="far fa-calendar-alt"></i> ${formatDateDMY(task.startDate)} → ${formatDateDMY(task.endDate)} (${task.duration || 0}d)</span><span><i class="fas fa-tag"></i> ${sprint ? sprint.name : "Backlog"}</span></div>`;
                 if (isManager) card.addEventListener('dblclick', (e) => { e.stopPropagation(); showTaskModal(task.id); });
                 container.appendChild(card);
@@ -1947,7 +2431,8 @@
                 const taskContainer = div.querySelector('.sprint-tasks-list');
                 if(tasksOfSprint.length === 0) taskContainer.innerHTML = "<p style='padding:8px; font-style:italic; color:#888; font-size:0.75rem;'>Sin tareas asignadas</p>";
                 tasksOfSprint.forEach(task => {
-                    const member = getParticipantById(proj, task.assigneeId);
+                    const assignees = (task.assignees || []).map(id => getParticipantById(proj, id)).filter(p => p);
+                    const assigneeNames = assignees.map(a => a.name).join(', ');
                     const row = document.createElement("div"); row.className = "task-row-sprint";
                     row.setAttribute('data-task-id', task.id);
                     row.style.flexDirection = "column";
@@ -1955,7 +2440,7 @@
                     row.innerHTML = `
                         <div style="width: 100%;">
                             <strong>${escapeHtml(task.title)}</strong>
-                            <br><small>${member ? member.name : "Sin asignar"} | ${formatDateDMY(task.startDate)} → ${formatDateDMY(task.endDate)} (${task.duration}d) | Estado: ${task.status === 'done' ? '✅ Hecho' : (task.status === 'inprogress' ? '⚙️ En Progreso' : '📋 To Do')}</small>
+                            <br><small>${assigneeNames || "Sin asignar"} | ${formatDateDMY(task.startDate)} → ${formatDateDMY(task.endDate)} (${task.duration}d) | Estado: ${task.status === 'done' ? '✅ Hecho' : (task.status === 'inprogress' ? '⚙️ En Progreso' : '📋 To Do')}</small>
                         </div>
                         <div style="width: 100%; margin-top: 8px;">
                             <select class="move-sprint-select" data-taskid="${task.id}" ${!isManager ? 'disabled' : ''} style="width: auto; min-width: 180px;">
@@ -1990,7 +2475,8 @@
         const backlogTasks = sortTasksByStartDate((proj.tasks || []).filter(t => !t.sprintId));
         backlogDiv.innerHTML = backlogTasks.length ? "" : "<p style='padding:16px; text-align:center; color:#888; font-size:0.8rem;'>📦 Backlog vacío</p>";
         backlogTasks.forEach(task => {
-            const member = getParticipantById(proj, task.assigneeId);
+            const assignees = (task.assignees || []).map(id => getParticipantById(proj, id)).filter(p => p);
+            const assigneeNames = assignees.map(a => a.name).join(', ');
             const div = document.createElement("div"); div.className = "task-row-sprint";
             div.setAttribute('data-task-id', task.id);
             div.style.flexDirection = "column";
@@ -1998,7 +2484,7 @@
             div.innerHTML = `
                 <div style="width: 100%;">
                     <strong>${escapeHtml(task.title)}</strong>
-                    <br><small>${member ? member.name : "Sin asignar"} | ${formatDateDMY(task.startDate) || "sin fecha"} → ${formatDateDMY(task.endDate) || "sin fecha"} (${task.duration || 0}d)</small>
+                    <br><small>${assigneeNames || "Sin asignar"} | ${formatDateDMY(task.startDate) || "sin fecha"} → ${formatDateDMY(task.endDate) || "sin fecha"} (${task.duration || 0}d)</small>
                 </div>
                 <div style="width: 100%; margin-top: 8px;">
                     <select class="assign-sprint-select" data-taskid="${task.id}" ${!isManager ? 'disabled' : ''} style="width: auto; min-width: 180px;">
@@ -2112,11 +2598,11 @@
         }
         let headerCells = timelineUnits.map(u => `<th style="min-width:${u.width}px; font-size:0.7rem; text-align:center;">${u.label}</th>`).join('');
         let html = `<div class="gantt-container"><table class="gantt-table"><thead><tr>
-            <th style="min-width:220px; position:sticky; left:0; background:#f8fafc; z-index:3;">Tarea / Sprint</th>
-            <th style="width:75px">Duración</th>
-            <th style="width:100px">Inicio</th>
-            <th style="width:100px">Fin</th>
-            <th style="width:130px">Responsable</th>${headerCells}
+            <th style="min-width:180px; position:sticky; left:0; background:#f8fafc; z-index:3;">Tarea / Sprint</th>
+            <th style="width:65px">Duración</th>
+            <th style="width:85px">Inicio</th>
+            <th style="width:85px">Fin</th>
+            <th style="width:220px">Responsables</th>${headerCells}
          </thead><tbody>`;
         for(let sprint of allSprints) {
             const tasksInSprint = sortTasksByStartDate((proj.tasks || []).filter(t => t.sprintId === sprint.id && t.startDate && t.duration));
@@ -2124,16 +2610,16 @@
                 <td style="position:sticky; left:0; background:#eef2ff; z-index:2; padding:12px 8px;">
                     <div><strong><i class="fas fa-rocket"></i> ${escapeHtml(sprint.name)}</strong></div>
                     <div style="font-size:0.7rem; font-weight:normal; margin-top:2px;">${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</div>
-                  <\/td>
-                <td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td><td style="background:#eef2ff;"><\/td>${'<td style="background:#eef2ff;"></td>'.repeat(timelineUnits.length)}
-            <\/tr>`;
+                  </td>
+                <td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td>${'<td style="background:#eef2ff;"></td>'.repeat(timelineUnits.length)}
+            </tr>`;
             if(tasksInSprint.length === 0) { 
                 html += `<tr><td colspan="${5 + timelineUnits.length}" style="text-align:center; color:#999; padding:20px;">Sin tareas con fechas<\/td><\/tr>`;
                 continue; 
             }
             for(let task of tasksInSprint) {
                 const barColor = getTaskColor(task);
-                const member = getParticipantById(proj, task.assigneeId);
+                const assignees = (task.assignees || []).map(id => getParticipantById(proj, id)).filter(p => p);
                 const tooltipText = `Inicio: ${formatDateDMY(task.startDate)} → Fin: ${formatDateDMY(task.endDate)}`;
                 let startUnitIdx = -1, endUnitIdx = -1;
                 for(let i = 0; i < timelineUnits.length; i++) { 
@@ -2148,7 +2634,9 @@
                     <td class="text-center">${task.duration}d<\/td>
                     <td class="text-center text-nowrap">${formatDateDMY(task.startDate)}<\/td>
                     <td class="text-center text-nowrap">${formatDateDMY(task.endDate)}<\/td>
-                    <td style="white-space: nowrap;">${member ? escapeHtml(member.name) : "—"}<\/td>`;
+                    <td style="font-size:0.7rem; line-height:1.3; vertical-align:top;">
+                        ${assignees.length > 0 ? assignees.map(a => `<div style="margin-bottom:8px;"><div><i class="fas fa-user-circle" style="color:#1c5a7a; margin-right:6px;"></i><strong>${escapeHtml(a.name)}</strong></div><div style="margin-left:22px; color:#64748b; font-size:0.65rem;">${escapeHtml(a.role || '')}</div></div>`).join('') : "<span style='color:#94a3b8;'><i class='fas fa-user-slash'></i> Sin asignar</span>"}
+                    <\/td>`;
                 for(let i = 0; i < timelineUnits.length; i++) { 
                     const isInRange = (i >= startUnitIdx && i <= endUnitIdx); 
                     if(isInRange) { 
@@ -2195,6 +2683,9 @@
             return;
         }
         
+        // Obtener asignados seleccionados
+        const selectedAssignees = getSelectedAssignees();
+        
         // Crear tarea temporal para validación
         let tempTask = {
             startDate: start || null,
@@ -2213,11 +2704,11 @@
                 alert(validation.message); 
                 return; 
             }
-            let newTask = { id: "t_"+Date.now()+Math.random(), title, assigneeId: document.getElementById("taskAssigneeSelect").value || null, sprintId, duration: duration, startDate: start, endDate: end, status: document.getElementById("taskStatus").value };
+            let newTask = { id: "t_"+Date.now()+Math.random(), title, assignees: selectedAssignees, sprintId, duration: duration, startDate: start, endDate: end, status: document.getElementById("taskStatus").value };
             proj.tasks.push(newTask);
         } else {
             let end = (start && duration && duration > 0) ? addDaysToYMD(start, duration - 1) : null;
-            let newTask = { id: "t_"+Date.now()+Math.random(), title, assigneeId: document.getElementById("taskAssigneeSelect").value || null, sprintId: null, duration: (duration && duration > 0) ? duration : null, startDate: start || null, endDate: end || null, status: document.getElementById("taskStatus").value };
+            let newTask = { id: "t_"+Date.now()+Math.random(), title, assignees: selectedAssignees, sprintId: null, duration: (duration && duration > 0) ? duration : null, startDate: start || null, endDate: end || null, status: document.getElementById("taskStatus").value };
             proj.tasks.push(newTask);
         }
         await saveAndSync(); renderAll();
@@ -2226,6 +2717,9 @@
         document.getElementById("taskStartDate").value = "";
         document.getElementById("createWarning").innerHTML = "📦 Backlog: Duración y fechas son opcionales (puedes editarlas después)";
         document.getElementById("createWarning").style.background = "#e6f7e6";
+        // Limpiar checkboxes
+        document.querySelectorAll('#assigneesCheckboxList .assignee-checkbox-input').forEach(cb => cb.checked = false);
+        updateSelectedCount();
     });
     
     document.getElementById("addMemberBtn")?.addEventListener("click", async () => { 
@@ -2278,6 +2772,9 @@
     
     document.querySelectorAll(".tab-btn").forEach(btn=>btn.addEventListener("click",()=>{ let tabId=btn.getAttribute("data-tab"); document.querySelectorAll(".tab-content").forEach(tc=>tc.classList.remove("active")); document.getElementById(tabId).classList.add("active"); document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }));
     document.querySelectorAll(".view-btn").forEach(btn=>btn.addEventListener("click",async (e)=>{ data.ganttView=btn.getAttribute("data-view"); await saveAndSync(); renderGantt(); }));
+    
+    // Inicializar desplegable múltiple
+    setTimeout(() => initMultiSelect(), 500);
     
     // ========== FUNCIONES DE SESIÓN ==========
     function resetSessionTimer() {
@@ -2353,7 +2850,7 @@
     function showLogin() {
         const profiles = [
             { id: 'stakeholder', title: 'Stakeholder', icon: 'fa-eye', description: 'Seguimiento del Proyecto', badge: 'Solo lectura', color: '#10b981' },
-            { id: 'manager', title: 'Manager', icon: 'fa-user-tie', description: 'Control y Administración del Proyecto', badge: 'Acceso total', color: '#1c5a7a' }            
+            { id: 'manager', title: 'Manager', icon: 'fa-user-tie', description: 'Control y Administración del Proyecto', badge: 'Acceso total', color: '#1c5a7a' }
         ];
         
         let rotationAngle = 0;
@@ -2521,7 +3018,7 @@
         <div style="width:1px; height:24px; background:#cbd5e1;"></div>
         <div style="text-align:center;"><span style="font-size:0.5rem; color:#0A2540;">Control Interno</span><br><span style="font-size:0.4rem; color:#94a3b8;">Ingeniería de Control</span></div>
         <div style="width:1px; height:24px; background:#cbd5e1;"></div>
-        <div style="text-align:center;"><span style="font-size:0.5rem; color:#0A2540;">Stride</span><br><span style="font-size:0.4rem; color:#94a3b8;">V1.0 | Datos en la nube</span></div>
+        <div style="text-align:center;"><span style="font-size:0.5rem; color:#0A2540;">Stride</span><br><span style="font-size:0.4rem; color:#94a3b8;">V1.0 | Datos en la nube | Asignación múltiple</span></div>
     </div>
 </footer>
 
