@@ -1593,7 +1593,7 @@ setTimeout(initTitleTextareas, 500);
             const msg = generateTaskSummary(participant.id, project, true);
             if (msg) allMessages.push(msg);
         }
-        const footer = `\n- - - - - - - - - - - - - - - - - -\n\u{1F4C5} Reporte generado: ${new Date().toLocaleString()}\n\u{1F3E2} Stride - Project Manager\n\u{1F6E1}\uFE0F DEPARTAMENTO DE CONTROL INTERNO`;
+        const footer = `\n- - - - - - - - - - - - - - - - - -\n\u{1F4C5} Reporte generado: ${new Date().toLocaleString()}\n\u{1F3E2} Stride - Project Manager [Accede aquí:  https://goo.su/kTNGQ]\n\u{1F6E1}\uFE0F DEPARTAMENTO DE CONTROL INTERNO`;
         return allMessages.join('\n\n' + '='.repeat(35) + '\n\n') + footer;
     }
 
