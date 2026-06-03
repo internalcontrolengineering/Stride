@@ -1470,7 +1470,7 @@
         return "#10b981";
     }
     
-    // ========== FUNCIONES DE COMUNICACIÓN CON ASIGNACIÓN MÚLTIPLE ==========
+// ========== FUNCIONES DE COMUNICACIÓN CON ASIGNACIÓN MÚLTIPLE ==========
     function generateTaskSummary(participantId, project, skipFooter = false) {
         const participant = project.participants.find(p => p.id === participantId);
         if (!participant) return null;
@@ -1478,52 +1478,54 @@
         const todoTasks = userTasks.filter(t => t.status === "todo");
         const inProgressTasks = userTasks.filter(t => t.status === "inprogress");
         const doneTasks = userTasks.filter(t => t.status === "done");
-        let message = `📋 RESUMEN DE TAREAS - ${participant.name.toUpperCase()}\n\n`;
-        message += `📁 Proyecto: ${project.name}\n`;
-        message += `👤 Rol: ${participant.role || "No especificado"}\n`;
-        message += `📧 Email: ${participant.email}\n`;
-        message += `📱 Teléfono: ${participant.phone}\n\n`;
-        message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n`;
-        message += `📊 ESTADÍSTICAS:\n`;
-        message += `• 📋 Pendientes: ${todoTasks.length}\n`;
-        message += `• ⚙️ En progreso: ${inProgressTasks.length}\n`;
-        message += `• ✅ Completadas: ${doneTasks.length}\n`;
-        message += `• 📦 Total asignadas: ${userTasks.length}\n\n`;
+        
+        // Uso de escapes Unicode para asegurar la compatibilidad en la transferencia de strings
+        let message = `\u{1F4CB} RESUMEN DE TAREAS - ${participant.name.toUpperCase()}\n\n`;
+        message += `\u{1F4C1} Proyecto: ${project.name}\n`;
+        message += `\u{1F464} Rol: ${participant.role || "No especificado"}\n`;
+        message += `\u{1F4E7} Email: ${participant.email}\n`;
+        //message += `\u{1F4F1} Tel\u00E9fono: ${participant.phone}\n\n`;
+        message += `- - - - - - - - - - - - - - - - - -\n\n`; // Cambiado a guiones estándar para evitar fallos de encoding
+        message += `\u{1F4CA} ESTAD\u00CDSTICAS:\n`;
+        message += `\u2022 \u{1F4CB} Pendientes: ${todoTasks.length}\n`;
+        message += `\u2022 \u{2699}\uFE0F En progreso: ${inProgressTasks.length}\n`;
+        message += `\u2022 \u2705 Completadas: ${doneTasks.length}\n`;
+        message += `\u2022 \u{1F4E6} Total asignadas: ${userTasks.length}\n\n`;
         
         if (todoTasks.length > 0) {
-            message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n📋 TAREAS PENDIENTES:\n`;
+            message += `- - - - - - - - - - - - - - - - - -\n\n\u{1F4CB} TAREAS PENDIENTES:\n`;
             todoTasks.forEach((t, idx) => {
-                message += `${idx+1}. ${t.title}\n   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
+                message += `${idx+1}. ${t.title}\n   \u{1F4C5} ${formatDateDMY(t.startDate)} \u2192 ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
                 if (t.sprintId) {
                     const sprint = getSprintById(project, t.sprintId);
-                    if (sprint) message += `   🚀 Sprint: ${sprint.name}\n`;
+                    if (sprint) message += `   \u{1F680} Sprint: ${sprint.name}\n`;
                 }
                 message += `\n`;
             });
         }
         if (inProgressTasks.length > 0) {
-            message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n⚙️ TAREAS EN PROGRESO:\n`;
+            message += `- - - - - - - - - - - - - - - - - -\n\n\u{2699}\uFE0F TAREAS EN PROGRESO:\n`;
             inProgressTasks.forEach((t, idx) => {
-                message += `${idx+1}. ${t.title}\n   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
+                message += `${idx+1}. ${t.title}\n   \u{1F4C5} ${formatDateDMY(t.startDate)} \u2192 ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
                 if (t.sprintId) {
                     const sprint = getSprintById(project, t.sprintId);
-                    if (sprint) message += `   🚀 Sprint: ${sprint.name}\n`;
+                    if (sprint) message += `   \u{1F680} Sprint: ${sprint.name}\n`;
                 }
                 message += `\n`;
             });
         }
         if (doneTasks.length > 0) {
-            message += `━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n\n✅ TAREAS COMPLETADAS:\n`;
+            message += `- - - - - - - - - - - - - - - - - -\n\n\u2705 TAREAS COMPLETADAS:\n`;
             doneTasks.forEach((t, idx) => {
-                message += `${idx+1}. ${t.title}\n   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)}\n\n`;
+                message += `${idx+1}. ${t.title}\n   \u{1F4C5} ${formatDateDMY(t.startDate)} \u2192 ${formatDateDMY(t.endDate)}\n\n`;
             });
         }
         if (userTasks.length === 0) {
-            message += `✨ ¡No tienes tareas asignadas actualmente!\n`;
+            message += `\u2728 \u00A1No tienes tareas asignadas actualmente!\n`;
         }
         
         if (!skipFooter) {
-            message += `\n━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n📅 Reporte generado: ${new Date().toLocaleString()}\n🏢 Stride - Project Manager\n🛡️ DEPARTAMENTO DE CONTROL INTERNO`;
+            message += `\n- - - - - - - - - - - - - - - - - -\n\u{1F4C5} Reporte generado: ${new Date().toLocaleString()}\n\u{1F3E2} Stride - Project Manager\n\u{1F6E1}\uFE0F DEPARTAMENTO DE CONTROL INTERNO`;
         }
         return message;
     }
@@ -1534,8 +1536,8 @@
             const msg = generateTaskSummary(participant.id, project, true);
             if (msg) allMessages.push(msg);
         }
-        const footer = `\n━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n📅 Reporte generado: ${new Date().toLocaleString()}\n🏢 Stride - Project Manager\n🛡️ DEPARTAMENTO DE CONTROL INTERNO`;
-        return allMessages.join('\n\n' + '='.repeat(50) + '\n\n') + footer;
+        const footer = `\n- - - - - - - - - - - - - - - - - -\n\u{1F4C5} Reporte generado: ${new Date().toLocaleString()}\n\u{1F3E2} Stride - Project Manager\n\u{1F6E1}\uFE0F DEPARTAMENTO DE CONTROL INTERNO`;
+        return allMessages.join('\n\n' + '='.repeat(35) + '\n\n') + footer;
     }
 
     function showCommunicationModal(type) {
@@ -1605,19 +1607,34 @@
                 }
                 closeModal();
             } else if (type === 'whatsapp') {
-                if (isAll) {
-                    window.open(`https://wa.me/?text=${encodeURIComponent(generateSummaryForAll(proj))}`, '_blank');
-                } else {
-                    const participant = proj.participants.find(p => p.id === selectedId);
-                    const summary = generateTaskSummary(selectedId, proj);
-                    if (participant && summary) {
-                        let phone = participant.phone.replace(/\D/g, '');
-                        if (!phone.startsWith('52')) phone = '52' + phone;
-                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(summary)}`, '_blank');
-                    }
-                }
-                closeModal();
+    if (isAll) {
+        const globalText = generateSummaryForAll(proj);
+        // Usamos una codificación limpia reemplazando posibles conflictos de caracteres en navegadores de escritorio
+        const safeText = encodeURIComponent(globalText).replace(/%C2%A0/g, '%20'); 
+        window.open(`https://web.whatsapp.com/send?text=${safeText}`, '_blank');
+    } else {
+        const participant = proj.participants.find(p => p.id === selectedId);
+        const summary = generateTaskSummary(selectedId, proj);
+        if (participant && summary) {
+            let phone = participant.phone.replace(/\D/g, '');
+            if (!phone.startsWith('52')) phone = '52' + phone;
+            
+            // Forzar espacio estándar en lugar de Non-breaking spaces que rompen WhatsApp Web
+            const safeSummary = encodeURIComponent(summary).replace(/%C2%A0/g, '%20');
+            
+            // Detectar si es entorno móvil o escritorio para usar el subdominio óptimo
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const waBase = isMobile ? 'https://wa.me/' : 'https://web.whatsapp.com/send';
+            
+            if (isMobile) {
+                window.open(`${waBase}${phone}?text=${safeSummary}`, '_blank');
+            } else {
+                window.open(`${waBase}?phone=${phone}&text=${safeSummary}`, '_blank');
             }
+        }
+    }
+    closeModal();
+}
         });
     }
     
