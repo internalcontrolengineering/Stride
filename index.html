@@ -964,32 +964,6 @@ textarea#editTaskTitle:focus {
         border-radius: 10px;
     }
 }
-// Auto-resize para textareas
-function autoResizeTextarea(textarea) {
-    if (!textarea) return;
-    textarea.style.height = 'auto';
-    textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-}
-
-// Inicializar auto-resize para todos los textareas de títulos
-function initTitleTextareas() {
-    const textareas = document.querySelectorAll('textarea#taskTitle, textarea#editTaskTitle');
-    textareas.forEach(textarea => {
-        textarea.removeEventListener('input', function() { autoResizeTextarea(this); });
-        textarea.addEventListener('input', function() { autoResizeTextarea(this); });
-        autoResizeTextarea(textarea);
-    });
-}
-
-// Llamar después de renderizar modales y el formulario principal
-const originalRenderAll = renderAll;
-renderAll = function() {
-    originalRenderAll();
-    setTimeout(initTitleTextareas, 50);
-};
-
-// También inicializar al cargar la página
-setTimeout(initTitleTextareas, 500);	
     </style>
 </head>
 <body>
@@ -1022,8 +996,8 @@ setTimeout(initTitleTextareas, 500);
     </div>
     <div class="tabs">
         <button class="tab-btn active" data-tab="tab-participantes"><i class="fas fa-users"></i> Participantes</button>
-        <button class="tab-btn" data-tab="tab-proyectos"><i class="fas fa-folder-tree"></i> Proyectos & Kanban</button>
-        <button class="tab-btn" data-tab="tab-sprints"><i class="fas fa-rocket"></i> Sprints & Backlog</button>
+        <button class="tab-btn" data-tab="tab-proyectos"><i class="fas fa-folder-tree"></i> Proyectos y Kanban</button>
+        <button class="tab-btn" data-tab="tab-sprints"><i class="fas fa-rocket"></i> Sprints y Backlog</button>
         <button class="tab-btn" data-tab="tab-gantt"><i class="fas fa-chart-gantt"></i> Gantt</button>
     </div>
 
@@ -1054,9 +1028,9 @@ setTimeout(initTitleTextareas, 500);
             <h3><i class="fas fa-plus-circle"></i> Crear Tarea</h3>
             <div class="form-row">
                 <div class="form-group" style="flex: 2;">
-    <label>Título</label>
-    <textarea id="taskTitle" placeholder="Tarea [Salto de línea - Ajustable]" rows="1" style="resize: vertical; overflow-y: hidden; min-height: 42px;"></textarea>
-</div>
+                    <label>Título</label>
+                    <textarea id="taskTitle" placeholder="Tarea [Salto de línea - Ajustable]" rows="1" style="resize: vertical; overflow-y: hidden; min-height: 42px;"></textarea>
+                </div>
                 <div class="form-group"><label>Duración (días)</label><input type="number" id="taskDuration" placeholder="Número" min="1"></div>
             </div>
             <div class="form-row">
@@ -1080,7 +1054,7 @@ setTimeout(initTitleTextareas, 500);
                                 <div class="select-all-option">
                                     <label class="assignee-checkbox">
                                         <input type="checkbox" id="selectAllAssigneesCheckbox">
-                                        <span><strong>✓ Seleccionar todos</strong></span>
+                                        <span><strong>✅ Seleccionar todos</strong></span>
                                     </label>
                                 </div>
                                 <div id="assigneesCheckboxList" class="assignees-checkbox-list"></div>
@@ -1114,8 +1088,8 @@ setTimeout(initTitleTextareas, 500);
     </div>
 
     <div id="tab-gantt" class="tab-content">        
-        <div class="gantt-controls"><div class="view-selector"><button class="view-btn" data-view="day">📅 Día</button><button class="view-btn" data-view="week">📆 Semana</button><button class="view-btn" data-view="month">📅 Mes</button></div>
-        <span style="font-size:0.7rem; color:#666;"><i class="fas fa-chart-line"></i> 🟢 En tiempo | 🟠 Por vencer (≤5 días) | 🔴 Vencido | 🔵 Finalizado</span></div>
+        <div class="gantt-controls"><div class="view-selector"><button class="view-btn" data-view="day">📆 Día</button><button class="view-btn" data-view="week">📅 Semana</button><button class="view-btn" data-view="month">📆 Mes</button></div>
+        <span style="font-size:0.7rem; color:#666;"><i class="fas fa-chart-line"></i> 🟢 En tiempo | 🟡 Por vencer (≤5 días) | 🔴 Vencido | 🔵 Finalizado</span></div>
         <div id="ganttProfessionalContainer"></div>
     </div>
 </div>
@@ -1527,7 +1501,7 @@ setTimeout(initTitleTextareas, 500);
         return "#10b981";
     }
     
-// ========== FUNCIONES DE COMUNICACIÓN CON ASIGNACIÓN MÚLTIPLE ==========
+    // ========== FUNCIONES DE COMUNICACIÓN CON ASIGNACIÓN MÚLTIPLE ==========
     function generateTaskSummary(participantId, project, skipFooter = false) {
         const participant = project.participants.find(p => p.id === participantId);
         if (!participant) return null;
@@ -1536,53 +1510,51 @@ setTimeout(initTitleTextareas, 500);
         const inProgressTasks = userTasks.filter(t => t.status === "inprogress");
         const doneTasks = userTasks.filter(t => t.status === "done");
         
-        // Uso de escapes Unicode para asegurar la compatibilidad en la transferencia de strings
-        let message = `\u{1F4CB} RESUMEN DE TAREAS - ${participant.name.toUpperCase()}\n\n`;
-        message += `\u{1F4C1} Proyecto: ${project.name}\n`;
-        message += `\u{1F464} Rol: ${participant.role || "No especificado"}\n`;
-        message += `\u{1F4E7} Email: ${participant.email}\n`;
-        //message += `\u{1F4F1} Tel\u00E9fono: ${participant.phone}\n\n`;
-        message += `- - - - - - - - - - - - - - - - - -\n\n`; // Cambiado a guiones estándar para evitar fallos de encoding
-        message += `\u{1F4CA} ESTAD\u00CDSTICAS:\n`;
-        message += `\u2022 \u{1F4CB} Pendientes: ${todoTasks.length}\n`;
-        message += `\u2022 \u{2699}\uFE0F En progreso: ${inProgressTasks.length}\n`;
-        message += `\u2022 \u2705 Completadas: ${doneTasks.length}\n`;
-        message += `\u2022 \u{1F4E6} Total asignadas: ${userTasks.length}\n\n`;
+        let message = `📋 RESUMEN DE TAREAS - ${participant.name.toUpperCase()}\n\n`;
+        message += `📁 Proyecto: ${project.name}\n`;
+        message += `👤 Rol: ${participant.role || "No especificado"}\n`;
+        message += `📧 Email: ${participant.email}\n`;
+        message += `- - - - - - - - - - - - - - - - - -\n\n`;
+        message += `📊 ESTADÍSTICAS:\n`;
+        message += `• 📋 Pendientes: ${todoTasks.length}\n`;
+        message += `• ⚙️ En progreso: ${inProgressTasks.length}\n`;
+        message += `• ✅ Completadas: ${doneTasks.length}\n`;
+        message += `• 📦 Total asignadas: ${userTasks.length}\n\n`;
         
         if (todoTasks.length > 0) {
-            message += `- - - - - - - - - - - - - - - - - -\n\n\u{1F4CB} TAREAS PENDIENTES:\n`;
+            message += `- - - - - - - - - - - - - - - - - -\n\n📋 TAREAS PENDIENTES:\n`;
             todoTasks.forEach((t, idx) => {
-                message += `${idx+1}. ${t.title}\n   \u{1F4C5} ${formatDateDMY(t.startDate)} \u2192 ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
+                message += `${idx+1}. ${t.title}\n   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
                 if (t.sprintId) {
                     const sprint = getSprintById(project, t.sprintId);
-                    if (sprint) message += `   \u{1F680} Sprint: ${sprint.name}\n`;
+                    if (sprint) message += `   🚀 Sprint: ${sprint.name}\n`;
                 }
                 message += `\n`;
             });
         }
         if (inProgressTasks.length > 0) {
-            message += `- - - - - - - - - - - - - - - - - -\n\n\u{2699}\uFE0F TAREAS EN PROGRESO:\n`;
+            message += `- - - - - - - - - - - - - - - - - -\n\n⚙️ TAREAS EN PROGRESO:\n`;
             inProgressTasks.forEach((t, idx) => {
-                message += `${idx+1}. ${t.title}\n   \u{1F4C5} ${formatDateDMY(t.startDate)} \u2192 ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
+                message += `${idx+1}. ${t.title}\n   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)} (${t.duration}d)\n`;
                 if (t.sprintId) {
                     const sprint = getSprintById(project, t.sprintId);
-                    if (sprint) message += `   \u{1F680} Sprint: ${sprint.name}\n`;
+                    if (sprint) message += `   🚀 Sprint: ${sprint.name}\n`;
                 }
                 message += `\n`;
             });
         }
         if (doneTasks.length > 0) {
-            message += `- - - - - - - - - - - - - - - - - -\n\n\u2705 TAREAS COMPLETADAS:\n`;
+            message += `- - - - - - - - - - - - - - - - - -\n\n✅ TAREAS COMPLETADAS:\n`;
             doneTasks.forEach((t, idx) => {
-                message += `${idx+1}. ${t.title}\n   \u{1F4C5} ${formatDateDMY(t.startDate)} \u2192 ${formatDateDMY(t.endDate)}\n\n`;
+                message += `${idx+1}. ${t.title}\n   📅 ${formatDateDMY(t.startDate)} → ${formatDateDMY(t.endDate)}\n\n`;
             });
         }
         if (userTasks.length === 0) {
-            message += `\u2728 \u00A1No tienes tareas asignadas actualmente!\n`;
+            message += `✨ ¡No tienes tareas asignadas actualmente!\n`;
         }
         
         if (!skipFooter) {
-            message += `\n- - - - - - - - - - - - - - - - - -\n\u{1F4C5} Reporte generado: ${new Date().toLocaleString()}\n\u{1F3E2} Stride - Project Manager [ Accede aquí:  https://goo.su/kTNGQ ]\n\u{1F6E1}\uFE0F DEPARTAMENTO DE CONTROL INTERNO`;
+            message += `\n- - - - - - - - - - - - - - - - - -\n📅 Reporte generado: ${new Date().toLocaleString()}\n🏢 Stride - Project Manager [Accede aquí: https://goo.su/kTNGQ]\n🛡️ DEPARTAMENTO DE CONTROL INTERNO`;
         }
         return message;
     }
@@ -1593,8 +1565,26 @@ setTimeout(initTitleTextareas, 500);
             const msg = generateTaskSummary(participant.id, project, true);
             if (msg) allMessages.push(msg);
         }
-        const footer = `\n- - - - - - - - - - - - - - - - - -\n\u{1F4C5} Reporte generado: ${new Date().toLocaleString()}\n\u{1F3E2} Stride - Project Manager [ Accede aquí:  https://goo.su/kTNGQ ]\n\u{1F6E1}\uFE0F DEPARTAMENTO DE CONTROL INTERNO`;
+        const footer = `\n- - - - - - - - - - - - - - - - - -\n📅 Reporte generado: ${new Date().toLocaleString()}\n🏢 Stride - Project Manager [Accede aquí: https://goo.su/kTNGQ]\n🛡️ DEPARTAMENTO DE CONTROL INTERNO`;
         return allMessages.join('\n\n' + '='.repeat(35) + '\n\n') + footer;
+    }
+
+    // Función robusta para detectar si es dispositivo móvil
+    function isMobileDevice() {
+        // Detección por ancho de pantalla (método más confiable)
+        const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
+        
+        // Detección por user agent (respaldo)
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i;
+        const isMobileUA = mobileRegex.test(userAgent);
+        
+        // Detección por eventos táctiles (respaldo adicional)
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+        
+        // Un dispositivo es móvil si tiene pantalla pequeña O es un user agent móvil O es táctil (y no es una PC con pantalla táctil)
+        // Para evitar falsos positivos en PC con pantalla táctil, verificamos que la pantalla sea pequeña
+        return isSmallScreen && (isMobileUA || isTouchDevice);
     }
 
     function showCommunicationModal(type) {
@@ -1608,14 +1598,14 @@ setTimeout(initTitleTextareas, 500);
         modalOverlay.innerHTML = `
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3><i class="fas ${type === 'email' ? 'fa-envelope' : 'fa-envelope'}"></i> ${type === 'email' ? 'Enviar Correo' : 'Enviar WhatsApp'}</h3>
+                    <h3><i class="fas ${type === 'email' ? 'fa-envelope' : 'fa-whatsapp'}"></i> ${type === 'email' ? 'Enviar Correo' : 'Enviar WhatsApp'}</h3>
                     <button class="modal-close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="form-row">
                     <div class="form-group full-width">
                         <label>Seleccionar participante</label>
                         <select id="participantSelect" style="width:100%; padding:8px; border-radius:12px;">
-                            <option value="all">📢 Todos los participantes</option>
+                            <option value="all">📨 Todos los participantes</option>
                             ${proj.participants.map(p => `<option value="${p.id}">👤 ${escapeHtml(p.name)} (${escapeHtml(p.role)})</option>`).join('')}
                         </select>
                     </div>
@@ -1664,34 +1654,40 @@ setTimeout(initTitleTextareas, 500);
                 }
                 closeModal();
             } else if (type === 'whatsapp') {
-    if (isAll) {
-        const globalText = generateSummaryForAll(proj);
-        // Usamos una codificación limpia reemplazando posibles conflictos de caracteres en navegadores de escritorio
-        const safeText = encodeURIComponent(globalText).replace(/%C2%A0/g, '%20'); 
-        window.open(`https://web.whatsapp.com/send?text=${safeText}`, '_blank');
-    } else {
-        const participant = proj.participants.find(p => p.id === selectedId);
-        const summary = generateTaskSummary(selectedId, proj);
-        if (participant && summary) {
-            let phone = participant.phone.replace(/\D/g, '');
-            if (!phone.startsWith('52')) phone = '52' + phone;
-            
-            // Forzar espacio estándar en lugar de Non-breaking spaces que rompen WhatsApp Web
-            const safeSummary = encodeURIComponent(summary).replace(/%C2%A0/g, '%20');
-            
-            // Detectar si es entorno móvil o escritorio para usar el subdominio óptimo
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const waBase = isMobile ? 'https://wa.me/' : 'https://web.whatsapp.com/send';
-            
-            if (isMobile) {
-                window.open(`${waBase}${phone}?text=${safeSummary}`, '_blank');
-            } else {
-                window.open(`${waBase}?phone=${phone}&text=${safeSummary}`, '_blank');
+                // Usar la función robusta de detección móvil
+                const isMobile = isMobileDevice();
+                
+                if (isAll) {
+                    const globalText = generateSummaryForAll(proj);
+                    const safeText = encodeURIComponent(globalText).replace(/%C2%A0/g, '%20');
+                    
+                    if (isMobile) {
+                        // Móvil: usar wa.me (abre la app de WhatsApp directamente)
+                        window.open(`https://wa.me/?text=${safeText}`, '_blank');
+                    } else {
+                        // PC: usar web.whatsapp.com
+                        window.open(`https://web.whatsapp.com/send?text=${safeText}`, '_blank');
+                    }
+                } else {
+                    const participant = proj.participants.find(p => p.id === selectedId);
+                    const summary = generateTaskSummary(selectedId, proj);
+                    if (participant && summary) {
+                        let phone = participant.phone.replace(/\D/g, '');
+                        if (!phone.startsWith('52')) phone = '52' + phone;
+                        
+                        const safeSummary = encodeURIComponent(summary).replace(/%C2%A0/g, '%20');
+                        
+                        if (isMobile) {
+                            // Móvil: usar wa.me (abre la app de WhatsApp directamente)
+                            window.open(`https://wa.me/${phone}?text=${safeSummary}`, '_blank');
+                        } else {
+                            // PC: usar web.whatsapp.com
+                            window.open(`https://web.whatsapp.com/send?phone=${phone}&text=${safeSummary}`, '_blank');
+                        }
+                    }
+                }
+                closeModal();
             }
-        }
-    }
-    closeModal();
-}
         });
     }
     
@@ -1730,7 +1726,7 @@ setTimeout(initTitleTextareas, 500);
         modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;display:flex;align-items:center;justify-content:center;';
         modal.innerHTML = `
             <div style="background:white;border-radius:16px;padding:24px;max-width:90%;width:600px;max-height:80vh;overflow:auto;">
-                <h3 style="margin-bottom:16px;">📥 Exportar datos</h3>
+                <h3 style="margin-bottom:16px;">📤 Exportar datos</h3>
                 <p style="margin-bottom:12px;font-size:13px;color:#666;">Copia el siguiente JSON y guárdalo en un archivo .json:</p>
                 <textarea id="exportJsonText" style="width:100%;height:300px;font-family:monospace;font-size:11px;padding:12px;border:1px solid #ccc;border-radius:8px;margin-bottom:16px;" readonly>${jsonData}</textarea>
                 <div style="display:flex;gap:12px;justify-content:flex-end;">
@@ -1970,7 +1966,7 @@ setTimeout(initTitleTextareas, 500);
         const container = document.getElementById("projectListContainer");
         container.innerHTML = "";
         if(data.projects.length === 0){
-            container.innerHTML = "<span style='color:#94a3b8; font-size:0.8rem; padding:8px 0;'>📁 Sin proyectos. Crea uno nuevo ➕</span>";
+            container.innerHTML = "<span style='color:#94a3b8; font-size:0.8rem; padding:8px 0;'>📁 Sin proyectos. Crea uno nuevo →</span>";
             return;
         }
         data.projects.forEach(proj => {
@@ -2062,9 +2058,9 @@ setTimeout(initTitleTextareas, 500);
                 </div>
                 <div class="form-row">
                     <div class="form-group" style="flex:2;">
-    <label>Título</label>
-    <textarea id="editTaskTitle" rows="1" style="resize: vertical; overflow-y: hidden; min-height: 42px;">${escapeHtml(task.title)}</textarea>
-</div>
+                        <label>Título</label>
+                        <textarea id="editTaskTitle" rows="1" style="resize: vertical; overflow-y: hidden; min-height: 42px;">${escapeHtml(task.title)}</textarea>
+                    </div>
                     <div class="form-group">
                         <label>Duración (días)</label>
                         <input type="number" id="editTaskDuration" value="${task.duration || ''}" min="1">
@@ -2113,7 +2109,7 @@ setTimeout(initTitleTextareas, 500);
                                     <div class="select-all-option">
                                         <label class="assignee-checkbox">
                                             <input type="checkbox" id="editSelectAllAssigneesCheckbox">
-                                            <span><strong>✓ Seleccionar todos</strong></span>
+                                            <span><strong>✅ Seleccionar todos</strong></span>
                                         </label>
                                     </div>
                                     <div id="editAssigneesList" class="assignees-checkbox-list"></div>
@@ -2367,7 +2363,7 @@ setTimeout(initTitleTextareas, 500);
             return;
         }
         if(!proj.participants || proj.participants.length === 0){
-            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8;'>📋 No hay participantes registrados</p>";
+            container.innerHTML = "<p style='text-align:center; padding:24px; color:#94a3b8;'>📭 No hay participantes registrados</p>";
             return;
         }
         proj.participants.forEach(m => {
@@ -2625,7 +2621,7 @@ setTimeout(initTitleTextareas, 500);
     function renderGantt() {
         const proj = currentProject();
         if(!proj || !proj.sprints || proj.sprints.length === 0) { 
-            document.getElementById("ganttProfessionalContainer").innerHTML = "<div class='form-card' style='text-align:center;'>📊 Crea sprints primero para ver el diagrama de Gantt</div>"; 
+            document.getElementById("ganttProfessionalContainer").innerHTML = "<div class='form-card' style='text-align:center;'>📅 Crea sprints primero para ver el diagrama de Gantt</div>"; 
             return; 
         }
         const allSprints = [...proj.sprints].sort((a,b)=>a.startDate.localeCompare(b.startDate));
@@ -2685,7 +2681,7 @@ setTimeout(initTitleTextareas, 500);
                     <div><strong><i class="fas fa-rocket"></i> ${escapeHtml(sprint.name)}</strong></div>
                     <div style="font-size:0.7rem; font-weight:normal; margin-top:2px;">${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</div>
                   </td>
-                <td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td>${'<td style="background:#eef2ff;"></td>'.repeat(timelineUnits.length)}
+                <td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td>${'<td style="background:#eef2ff;"><td>'.repeat(timelineUnits.length)}
             </tr>`;
             if(tasksInSprint.length === 0) { 
                 html += `<tr><td colspan="${5 + timelineUnits.length}" style="text-align:center; color:#999; padding:20px;">Sin tareas con fechas<\/td><\/tr>`;
@@ -2938,7 +2934,7 @@ setTimeout(initTitleTextareas, 500);
                         <div class="carousel-logo"><img src="https://raw.githubusercontent.com/internalcontrolengineering/Desarrollos/main/LogoCI-BC.png"></div>
                         <h2>Stride</h2>
                         <p>Project Manager · Coworking · Supervisión · Control</p>
-                        <p style="font-size:0.7rem; margin-top:8px; opacity:0.7;">📡 Datos compartidos en la nube</p>
+                        <p style="font-size:0.7rem; margin-top:8px; opacity:0.7;">☁️ Datos compartidos en la nube</p>
                     </div>
                     <div class="carousel-3d" id="carousel3d">
                         ${profiles.map((p, idx) => `<div class="carousel-card" data-id="${p.id}" style="transform: rotateY(${idx * angleStep}deg) translateZ(250px);"><div class="card-icon" style="background: linear-gradient(135deg, ${p.color} 0%, ${p.color}cc 100%);"><i class="fas ${p.icon}"></i></div><div class="card-title">${p.title}</div><div class="card-desc">${p.description}</div><div class="card-badge">${p.badge}</div></div>`).join('')}
