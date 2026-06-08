@@ -1579,12 +1579,8 @@ textarea#editTaskTitle:focus {
         const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i;
         const isMobileUA = mobileRegex.test(userAgent);
         
-        // Detección por eventos táctiles (respaldo adicional)
-        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
-        
-        // Un dispositivo es móvil si tiene pantalla pequeña O es un user agent móvil O es táctil (y no es una PC con pantalla táctil)
-        // Para evitar falsos positivos en PC con pantalla táctil, verificamos que la pantalla sea pequeña
-        return isSmallScreen && (isMobileUA || isTouchDevice);
+        // Un dispositivo es móvil si tiene pantalla pequeña Y es un user agent móvil
+        return isSmallScreen && isMobileUA;
     }
 
     function showCommunicationModal(type) {
@@ -1598,7 +1594,7 @@ textarea#editTaskTitle:focus {
         modalOverlay.innerHTML = `
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3><i class="fas ${type === 'email' ? 'fa-envelope' : 'fa-whatsapp'}"></i> ${type === 'email' ? 'Enviar Correo' : 'Enviar WhatsApp'}</h3>
+                    <h3><i class="fas ${type === 'email' ? 'fa-envelope' : 'fa-envelope'}"></i> ${type === 'email' ? 'Enviar Correo' : 'Enviar WhatsApp'}</h3>
                     <button class="modal-close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="form-row">
@@ -1654,7 +1650,6 @@ textarea#editTaskTitle:focus {
                 }
                 closeModal();
             } else if (type === 'whatsapp') {
-                // Usar la función robusta de detección móvil
                 const isMobile = isMobileDevice();
                 
                 if (isAll) {
@@ -2676,15 +2671,15 @@ textarea#editTaskTitle:focus {
          </thead><tbody>`;
         for(let sprint of allSprints) {
             const tasksInSprint = sortTasksByStartDate((proj.tasks || []).filter(t => t.sprintId === sprint.id && t.startDate && t.duration));
-            html += `<tr class="sprint-group-title">
-                <td style="position:sticky; left:0; background:#eef2ff; z-index:2; padding:12px 8px;">
-                    <div><strong><i class="fas fa-rocket"></i> ${escapeHtml(sprint.name)}</strong></div>
-                    <div style="font-size:0.7rem; font-weight:normal; margin-top:2px;">${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</div>
-                  </td>
-                <td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td><td style="background:#eef2ff;"></td>${'<td style="background:#eef2ff;"><td>'.repeat(timelineUnits.length)}
-            </tr>`;
+html += `<tr class="sprint-group-title">
+    <td colspan="5" style="position:sticky; left:0; background:#eef2ff; z-index:2; padding:12px 8px; white-space: normal;">
+        <div><strong><i class="fas fa-rocket"></i> ${escapeHtml(sprint.name)}</strong></div>
+        <div style="font-size:0.7rem; font-weight:normal; margin-top: 6px;">${formatDateDMY(sprint.startDate)} → ${formatDateDMY(sprint.endDate)}</div>
+    </td>
+    ${'<td style="background:#eef2ff;"></td>'.repeat(timelineUnits.length)}
+</tr>`;
             if(tasksInSprint.length === 0) { 
-                html += `<tr><td colspan="${5 + timelineUnits.length}" style="text-align:center; color:#999; padding:20px;">Sin tareas con fechas<\/td><\/tr>`;
+                html += `<tr><td colspan="${5 + timelineUnits.length}" style="text-align:center; color:#999; padding:20px;">Sin tareas con fechas</td></tr>`;
                 continue; 
             }
             for(let task of tasksInSprint) {
@@ -2700,22 +2695,22 @@ textarea#editTaskTitle:focus {
                     } 
                 }
                 html += `<tr>
-                    <td style="position:sticky; left:0; background:white; z-index:1;" class="task-name-col">${escapeHtml(task.title)}<\/td>
-                    <td class="text-center">${task.duration}d<\/td>
-                    <td class="text-center text-nowrap">${formatDateDMY(task.startDate)}<\/td>
-                    <td class="text-center text-nowrap">${formatDateDMY(task.endDate)}<\/td>
+                    <td style="position:sticky; left:0; background:white; z-index:1;" class="task-name-col">${escapeHtml(task.title)}</td>
+                    <td class="text-center">${task.duration}d</td>
+                    <td class="text-center text-nowrap">${formatDateDMY(task.startDate)}</td>
+                    <td class="text-center text-nowrap">${formatDateDMY(task.endDate)}</td>
                     <td style="font-size:0.7rem; line-height:1.3; vertical-align:top;">
                         ${assignees.length > 0 ? assignees.map(a => `<div style="margin-bottom:8px;"><div><i class="fas fa-user-circle" style="color:#1c5a7a; margin-right:6px;"></i><strong>${escapeHtml(a.name)}</strong></div><div style="margin-left:22px; color:#64748b; font-size:0.65rem;">${escapeHtml(a.role || '')}</div></div>`).join('') : "<span style='color:#94a3b8;'><i class='fas fa-user-slash'></i> Sin asignar</span>"}
-                    <\/td>`;
+                    </td>`;
                 for(let i = 0; i < timelineUnits.length; i++) { 
                     const isInRange = (i >= startUnitIdx && i <= endUnitIdx); 
                     if(isInRange) { 
-                        html += `<td class="gantt-unit-cell" style="background:${barColor}20;"><div class="gantt-bar-bg" style="background:${barColor};" title="${tooltipText}"></div><\/td>`; 
+                        html += `<td class="gantt-unit-cell" style="background:${barColor}20;"><div class="gantt-bar-bg" style="background:${barColor};" title="${tooltipText}"></div></td>`; 
                     } else { 
-                        html += `<td class="gantt-unit-cell"><\/td>`; 
+                        html += `<td class="gantt-unit-cell"></td>`; 
                     } 
                 }
-                html += `<\/tr>`;
+                html += `</tr>`;
             }
         }
         html += `</tbody></table></div>`;
